@@ -1,0 +1,99 @@
+.add-customer-dialog {
+    background-color: #0d2136;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    border-radius: 0px;
+    border-width: 0px;
+    border: 1px solid #3f51b5;
+    box-sizing: border-box;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  .add-customer-heading {
+    margin-top: 0px;
+    color: rgb(211, 227, 253);
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #3f51b5;
+  }
+  .customerID {
+    width: 150px;
+    color: rgb(211, 227, 253);
+    margin-top: -64px;
+    margin-left: 10px;
+    border: 1px solid rgb(211, 227, 253);
+    box-sizing: border-box;
+    margin-right: 1000px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .total-customers{
+    color:rgb(211, 227, 253);
+    margin-top: -45px;
+    margin-left: 910px;
+  }
+  .container2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+  }
+  .add-all-label {
+    margin-top: 20px;
+    color: rgb(211, 227, 253);
+  }
+  .inputbox2 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+    height: 30px;
+    padding: 10px;
+    border-radius: 6px;
+    width: 400px;
+    background: rgb(3, 21, 37);
+    border-width: 0px;
+    border-color: #092635;
+    color: rgb(211, 227, 253);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .container2 input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+    margin-left: 260px;
+  }
+  .add-cancel-button {
+    width: 100px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 720px;
+    margin-right: 550px; 
+    background-color: #3f51b5;
+    padding: 10px;
+    border: 0;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  }
+  .add-save-button {
+    width: 100px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 720px;
+    margin-right: 430px; 
+    background-color: #3f51b5;
+    padding: 10px;
+    border: 0;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  }
+  .add-error-messages {
+    color: red;
+    margin-top: 5px;
+    font-size: 15px;
+  }
