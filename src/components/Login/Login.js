@@ -54,7 +54,14 @@ const Login = () => {
 
       setLoading(true);
       await auth.signInWithEmailAndPassword(email, password);
-      history.push("/pg-selection");
+
+      // Check if the logged-in user's email matches specific email ID
+      if (email === 'sudarshankapatil@gmail.com') {
+        history.push("/admin-dashboard");
+      } else {
+        history.push("/pg-selection");
+      }
+
       console.log("Login successful");
     } catch (error) {
       console.error("Error logging in:", error.message);
