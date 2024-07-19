@@ -67,10 +67,23 @@ const PgTable = ({ pgData, fetchPgData }) => {
     }
   };
 
+  const deleteCollection = async (collectionRef) => {
+    const snapshot = await collectionRef.get();
+    const batch = db.batch();
+    snapshot.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+  };
+
   const handleDeleteConfirm = async () => {
     try {
       const pgRef = db.collection(`users/${deleteData.userId}/PGs`).doc(deleteData.id);
-      await pgRef.delete();
+      const customerDataRef = pgRef.collection('CustomerData');
+
+      await deleteCollection(customerDataRef); // Delete CustomerData collection first
+      await pgRef.delete(); // Then delete the PG document itself
+
       console.log('Deleting Data:', deleteData);
       setSnackbarMessage('Data deleted successfully');
       setSnackbarSeverity('success');
