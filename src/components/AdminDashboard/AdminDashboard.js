@@ -1,10 +1,11 @@
-// AdminDashboard.js
 import React, { useState, useEffect } from 'react';
 import { auth, db } from "../shared/firebase";
 import { useHistory } from "react-router-dom";
 import "./adminDashboard.css";
 import PgTable from '../PgTable/PgTable';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const AdminDashboard = () => {
   const history = useHistory();
@@ -21,6 +22,11 @@ const AdminDashboard = () => {
 
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
+
+  // Snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const fetchPgData = async () => {
     try {
@@ -87,32 +93,76 @@ const AdminDashboard = () => {
       setPgName("");
       setPgAddress("");
       setPgMobile("");
+      setSnackbarMessage("PG added successfully");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Error adding PG:", error.message);
+      setSnackbarMessage("Error adding PG");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
- const createUser = async () => {
-  try {
-    setLoading(true);
-    const userCredential = await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
-    const newUserId = userCredential.user.uid;
-    await db.collection('users').doc(newUserId).set({
-      email: newUserEmail,
-    });
-    console.log("User created successfully");
-    setNewUserEmail("");
-    setNewUserPassword("");
-    // Ensure admin remains on AdminDashboard
-    history.push('/admin-dashboard');
-  } catch (error) {
-    console.error("Error creating user:", error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  const createUser = async () => {
+    try {
+      setLoading(true);
+  
+      // Check if email exists in Firebase Authentication
+      const existingAuthUser = await auth.fetchSignInMethodsForEmail(newUserEmail);
+      if (existingAuthUser.length > 0) {
+        setSnackbarMessage("Email already exists in Firebase Authentication");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+        return;
+      }
+  
+      // Check if email exists in Firestore
+      const userDoc = await db.collection('users').where('email', '==', newUserEmail).get();
+      if (!userDoc.empty) {
+        setSnackbarMessage("Email already exists in Firestore");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+        return;
+      }
+  
+      // Create new user in Firebase Authentication
+      await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
+      const newUserId = auth.currentUser.uid;
+  
+      // Add user data to Firestore
+      await db.collection('users').doc(newUserId).set({
+        email: newUserEmail,
+      });
+  
+      console.log("User created successfully");
+      setNewUserEmail("");
+      setNewUserPassword("");
+      setSnackbarMessage("User created successfully");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      history.push('/admin-dashboard'); // Ensure admin remains on AdminDashboard
+    } catch (error) {
+      console.error("Error creating user:", error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setSnackbarMessage("Email already exists");
+        setSnackbarSeverity("error");
+      } else {
+        setSnackbarMessage("Error creating user");
+        setSnackbarSeverity("error");
+      }
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <div>
@@ -128,89 +178,110 @@ const AdminDashboard = () => {
         e.preventDefault();
         addPG();
       }}>
+        <h2 className='heading'>Add New PG</h2>
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter User Document ID"
+          placeholder="User Document ID"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter PG Number"
+          placeholder="PG Number"
           value={pgNumber}
           onChange={(e) => setPgNumber(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter Max Customers/PG"
+          placeholder="Max Customers/PG"
           value={pgMaxCustomers}
           onChange={(e) => setpgMaxCustomers(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter PG Owner Name"
+          placeholder="PG Owner Name"
           value={pgOwnerName}
           onChange={(e) => setPgOwnerName(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="email"
-          placeholder="Enter PG Owner Email ID"
+          placeholder="Owner Email ID"
           value={pgOwnerEmail}
           onChange={(e) => setPgOwnerEmail(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter PG Name"
+          placeholder="PG Mobile Number"
+          value={pgMobile}
+          onChange={(e) => setPgMobile(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="text"
+          placeholder="PG Name"
           value={pgName}
           onChange={(e) => setPgName(e.target.value)}
           required
         />
         <input
+          className='inputbox5'
           type="text"
-          placeholder="Enter PG Address"
+          placeholder="PG Address"
           value={pgAddress}
           onChange={(e) => setPgAddress(e.target.value)}
           required
         />
-        <input
-          type="text"
-          placeholder="Enter PG Mobile Number"
-          value={pgMobile}
-          onChange={(e) => setPgMobile(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>Add PG</button>
+        <button className='add-pg' type="submit" disabled={loading}>Add PG</button>
       </form>
 
       <form onSubmit={(e) => {
         e.preventDefault();
         createUser();
       }}>
-        <h2>Create New User</h2>
+        <h2 className='heading'>Create New User</h2>
         <input
+          className='inputbox5'
           type="email"
           placeholder="Enter New User Email"
           value={newUserEmail}
           onChange={(e) => setNewUserEmail(e.target.value)}
           required
-          
         />
         <input
+          className='inputbox5'
           type="password"
           placeholder="Enter New User Password"
           value={newUserPassword}
           onChange={(e) => setNewUserPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={loading}>Create User</button>
+        <button className='add-pg' type="submit" disabled={loading}>Create User</button>
       </form>
 
       <PgTable pgData={pgData} fetchPgData={fetchPgData} />
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

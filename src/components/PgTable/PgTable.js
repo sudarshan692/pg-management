@@ -1,8 +1,8 @@
-// PgTable.js
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaCopy, FaArrowUp, FaEdit, FaTrash } from 'react-icons/fa';
-import CustomSnackbar from '../shared/CustomSnackbar';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import './pgTable.css';
 import EditDialog from '../AdminDashboard/EditDialog/EditDialog';
 import DeleteDialog from '../AdminDashboard/DeleteDialog/DeleteDialog';
@@ -14,9 +14,10 @@ const CustomNoDataComponent = () => (
   </div>
 );
 
-const PgTable = ({ pgData,fetchPgData }) => {
+const PgTable = ({ pgData, fetchPgData }) => {
   const [searchText, setSearchText] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [editData, setEditData] = useState(null);
   const [deleteData, setDeleteData] = useState(null);
@@ -28,6 +29,7 @@ const PgTable = ({ pgData,fetchPgData }) => {
   const handleCopy = (userId) => {
     navigator.clipboard.writeText(userId);
     setSnackbarMessage(`Copied User ID: ${userId}`);
+    setSnackbarSeverity('success');
     setShowSnackbar(true);
   };
 
@@ -52,11 +54,13 @@ const PgTable = ({ pgData,fetchPgData }) => {
       await pgRef.update({ PGDetails: pgDetails });
       console.log('Updated Data:', updatedData);
       setSnackbarMessage('Data updated successfully');
+      setSnackbarSeverity('success');
       setShowSnackbar(true);
       fetchPgData();
     } catch (error) {
       console.error('Error updating data:', error.message);
       setSnackbarMessage('Error updating data');
+      setSnackbarSeverity('error');
       setShowSnackbar(true);
     } finally {
       setEditData(null);
@@ -69,11 +73,13 @@ const PgTable = ({ pgData,fetchPgData }) => {
       await pgRef.delete();
       console.log('Deleting Data:', deleteData);
       setSnackbarMessage('Data deleted successfully');
+      setSnackbarSeverity('success');
       setShowSnackbar(true);
       fetchPgData();
     } catch (error) {
       console.error('Error deleting data:', error.message);
       setSnackbarMessage('Error deleting data');
+      setSnackbarSeverity('error');
       setShowSnackbar(true);
     } finally {
       setDeleteData(null);
@@ -187,13 +193,16 @@ const PgTable = ({ pgData,fetchPgData }) => {
           noDataComponent={<CustomNoDataComponent />}
         />
       </div>
-      {showSnackbar && (
-        <CustomSnackbar
-          message={snackbarMessage}
-          duration={3000}
-          onClose={() => setShowSnackbar(false)}
-        />
-      )}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setShowSnackbar(false)} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       {editData && (
         <EditDialog
           data={editData}
