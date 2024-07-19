@@ -7,6 +7,7 @@ const AdminDashboard = () => {
   const history = useHistory();
   const [userId, setUserId] = useState("");
   const [pgNumber, setPgNumber] = useState("");
+  const [pgMaxCustomers, setpgMaxCustomers] = useState("");
   const [pgOwnerName, setPgOwnerName] = useState("");
   const [pgOwnerEmail, setPgOwnerEmail] = useState("");
   const [pgName, setPgName] = useState("");
@@ -34,6 +35,7 @@ const AdminDashboard = () => {
       await db.collection(`users/${userId}/PGs`).add({
         PGDetails: {
           number: pgNumber,
+          maxCustomers: pgMaxCustomers,
           ownerName: pgOwnerName,
           ownerEmail: pgOwnerEmail,
           name: pgName,
@@ -45,6 +47,7 @@ const AdminDashboard = () => {
       // Clear the form
       setUserId("");
       setPgNumber("");
+      setpgMaxCustomers("");
       setPgOwnerName("");
       setPgOwnerEmail("");
       setPgName("");
@@ -102,6 +105,13 @@ const AdminDashboard = () => {
           placeholder="Enter PG Number"
           value={pgNumber}
           onChange={(e) => setPgNumber(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Enter Max Customers/PG"
+          value={pgMaxCustomers}
+          onChange={(e) => setpgMaxCustomers(e.target.value)}
           required
         />
         <input

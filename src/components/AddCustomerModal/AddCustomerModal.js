@@ -12,7 +12,8 @@ const AddCustomerModal = ({
   setIsMobileUnique,
   onCustomerAdded,
   onCustomerCount,
-  selectedPGId // Prop to pass the selected PG ID
+  selectedPGId, // Prop to pass the selected PG ID
+  pgData // Prop to pass the PG data
 }) => {
   // State to manage customer data and initialize it with default values
   const [customerData, setCustomerData] = useState({
@@ -26,13 +27,13 @@ const AddCustomerModal = ({
     startDate: "",
     createdAt: new Date(),
   });
+
   const userID = getCurrentUserID();
   const [customerCount, setCustomerCount] = useState(0);
 
   const [nameError, setNameError] = useState("");
   const [mobileError, setMobileError] = useState("");
   const [placeError, setPlaceError] = useState("");
-  // const [addressError, setAddressError] = useState("");
   const [ageError, setAgeError] = useState("");
   const [totalCostError, setTotalCostError] = useState("");
   const [startDateError, setStartDateError] = useState("");
@@ -43,12 +44,7 @@ const AddCustomerModal = ({
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    console.log("AddCustomerModal - selectedPGId:", selectedPGId); // Log selectedPGId to check its value
-    // Add other necessary logic or useEffect dependencies
-  }, [selectedPGId]);
-  
-  // useEffect hook to fetch the maximum customer ID when the modal is opened
+  // Fetch the maximum customer ID and current customer count when the modal is opened
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -116,14 +112,6 @@ const AddCustomerModal = ({
       setPlaceError("");
     }
 
-    // // Address validation
-    // if (!customerData.address.trim()) {
-    //   setAddressError("Address is required");
-    //   isValid = false;
-    // } else {
-    //   setAddressError("");
-    // }
-
     // Age validation
     if (!customerData.age.trim()) {
       setAgeError("Age is required");
@@ -159,7 +147,6 @@ const AddCustomerModal = ({
     return isValid;
   };
 
-  // Event handler for input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCustomerData((prevData) => ({
@@ -168,18 +155,15 @@ const AddCustomerModal = ({
     }));
   };
 
-  // Function to reset errors
   const resetErrors = () => {
     setNameError("");
     setMobileError("");
     setPlaceError("");
-    // setAddressError('');
     setAgeError("");
     setTotalCostError("");
     setStartDateError("");
   };
 
-  // Custom styles for the modal
   const customStyles = {
     content: {
       width: window.innerWidth < 768 ? "auto" : "1100px",
@@ -193,14 +177,12 @@ const AddCustomerModal = ({
     },
   };
 
-  // Function to check the uniqueness of a mobile number in the 'customers' collection
   const checkMobileNumberUnique = async (mobileNumber) => {
     try {
       const snapshot = await db
         .collection(`users/${userID}/PGs/${selectedPGId}/CustomerData`)
         .where("mobile", "==", mobileNumber)
         .get();
-      // Return true if no matching documents found (mobile number is unique)
       return snapshot.empty;
     } catch (error) {
       console.error("Error checking mobile number uniqueness:", error.message);
@@ -208,34 +190,27 @@ const AddCustomerModal = ({
     }
   };
 
-  // Function to handle saving customer data to the 'customers' collection
   const handleSave = async () => {
     try {
       resetErrors();
-      if (!validateInputs() || customerCount >= 100) {
-        if (customerCount >= 100) {
+      if (!validateInputs() || customerCount >= pgData.maxCustomers) {
+        if (customerCount >= pgData.maxCustomers) {
           onRequestClose();
           onCustomerCount();
         }
-
         return;
       }
-      // Check if the mobile number is unique
       const isUnique = await checkMobileNumberUnique(customerData.mobile);
 
       if (isUnique) {
-        // Save data with the specified document ID (customerID) and include customerID as a field
         await db
           .collection(`users/${userID}/PGs/${selectedPGId}/CustomerData`)
           .doc(String(customerData.customerID))
           .set({
-            // Include other customer data here
             ...customerData,
-            // Set default values for status and endDate for new customers
             status: "In Progress",
             endDate: "",
           });
-        // Clear input boxes after successful save
         setCustomerData({
           customerID: "",
           name: "",
@@ -246,11 +221,9 @@ const AddCustomerModal = ({
           totalCost: "",
           startDate: "",
         });
-        // Close the modal after successful save
         onRequestClose();
         onCustomerAdded();
       } else {
-        // Handle case where mobile number is not unique
         setIsMobileUnique(false);
       }
     } catch (error) {
@@ -267,7 +240,7 @@ const AddCustomerModal = ({
       <div className="add-customer-dialog">
         <h2 className="add-customer-heading">Add Customer</h2>
         <p className="customerID">CustomerID: {customerData.customerID}</p>
-        <p className='total-customers'>Total Customers: {customerCount} / 100</p>
+        <p className='total-customers'>Total Customers: {customerCount} / {pgData.maxCustomers}</p>
         <div className="container2">
           <label className="add-all-label">
             Name *
@@ -321,7 +294,6 @@ const AddCustomerModal = ({
               value={customerData.address}
               onChange={handleInputChange}
             />
-            {/* <div className="edit-error-messages">{addressError}</div>   */}
           </label>
         </div>
 

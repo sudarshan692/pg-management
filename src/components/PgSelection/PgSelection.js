@@ -49,6 +49,7 @@ const PgSelection = () => {
           id: pgId,
           name: pgDetails.name || 'Unnamed PG',
           number: pgDetails.number || '',
+          maxCustomers: pgDetails.maxCustomers || '',
           ownerName: pgDetails.ownerName || '',
           ownerEmail: pgDetails.ownerEmail || '',
           address: pgDetails.address || '',
@@ -95,6 +96,7 @@ const PgSelection = () => {
           <div key={pg.id} className="pg-card" onClick={() => handlePGClick(pg)}>
             <h2 className="pg-name">{pg.name}</h2>
             <p><strong>PG Number:</strong> {pg.number}</p>
+            <p><strong>Max Customers:</strong> {pg.maxCustomers}</p>
             <p><strong>Owner Name:</strong> {pg.ownerName}</p>
             <p><strong>Owner Email:</strong> {pg.ownerEmail}</p>
             <p><strong>Address:</strong> {pg.address}</p>

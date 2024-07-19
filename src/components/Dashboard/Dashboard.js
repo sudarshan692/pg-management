@@ -70,6 +70,7 @@ const Dashboard = () => {
           onRequestClose={closeAddCustomerModal}
           onCustomerAdded={saveCustomerData}
           selectedPGId={pgId}
+          pgData={pgData}
         />
       </Modal>
     </div>
