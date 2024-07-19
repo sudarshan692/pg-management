@@ -17,6 +17,7 @@ const AdminDashboard = () => {
   const [pgName, setPgName] = useState("");
   const [pgAddress, setPgAddress] = useState("");
   const [pgMobile, setPgMobile] = useState("");
+  const [pgMobileError, setPgMobileError] = useState("");
   const [loading, setLoading] = useState(false);
   const [pgData, setPgData] = useState([]);
 
@@ -59,6 +60,16 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleMobileChange = (e) => {
+    const value = e.target.value;
+    if (value.length > 10) {
+      setPgMobileError("Mobile number cannot exceed 10 digits");
+    } else {
+      setPgMobile(value);
+      setPgMobileError("");
+    }
+  };
+  
   const addPG = async () => {
     try {
       setLoading(true);
@@ -197,7 +208,7 @@ const AdminDashboard = () => {
         />
         <input
           className='inputbox5'
-          type="text"
+          type="number"
           placeholder="Max Customers/PG"
           value={pgMaxCustomers}
           onChange={(e) => setpgMaxCustomers(e.target.value)}
@@ -223,10 +234,12 @@ const AdminDashboard = () => {
           className='inputbox5'
           type="text"
           placeholder="PG Mobile Number"
+          maxLength={10}
           value={pgMobile}
-          onChange={(e) => setPgMobile(e.target.value)}
+          onChange={handleMobileChange}
           required
         />
+        {pgMobileError && <div className="error-message">{pgMobileError}</div>}
         <input
           className='inputbox5'
           type="text"
