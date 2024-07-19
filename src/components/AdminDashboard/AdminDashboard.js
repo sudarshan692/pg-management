@@ -22,24 +22,24 @@ const AdminDashboard = () => {
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
 
-  useEffect(() => {
-    const fetchPgData = async () => {
-      try {
-        setLoading(true);
-        const snapshot = await db.collectionGroup('PGs').get();
-        const data = snapshot.docs.map(doc => ({
-          id: doc.id,
-          userId: doc.ref.parent.parent.id,
-          ...doc.data().PGDetails
-        }));
-        setPgData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching PG data:", error.message);
-        setLoading(false);
-      }
-    };
+  const fetchPgData = async () => {
+    try {
+      setLoading(true);
+      const snapshot = await db.collectionGroup('PGs').get();
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        userId: doc.ref.parent.parent.id,
+        ...doc.data().PGDetails
+      }));
+      setPgData(data);
+    } catch (error) {
+      console.error("Error fetching PG data:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchPgData();
   }, []);
   
@@ -78,6 +78,7 @@ const AdminDashboard = () => {
         address: pgAddress,
         mobile: pgMobile,
       }]);
+      fetchPgData();
       setUserId("");
       setPgNumber("");
       setpgMaxCustomers("");
@@ -93,26 +94,25 @@ const AdminDashboard = () => {
     }
   };
 
-  const createUser = async () => {
-    try {
-      setLoading(true);
-      const userCredential = await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
-      const newUserId = userCredential.user.uid;
-      await db.collection('users').doc(newUserId).set({
-        email: newUserEmail,
-      });
-      console.log("User created successfully");
-      setNewUserEmail("");
-      setNewUserPassword("");
-      // Ensure admin remains on AdminDashboard
-      history.push('/admin-dashboard');
-    } catch (error) {
-      console.error("Error creating user:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
+ const createUser = async () => {
+  try {
+    setLoading(true);
+    const userCredential = await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
+    const newUserId = userCredential.user.uid;
+    await db.collection('users').doc(newUserId).set({
+      email: newUserEmail,
+    });
+    console.log("User created successfully");
+    setNewUserEmail("");
+    setNewUserPassword("");
+    // Ensure admin remains on AdminDashboard
+    history.push('/admin-dashboard');
+  } catch (error) {
+    console.error("Error creating user:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div>
@@ -210,7 +210,7 @@ const AdminDashboard = () => {
         <button type="submit" disabled={loading}>Create User</button>
       </form>
 
-      <PgTable pgData={pgData} />
+      <PgTable pgData={pgData} fetchPgData={fetchPgData} />
     </div>
   );
 };

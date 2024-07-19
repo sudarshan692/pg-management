@@ -1,9 +1,12 @@
 // PgTable.js
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { FaCopy, FaArrowUp } from 'react-icons/fa';
-import CustomSnackbar from '../shared/CustomSnackbar'; // Import CustomSnackbar component
+import { FaCopy, FaArrowUp, FaEdit, FaTrash } from 'react-icons/fa';
+import CustomSnackbar from '../shared/CustomSnackbar';
 import './pgTable.css';
+import EditDialog from '../AdminDashboard/EditDialog/EditDialog';
+import DeleteDialog from '../AdminDashboard/DeleteDialog/DeleteDialog';
+import { db } from '../shared/firebase'; // Import Firestore database
 
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
@@ -11,10 +14,12 @@ const CustomNoDataComponent = () => (
   </div>
 );
 
-const PgTable = ({ pgData }) => {
+const PgTable = ({ pgData,fetchPgData }) => {
   const [searchText, setSearchText] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [deleteData, setDeleteData] = useState(null);
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -31,6 +36,49 @@ const PgTable = ({ pgData }) => {
       (value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase())
     )
   );
+
+  const handleEdit = (row) => {
+    setEditData(row);
+  };
+
+  const handleDelete = (row) => {
+    setDeleteData(row);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const { userId, ...pgDetails } = updatedData; // Exclude userId from update
+      const pgRef = db.collection(`users/${userId}/PGs`).doc(updatedData.id);
+      await pgRef.update({ PGDetails: pgDetails });
+      console.log('Updated Data:', updatedData);
+      setSnackbarMessage('Data updated successfully');
+      setShowSnackbar(true);
+      fetchPgData();
+    } catch (error) {
+      console.error('Error updating data:', error.message);
+      setSnackbarMessage('Error updating data');
+      setShowSnackbar(true);
+    } finally {
+      setEditData(null);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const pgRef = db.collection(`users/${deleteData.userId}/PGs`).doc(deleteData.id);
+      await pgRef.delete();
+      console.log('Deleting Data:', deleteData);
+      setSnackbarMessage('Data deleted successfully');
+      setShowSnackbar(true);
+      fetchPgData();
+    } catch (error) {
+      console.error('Error deleting data:', error.message);
+      setSnackbarMessage('Error deleting data');
+      setShowSnackbar(true);
+    } finally {
+      setDeleteData(null);
+    }
+  };
 
   const columns = [
     {
@@ -54,6 +102,21 @@ const PgTable = ({ pgData }) => {
     { name: 'PG Name', selector: (row) => row.name || '-', sortable: true },
     { name: 'Address', selector: (row) => row.address || '-', sortable: true },
     { name: 'Mobile', selector: (row) => row.mobile || '-', sortable: true },
+    {
+      name: 'Actions',
+      cell: (row) => (
+        <div>
+          <FaEdit
+            style={{ cursor: 'pointer', marginRight: '15px', width: '15px', height: '15px' }}
+            onClick={() => handleEdit(row)}
+          />
+          <FaTrash
+            style={{ cursor: 'pointer', color: 'red', width: '15px', height: '15px' }}
+            onClick={() => handleDelete(row)}
+          />
+        </div>
+      )
+    }
   ];
 
   const customStyles = {
@@ -129,6 +192,20 @@ const PgTable = ({ pgData }) => {
           message={snackbarMessage}
           duration={3000}
           onClose={() => setShowSnackbar(false)}
+        />
+      )}
+      {editData && (
+        <EditDialog
+          data={editData}
+          onClose={() => setEditData(null)}
+          onSave={handleEditSave}
+        />
+      )}
+      {deleteData && (
+        <DeleteDialog
+          data={deleteData}
+          onClose={() => setDeleteData(null)}
+          onDelete={handleDeleteConfirm}
         />
       )}
     </div>
