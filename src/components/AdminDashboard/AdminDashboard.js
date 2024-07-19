@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+// AdminDashboard.js
+import React, { useState, useEffect } from 'react';
 import { auth, db } from "../shared/firebase";
 import { useHistory } from "react-router-dom";
 import "./adminDashboard.css";
+import PgTable from '../PgTable/PgTable';
 
 const AdminDashboard = () => {
   const history = useHistory();
@@ -14,10 +16,31 @@ const AdminDashboard = () => {
   const [pgAddress, setPgAddress] = useState("");
   const [pgMobile, setPgMobile] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pgData, setPgData] = useState([]);
 
-  // New user state
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
+
+  useEffect(() => {
+    const fetchPgData = async () => {
+      try {
+        setLoading(true);
+        const snapshot = await db.collectionGroup('PGs').get();
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          userId: doc.ref.parent.parent.id,
+          ...doc.data().PGDetails
+        }));
+        setPgData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching PG data:", error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchPgData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -44,7 +67,16 @@ const AdminDashboard = () => {
         }
       });
       console.log("PG added successfully");
-      // Clear the form
+      setPgData([...pgData, {
+        userId,
+        number: pgNumber,
+        maxCustomers: pgMaxCustomers,
+        ownerName: pgOwnerName,
+        ownerEmail: pgOwnerEmail,
+        name: pgName,
+        address: pgAddress,
+        mobile: pgMobile,
+      }]);
       setUserId("");
       setPgNumber("");
       setpgMaxCustomers("");
@@ -63,18 +95,12 @@ const AdminDashboard = () => {
   const createUser = async () => {
     try {
       setLoading(true);
-      // Create a new user with email and password
       const userCredential = await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
       const newUserId = userCredential.user.uid;
-      
-      // Add the new user's details to Firestore
       await db.collection('users').doc(newUserId).set({
         email: newUserEmail,
-        // Add other user details if necessary
       });
-
       console.log("User created successfully");
-      // Clear the form
       setNewUserEmail("");
       setNewUserPassword("");
     } catch (error) {
@@ -88,7 +114,7 @@ const AdminDashboard = () => {
     <div>
       <h1 className="admin-nav-heading">Admin Dashboard</h1>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
-      
+
       <form onSubmit={(e) => {
         e.preventDefault();
         addPG();
@@ -175,6 +201,8 @@ const AdminDashboard = () => {
       </form>
 
       {loading && <p>Loading...</p>}
+
+      <PgTable pgData={pgData} />
     </div>
   );
 };
