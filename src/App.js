@@ -15,28 +15,32 @@ Modal.setAppElement('#root');
 // PrivateRoute component - restricts access to authenticated users
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const authContext = useAuth();
-  const userEmail = authContext.currentUser ? authContext.currentUser.email : null;
 
   if (authContext.loading) {
     return <LoadingSpinner />;
   }
 
-  // Check if user email matches the specific email ID
-  if (userEmail === 'sudarshankapatil@gmail.com') {
-    return <Route {...rest} render={(props) => <AdminDashboard {...props} />} />;
-  }
+  const isAdmin = authContext.currentUser?.email === 'sudarshankapatil@gmail.com';
 
-  // For other users, redirect to the PgSelection page
+  // Redirect logic based on role and current path
   return (
     <Route
       {...rest}
-      render={(props) =>
-        authContext.currentUser ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
-        )
-      }
+      render={(props) => {
+        if (!authContext.currentUser) {
+          return <Redirect to="/login" />;
+        }
+
+        if (isAdmin && rest.path === '/pg-selection') {
+          return <Redirect to="/admin-dashboard" />;
+        }
+
+        if (!isAdmin && rest.path === '/admin-dashboard') {
+          return <Redirect to="/pg-selection" />;
+        }
+
+        return <Component {...props} />;
+      }}
     />
   );
 };
@@ -68,7 +72,7 @@ const App = () => {
         <Switch>
           <PublicRoute path="/login" restricted component={Login} />
           <PrivateRoute path="/pg-selection" component={PgSelection} />
-          {/* <PrivateRoute path ="/admin-dashboard" component={{AdminDashboard}} /> */}
+          <PrivateRoute path="/admin-dashboard" component={AdminDashboard} />
           <PrivateRoute
             path="/dashboard/:pgId"
             component={({ match, ...props }) => {
@@ -86,5 +90,6 @@ const App = () => {
     </AuthProvider>
   );
 };
+
 
 export default App;

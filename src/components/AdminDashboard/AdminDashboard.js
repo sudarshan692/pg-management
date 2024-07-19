@@ -104,12 +104,15 @@ const AdminDashboard = () => {
       console.log("User created successfully");
       setNewUserEmail("");
       setNewUserPassword("");
+      // Ensure admin remains on AdminDashboard
+      history.push('/admin-dashboard');
     } catch (error) {
       console.error("Error creating user:", error.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div>

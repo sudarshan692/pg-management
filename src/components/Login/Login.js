@@ -58,8 +58,6 @@ const Login = () => {
       // Check if the logged-in user's email matches specific email ID
       if (email === 'sudarshankapatil@gmail.com') {
         history.push("/admin-dashboard");
-      } else {
-        history.push("/pg-selection");
       }
 
       console.log("Login successful");
