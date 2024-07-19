@@ -4,6 +4,7 @@ import { auth, db } from "../shared/firebase";
 import { useHistory } from "react-router-dom";
 import "./adminDashboard.css";
 import PgTable from '../PgTable/PgTable';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 const AdminDashboard = () => {
   const history = useHistory();
@@ -41,7 +42,7 @@ const AdminDashboard = () => {
 
     fetchPgData();
   }, []);
-
+  
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -112,6 +113,11 @@ const AdminDashboard = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="overlay">
+          <LoadingSpinner />
+        </div>
+      )}
       <h1 className="admin-nav-heading">Admin Dashboard</h1>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
 
@@ -189,6 +195,7 @@ const AdminDashboard = () => {
           value={newUserEmail}
           onChange={(e) => setNewUserEmail(e.target.value)}
           required
+          
         />
         <input
           type="password"
@@ -199,8 +206,6 @@ const AdminDashboard = () => {
         />
         <button type="submit" disabled={loading}>Create User</button>
       </form>
-
-      {loading && <p>Loading...</p>}
 
       <PgTable pgData={pgData} />
     </div>
