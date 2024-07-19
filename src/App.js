@@ -68,6 +68,7 @@ const App = () => {
         <Switch>
           <PublicRoute path="/login" restricted component={Login} />
           <PrivateRoute path="/pg-selection" component={PgSelection} />
+          {/* <PrivateRoute path ="/admin-dashboard" component={{AdminDashboard}} /> */}
           <PrivateRoute
             path="/dashboard/:pgId"
             component={({ match, ...props }) => {
