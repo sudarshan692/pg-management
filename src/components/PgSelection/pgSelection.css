@@ -13,14 +13,6 @@
     font-weight: 300;
     font-style: normal;
   }
-  .pg-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Adjust the spacing between items as needed */
-    justify-content: flex-start; /* Align items to the left */
-    align-items: flex-start; /* Align items to the top */
-    padding: 10px; /* Add some padding around the container */
-  }
   
   .pg-item {
     color: rgb(211, 227, 253);
@@ -39,8 +31,44 @@
     align-items: center; /* Center content vertically */
   }
   
-  .pg-item:hover {
-    background-color: #333e54; /* Slightly darker grey on hover */
+  .pg-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
   }
-
+  
+  .pg-card {
+    background-color: #0d2136;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    width: calc(25% - 1rem); /* Adjust based on number of columns you want */
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    color: rgb(211, 227, 253);
+  }
+  
+  .pg-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #3f51b5;
+  }
+  
+  .pg-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pg-card p {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+  }
+  
+  .pg-card strong {
+    font-weight: bold;
+  }
+  
   

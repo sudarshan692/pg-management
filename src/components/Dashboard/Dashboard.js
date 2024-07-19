@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import { auth, db } from "../shared/firebase";
 import Modal from "react-modal";
 import AddCustomerModal from "../AddCustomerModal/AddCustomerModal";
@@ -10,28 +10,12 @@ Modal.setAppElement('#root');
 const Dashboard = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCount, setCustomerCount] = useState(0);
-  const [pgData, setPgData] = useState(null); // State to hold PG data
+  const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
 
-  useEffect(() => {
-    const fetchPgData = async () => {
-      try {
-        const pgDoc = await db.collection(`users/${auth.currentUser.uid}/PGs`).doc(pgId).get();
-        if (pgDoc.exists) {
-          setPgData(pgDoc.data());
-        } else {
-          console.error("PG not found or unauthorized access.");
-          history.push("/pg-selection"); // Redirect to selection page if unauthorized
-        }
-      } catch (error) {
-        console.error("Error fetching PG data:", error.message);
-        history.push("/pg-selection"); // Redirect to selection page on error
-      }
-    };
-
-    fetchPgData();
-  }, [pgId, history]);
+  // Get PG details from location state
+  const pgData = location.state?.pgDetails;
 
   const openAddCustomerModal = () => {
     setModalIsOpen(true);
@@ -64,12 +48,15 @@ const Dashboard = () => {
   };
 
   if (!pgData) {
-    return null; // or LoadingSpinner or any loading indicator while fetching data
+    return null; // You can replace this with a loading spinner or message
   }
 
   return (
-    <div>
-      <h1 className="dashboard-nav-heading">Welcome to PG Management Dashboard - {pgData.name}</h1>
+    <div className="dashboard-page">
+      <div className="dashboard-nav-heading">
+        <span className="pg-number">{pgData.number}</span>
+        <span className="heading-text">{pgData.name} PG Management Center</span>
+      </div>
       <button className="add-customer-btn" onClick={openAddCustomerModal}>Add Customer</button>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
 

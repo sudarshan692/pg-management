@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { auth, db } from "../shared/firebase";
-import { getCurrentUserID } from "../shared/getCurrentUserID";
-import "./pgSelection.css";
-import LoadingSpinner from "../shared/LoadingSpinner";
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { auth, db } from '../shared/firebase';
+import { getCurrentUserID } from '../shared/getCurrentUserID';
+import './pgSelection.css';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 const PgSelection = () => {
   const [pgs, setPgs] = useState([]);
-  const history = useHistory();
-  const [newPgName, setNewPgName] = useState("");
-  const [loading, setLoading] = useState(true); // Initially true to show loading spinner
+  const [loading, setLoading] = useState(true);
   const [selectedPG, setSelectedPG] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     fetchPGs();
   }, []);
 
   useEffect(() => {
-    // Navigate to dashboard after selecting a PG and a delay of 2 seconds
     if (loading && selectedPG) {
       const timer = setTimeout(() => {
-        history.push(`/dashboard/${selectedPG}`);
+        history.push({
+          pathname: `/dashboard/${selectedPG.id}`,
+          state: { pgDetails: selectedPG }
+        });
         setLoading(false);
       }, 2000); // 2 seconds delay
 
@@ -32,55 +33,51 @@ const PgSelection = () => {
     try {
       const userID = getCurrentUserID();
       if (!userID) {
-        throw new Error("User ID not found.");
+        throw new Error('User ID not found.');
       }
 
       const snapshot = await db.collection(`users/${userID}/PGs`).get();
-      const pgsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const pgsData = [];
 
-      // Sort PGs alphabetically by name
-      const sortedPgs = pgsData.sort((a, b) => a.name.localeCompare(b.name));
+      snapshot.docs.forEach(doc => {
+        const pgDoc = doc.data();
+        const pgId = doc.id;
+
+        const pgDetails = pgDoc.PGDetails || {};
+
+        pgsData.push({
+          id: pgId,
+          name: pgDetails.name || 'Unnamed PG',
+          number: pgDetails.number || '',
+          ownerName: pgDetails.ownerName || '',
+          ownerEmail: pgDetails.ownerEmail || '',
+          address: pgDetails.address || '',
+          mobile: pgDetails.mobile || ''
+        });
+      });
+
+      // Sort PGs by number field
+      const sortedPgs = pgsData.sort((a, b) => a.number.localeCompare(b.number));
+
       setPgs(sortedPgs);
       setLoading(false); // Data fetched, hide loading spinner
     } catch (error) {
-      console.error("Error fetching PGs:", error.message);
+      console.error('Error fetching PGs:', error.message);
     }
   };
 
-  const handlePGClick = (pgId) => {
-    setSelectedPG(pgId);
+  const handlePGClick = (pg) => {
+    setSelectedPG(pg);
     setLoading(true); // Show loading spinner after selecting PG
   };
 
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      history.push("/login"); // Redirect to login page after logout
-      console.log("Logout successful");
+      history.push('/login'); // Redirect to login page after logout
+      console.log('Logout successful');
     } catch (error) {
-      console.error("Error logging out:", error.message);
-    }
-  };
-
-
-
-  const addPG = async () => {
-    try {
-      const userID = getCurrentUserID();
-      if (!userID) {
-        throw new Error("User ID not found.");
-      }
-
-      await db.collection(`users/${userID}/PGs`).add({
-        name: newPgName
-      });
-      fetchPGs();
-      setNewPgName("");
-    } catch (error) {
-      console.error("Error adding PG:", error.message);
+      console.error('Error logging out:', error.message);
     }
   };
 
@@ -91,28 +88,20 @@ const PgSelection = () => {
           <LoadingSpinner />
         </div>
       )}
-      <h1 className="dashboard-nav-heading">Select PG</h1>
+      <h1 className="dashboard-nav-heading">PG Selection Dashboard</h1>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <div className="pg-container">
         {pgs.map(pg => (
-          <div key={pg.id} className="pg-item" onClick={() => handlePGClick(pg.id)}>
-            {pg.name}
+          <div key={pg.id} className="pg-card" onClick={() => handlePGClick(pg)}>
+            <h2 className="pg-name">{pg.name}</h2>
+            <p><strong>PG Number:</strong> {pg.number}</p>
+            <p><strong>Owner Name:</strong> {pg.ownerName}</p>
+            <p><strong>Owner Email:</strong> {pg.ownerEmail}</p>
+            <p><strong>Address:</strong> {pg.address}</p>
+            <p><strong>Mobile:</strong> {pg.mobile}</p>
           </div>
         ))}
       </div>
-
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        addPG();
-      }}>
-        <input
-          type="text"
-          placeholder="Enter new PG name"
-          value={newPgName}
-          onChange={(e) => setNewPgName(e.target.value)}
-        />
-        <button type="submit">Add PG</button>
-      </form>
     </div>
   );
 };
