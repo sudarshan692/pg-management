@@ -21,14 +21,22 @@ const AdminDashboard = () => {
   const [pgMobileError, setPgMobileError] = useState("");
   const [loading, setLoading] = useState(false);
   const [pgData, setPgData] = useState([]);
-
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
-
-  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const updatePgData = ({ id, action, newData, updatedData }) => {
+    if (action === 'delete') {
+      setPgData(pgData.filter(pg => pg.id !== id));
+    } else if (action === 'update') {
+      setPgData(pgData.map(pg => (pg.id === id ? { ...pg, ...updatedData } : pg)));
+    } else if (action === 'add') {
+      console.log('Adding new PG data:', newData);
+      setPgData([...pgData, { id, ...newData }]);
+    }
+  };
 
   const fetchPgData = async () => {
     try {
@@ -50,7 +58,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchPgData();
   }, []);
-  
+
   useEffect(() => {
     if (location.state && location.state.showSnackbar) {
       setSnackbarMessage(location.state.message);
@@ -88,11 +96,11 @@ const AdminDashboard = () => {
       setPgMobileError("");
     }
   };
-  
+
   const addPG = async () => {
     try {
       setLoading(true);
-      await db.collection(`users/${userId}/PGs`).add({
+      const pgRef = await db.collection(`users/${userId}/PGs`).add({
         PGDetails: {
           number: pgNumber,
           maxCustomers: pgMaxCustomers,
@@ -103,18 +111,22 @@ const AdminDashboard = () => {
           mobile: pgMobile,
         }
       });
-      console.log("PG added successfully");
-      setPgData([...pgData, {
-        userId,
-        number: pgNumber,
-        maxCustomers: pgMaxCustomers,
-        ownerName: pgOwnerName,
-        ownerEmail: pgOwnerEmail,
-        name: pgName,
-        address: pgAddress,
-        mobile: pgMobile,
-      }]);
-      fetchPgData();
+
+      updatePgData({
+        id: pgRef.id,
+        action: 'add',
+        newData: {
+          userId,
+          number: pgNumber,
+          maxCustomers: pgMaxCustomers,
+          ownerName: pgOwnerName,
+          ownerEmail: pgOwnerEmail,
+          name: pgName,
+          address: pgAddress,
+          mobile: pgMobile,
+        }
+      });
+
       setUserId("");
       setPgNumber("");
       setpgMaxCustomers("");
@@ -139,7 +151,7 @@ const AdminDashboard = () => {
   const createUser = async () => {
     try {
       setLoading(true);
-  
+
       // Check if email exists in Firebase Authentication
       const existingAuthUser = await auth.fetchSignInMethodsForEmail(newUserEmail);
       if (existingAuthUser.length > 0) {
@@ -148,7 +160,7 @@ const AdminDashboard = () => {
         setSnackbarOpen(true);
         return;
       }
-  
+
       // Check if email exists in Firestore
       const userDoc = await db.collection('users').where('email', '==', newUserEmail).get();
       if (!userDoc.empty) {
@@ -157,16 +169,16 @@ const AdminDashboard = () => {
         setSnackbarOpen(true);
         return;
       }
-  
+
       // Create new user in Firebase Authentication
       await auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword);
       const newUserId = auth.currentUser.uid;
-  
+
       // Add user data to Firestore
       await db.collection('users').doc(newUserId).set({
         email: newUserEmail,
       });
-  
+
       console.log("User created successfully");
       setNewUserEmail("");
       setNewUserPassword("");
@@ -188,7 +200,6 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   };
-  
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -305,7 +316,7 @@ const AdminDashboard = () => {
         <button className='add-pg' type="submit" disabled={loading}>Create User</button>
       </form>
 
-      <PgTable pgData={pgData} fetchPgData={fetchPgData} />
+      <PgTable pgData={pgData} updatePgData={updatePgData} />
 
       <Snackbar
         open={snackbarOpen}

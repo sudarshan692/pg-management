@@ -14,7 +14,7 @@ const CustomNoDataComponent = () => (
   </div>
 );
 
-const PgTable = ({ pgData, fetchPgData }) => {
+const PgTable = ({ pgData, updatePgData }) => {
   const [searchText, setSearchText] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -49,14 +49,19 @@ const PgTable = ({ pgData, fetchPgData }) => {
 
   const handleEditSave = async (updatedData) => {
     try {
-      const { userId, ...pgDetails } = updatedData; // Exclude userId from update
+      const { userId, ...pgDetails } = updatedData;
       const pgRef = db.collection(`users/${userId}/PGs`).doc(updatedData.id);
       await pgRef.update({ PGDetails: pgDetails });
-      console.log('Updated Data:', updatedData);
+
+      // Log the updated data
+      console.log("Data updated successfully:", { id: updatedData.id, ...pgDetails });
+
+      // Use the updatePgData function passed as a prop
+      updatePgData({ id: updatedData.id, ...pgDetails });
+
       setSnackbarMessage('Data updated successfully');
       setSnackbarSeverity('success');
       setShowSnackbar(true);
-      fetchPgData();
     } catch (error) {
       console.error('Error updating data:', error.message);
       setSnackbarMessage('Error updating data');
@@ -80,15 +85,18 @@ const PgTable = ({ pgData, fetchPgData }) => {
     try {
       const pgRef = db.collection(`users/${deleteData.userId}/PGs`).doc(deleteData.id);
       const customerDataRef = pgRef.collection('CustomerData');
-
+  
       await deleteCollection(customerDataRef); // Delete CustomerData collection first
       await pgRef.delete(); // Then delete the PG document itself
-
+  
       console.log('Deleting Data:', deleteData);
+  
+      // Use the updatePgData function passed as a prop to remove the deleted item
+      updatePgData({ id: deleteData.id, action: 'delete' });
+  
       setSnackbarMessage('Data deleted successfully');
       setSnackbarSeverity('success');
       setShowSnackbar(true);
-      fetchPgData();
     } catch (error) {
       console.error('Error deleting data:', error.message);
       setSnackbarMessage('Error deleting data');
@@ -98,6 +106,7 @@ const PgTable = ({ pgData, fetchPgData }) => {
       setDeleteData(null);
     }
   };
+  
 
   const columns = [
     {
