@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     return <LoadingSpinner />;
   }
 
-  const isAdmin = authContext.currentUser?.email === 'sudarshankapatil@gmail.com';
+  const isAdmin = authContext.currentUser?.email === 'sudarshanakpatil@gmail.com';
 
   // Redirect logic based on role and current path
   return (
