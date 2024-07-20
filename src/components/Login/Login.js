@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../shared/firebase";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import "./login.css";
 import LoadingSpinner from "../shared/LoadingSpinner";
-import CustomSnackbar from "../shared/CustomSnackbar";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,13 +14,27 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     if (auth.currentUser) {
       history.push("/pg-selection");
     }
   }, [history]);
+
+  useEffect(() => {
+    if (location.state && location.state.showSnackbar) {
+      setSnackbarMessage(location.state.message);
+      setSnackbarSeverity(location.state.severity);
+      setShowSnackbar(true);
+      history.replace({
+        pathname: location.pathname,
+        state: {}
+      });
+    }
+  }, [location, history]);
 
   const validateInputs = () => {
     let isValid = true;
@@ -51,16 +66,20 @@ const Login = () => {
       if (!validateInputs()) {
         return;
       }
-
       setLoading(true);
       await auth.signInWithEmailAndPassword(email, password);
-
       // Check if the logged-in user's email matches specific email ID
       if (email === 'sudarshanakpatil@gmail.com') {
-        history.push("/admin-dashboard");
+        history.push({
+          pathname: "/admin-dashboard",
+          state: { showSnackbar: true, message: "Login successful", severity: "success" }
+        });
+      } else {
+        history.push({
+          pathname: "/pg-selection",
+          state: { showSnackbar: true, message: "Login successful", severity: "success" }
+        });
       }
-
-      console.log("Login successful");
     } catch (error) {
       console.error("Error logging in:", error.message);
       // Check for specific error codes and show different error messages
@@ -71,12 +90,19 @@ const Login = () => {
       } else {
         setSnackbarMessage("An error occurred during login. Please try after sometime.");
       }
+      setSnackbarSeverity("error");
       setShowSnackbar(true);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSnackbar(false);
+  };
 
   return (
     <div>
@@ -123,13 +149,16 @@ const Login = () => {
           LOG IN
         </button>
       </div>
-      {showSnackbar && (
-        <CustomSnackbar
-          message={snackbarMessage}
-          duration={10000}
-          onClose={() => setShowSnackbar(false)}
-        />
-      )}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

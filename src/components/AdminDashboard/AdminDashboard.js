@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from "../shared/firebase";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import "./adminDashboard.css";
 import PgTable from '../PgTable/PgTable';
 import LoadingSpinner from '../shared/LoadingSpinner';
@@ -9,6 +9,7 @@ import Alert from '@mui/material/Alert';
 
 const AdminDashboard = () => {
   const history = useHistory();
+  const location = useLocation();
   const [userId, setUserId] = useState("");
   const [pgNumber, setPgNumber] = useState("");
   const [pgMaxCustomers, setpgMaxCustomers] = useState("");
@@ -50,13 +51,31 @@ const AdminDashboard = () => {
     fetchPgData();
   }, []);
   
+  useEffect(() => {
+    if (location.state && location.state.showSnackbar) {
+      setSnackbarMessage(location.state.message);
+      setSnackbarSeverity(location.state.severity);
+      setSnackbarOpen(true);
+      history.replace({
+        pathname: location.pathname,
+        state: {}
+      });
+    }
+  }, [location, history]);
+
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      history.push("/login");
+      history.push({
+        pathname: "/login",
+        state: { showSnackbar: true, message: "Logout successful", severity: "success" }
+      });
       console.log("Logout successful");
     } catch (error) {
       console.error("Error logging out:", error.message);
+      setSnackbarMessage("Error logging out");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -171,7 +190,10 @@ const AdminDashboard = () => {
   };
   
 
-  const handleSnackbarClose = () => {
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
     setSnackbarOpen(false);
   };
 

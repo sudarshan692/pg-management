@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { auth, db } from '../shared/firebase';
 import { getCurrentUserID } from '../shared/getCurrentUserID';
 import './pgSelection.css';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const PgSelection = () => {
   const [pgs, setPgs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPG, setSelectedPG] = useState(null);
   const history = useHistory();
+  const location = useLocation();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   useEffect(() => {
     fetchPGs();
@@ -28,6 +34,18 @@ const PgSelection = () => {
       return () => clearTimeout(timer); // Clean up timer
     }
   }, [loading, selectedPG, history]);
+
+  useEffect(() => {
+    if (location.state && location.state.showSnackbar) {
+      setSnackbarMessage(location.state.message);
+      setSnackbarSeverity(location.state.severity);
+      setSnackbarOpen(true);
+      history.replace({
+        pathname: location.pathname,
+        state: {}
+      });
+    }
+  }, [location, history]);
 
   const fetchPGs = async () => {
     try {
@@ -75,11 +93,24 @@ const PgSelection = () => {
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      history.push('/login'); // Redirect to login page after logout
+      history.push({
+        pathname: '/login',
+        state: { showSnackbar: true, message: 'Logout successful', severity: 'success' }
+      }); // Redirect to login page after logout
       console.log('Logout successful');
     } catch (error) {
       console.error('Error logging out:', error.message);
+      setSnackbarMessage('Error logging out');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
@@ -104,6 +135,16 @@ const PgSelection = () => {
           </div>
         ))}
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
