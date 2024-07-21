@@ -21,6 +21,60 @@
   .paying-guest-table tr:nth-child(even) {
     background-color: #f9f9f9;
   }
-.cYFpUK svg  {
-    margin-top: 15;
+  .box-container {
+    display: flex;
+    gap: 4px; /* Adjust gap as needed */
+  }
+  
+  .box {
+    padding: 4px 8px; /* Adjust padding as needed */
+    color: #333; /* Adjust text color as needed */
+    border-radius: 4px; /* Adjust border radius as needed */
+    font-size: 0.875rem; /* Adjust font size as needed */
+    display: inline-block;
+  }
+  
+  /* Different background colors for each box */
+  .box.floor {
+    background-color: #4D3C77; /* Light red */
+  }
+  
+  .box.room {
+    background-color: #A2678A; /* Light orange */
+  }
+  
+  .box.type {
+    background-color: #E19898; /* Light yellow */
+  }
+  
+.box-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
+
+.box {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+ 
+}
+
+.box.deposit.green {
+  background-color: #059212;
+}
+
+.box.deposit.red {
+  background-color: #E72929;
+
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  background-color: #162c46;
+  color: rgb(211, 227, 253);
+  width: 100%;
+}
+

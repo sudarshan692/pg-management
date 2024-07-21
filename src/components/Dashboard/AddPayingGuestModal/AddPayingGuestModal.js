@@ -18,12 +18,15 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     roomType: "", // Single, Double, Triple
     depositAmount: "",
     monthlyRent: "",
-    maintenanceCharges: ""
+    maintenanceCharges: "",
+    depositPaid: false, // New field for deposit paid status
+    rentPaid: false // New field for rent paid status
   });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setGuestData({ ...guestData, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setGuestData({ ...guestData, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleSubmit = async (e) => {
@@ -49,7 +52,9 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         roomType: roomTypeMap[guestData.roomType],
         depositAmount: guestData.depositAmount,
         monthlyRent: guestData.monthlyRent,
-        maintenanceCharges: guestData.maintenanceCharges
+        maintenanceCharges: guestData.maintenanceCharges,
+        depositPaid: guestData.depositPaid, // Save deposit paid status
+        rentPaid: guestData.rentPaid // Save rent paid status
       };
 
       await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
@@ -74,7 +79,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
             border: 'none',
             maxWidth: '900px',
             width: '90%',
-            maxHeight: '70vh',
+            maxHeight: '72vh',
             height: 'auto',
             margin: 'auto',
             padding: '20px',
@@ -104,6 +109,14 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
               <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
               <input type="text" name="presentStatus" placeholder="Present Status (Employee/Student)" value={guestData.presentStatus} onChange={handleChange} required />
+              <label className="checkbox-label">
+                <input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} />
+                Deposit Paid
+              </label>
+              <label className="checkbox-label">
+                <input type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} />
+                Rent Paid
+              </label>
             </div>
             <div className="form-column">
               <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />
@@ -123,7 +136,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <button type="submit" disabled={loading}>Save</button>
               <button type="button" onClick={onRequestClose} disabled={loading}>Cancel</button>
             </div>
-
           </form>
         </div>
       </Modal>

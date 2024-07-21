@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaArrowUp } from 'react-icons/fa';
-import './payingGuestTable.css'; // Ensure this CSS file has the same styles as in pgTable.css
+import './payingGuestTable.css';
 
 const CustomNoDataComponent = () => (
-  <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
+  <div className="no-data">
     There are no records to display.
+  </div>
+);
+
+const BoxedCell = ({ value, className, color }) => (
+  <div className={`box ${className} ${color}`}>
+    {value}
+  </div>
+);
+
+const BoxContainer = ({ floorNo, roomNo, roomType }) => (
+  <div className="box-container">
+    <BoxedCell value={floorNo || '-'} className="floor" />
+    <BoxedCell value={roomNo || '-'} className="room" />
+    <BoxedCell value={roomType || '-'} className="type" />
   </div>
 );
 
 const PayingGuestTable = ({ payingGuests }) => {
   const [searchText, setSearchText] = useState('');
-
-
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -29,12 +41,21 @@ const PayingGuestTable = ({ payingGuests }) => {
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
-      selector: (row) => 
-        `${row.floorNo || '-'} / ${row.roomNo || '-'} / ${row.roomType || '-'}`, 
+      cell: (row) => <BoxContainer floorNo={row.floorNo} roomNo={row.roomNo} roomType={row.roomType} />, 
       sortable: true 
     },
     { name: 'Date Of Admission', selector: (row) => row.dateOfAdmission || '-', sortable: true },
-    { name: 'Deposit Amount', selector: (row) => row.depositAmount || '-', sortable: true },
+    { 
+      name: 'Deposit Amount', 
+      cell: (row) => (
+        <BoxedCell
+          value={row.depositAmount || '-'}
+          className="deposit"
+          color={row.depositPaid ? 'green' : 'red'}
+        />
+      ), 
+      sortable: true 
+    },
     { name: 'Monthly Rent', selector: (row) => row.monthlyRent || '-', sortable: true },
     { name: 'Payment Status', selector: (row) => row.paymentStatus || '-', sortable: true },
     {
@@ -46,7 +67,7 @@ const PayingGuestTable = ({ payingGuests }) => {
       )
     }
   ];
-  
+
   const customStyles = {
     headRow: {
       style: {
