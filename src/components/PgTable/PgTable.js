@@ -52,13 +52,13 @@ const PgTable = ({ pgData, updatePgData }) => {
       const { userId, ...pgDetails } = updatedData;
       const pgRef = db.collection(`users/${userId}/PGs`).doc(updatedData.id);
       await pgRef.update({ PGDetails: pgDetails });
-
+  
       // Log the updated data
       console.log("Data updated successfully:", { id: updatedData.id, ...pgDetails });
-
+  
       // Use the updatePgData function passed as a prop
-      updatePgData({ id: updatedData.id, ...pgDetails });
-
+      updatePgData({ id: updatedData.id, action: 'update', updatedData: pgDetails });
+  
       setSnackbarMessage('Data updated successfully');
       setSnackbarSeverity('success');
       setShowSnackbar(true);
@@ -71,6 +71,7 @@ const PgTable = ({ pgData, updatePgData }) => {
       setEditData(null);
     }
   };
+  
 
   const deleteCollection = async (collectionRef) => {
     const snapshot = await collectionRef.get();
