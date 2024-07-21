@@ -13,9 +13,7 @@ const Dashboard = () => {
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
-
-  // Get PG details from location state
-  const pgData = location.state?.pgDetails;
+  const [pgData] = useState(location.state?.pgDetails || {});
 
   const openAddCustomerModal = () => {
     setModalIsOpen(true);
@@ -27,9 +25,7 @@ const Dashboard = () => {
 
   const saveCustomerData = async (customerData) => {
     try {
-      await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/CustomerData`).doc({
-        ...customerData,
-      });
+      await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/CustomerData`).add(customerData);
       setCustomerCount(customerCount + 1);
       closeAddCustomerModal();
     } catch (error) {
@@ -46,10 +42,6 @@ const Dashboard = () => {
       console.error("Error logging out:", error.message);
     }
   };
-
-  if (!pgData) {
-    return null; // You can replace this with a loading spinner or message
-  }
 
   return (
     <div className="dashboard-page">
