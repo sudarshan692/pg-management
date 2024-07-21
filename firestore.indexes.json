@@ -1,4 +1,48 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "id", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "number", "mode": "ASCENDING" },
+        { "fieldPath": "name", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "maxCustomers", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "ownerName", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "ownerEmail", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "address", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "PGs",
+      "fields": [
+        { "fieldPath": "mobile", "mode": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }
