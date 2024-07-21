@@ -69,6 +69,7 @@ const Login = () => {
       setLoading(true);
       await auth.signInWithEmailAndPassword(email, password);
       // Check if the logged-in user's email matches specific email ID
+      window.location.reload();
       if (email === 'sudarshanakpatil@gmail.com') {
         history.push({
           pathname: "/admin-dashboard",
