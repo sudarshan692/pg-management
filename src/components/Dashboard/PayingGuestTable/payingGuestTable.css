@@ -1,0 +1,26 @@
+.paying-guest-table {
+    margin: 20px;
+    padding: 10px;
+  }
+  
+  .paying-guest-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .paying-guest-table th, .paying-guest-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .paying-guest-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .paying-guest-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+.cYFpUK svg  {
+    margin-top: 15;
+}

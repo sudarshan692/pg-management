@@ -1,23 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
-import { auth } from "../shared/firebase";
+import { auth, db } from "../shared/firebase";
 import Modal from "react-modal";
 import AddPayingGuestModal from "./AddPayingGuestModal/AddPayingGuestModal";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import "./dashboard.css";
+import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 
 Modal.setAppElement('#root');
+
+const fetchPayingGuests = async (pgId, setPayingGuests) => {
+  try {
+    console.log("Fetching paying guests for PG ID:", pgId); // Log when fetching starts
+    const data = [];
+    const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
+    pgSnapshot.forEach(doc => {
+      data.push({
+        id: doc.id,
+        ...doc.data().payingGuestMap
+      });
+    });
+    setPayingGuests(data);
+    console.log("Paying guests fetched successfully:", data); // Log when fetching is successful
+  } catch (error) {
+    console.error("Error fetching paying guests:", error);
+  }
+};
 
 const Dashboard = () => {
   const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [payingGuests, setPayingGuests] = useState([]);
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
+
+  useEffect(() => {
+    console.log("Dashboard mounted or PG ID changed:", pgId); // Log when component mounts or PG ID changes
+    fetchPayingGuests(pgId, setPayingGuests);
+  }, [pgId]);
 
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
@@ -47,6 +72,11 @@ const Dashboard = () => {
     setOpenSnackbar(false);
   };
 
+  const handleDataUpdate = async () => {
+    console.log("Updating data after closing modal"); // Log before fetching new data
+    await fetchPayingGuests(pgId, setPayingGuests); // Fetch new data after modal closes
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
@@ -55,7 +85,7 @@ const Dashboard = () => {
       </div>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
-
+      <PayingGuestTable payingGuests={payingGuests} />
       <Modal
         isOpen={payingGuestModalIsOpen}
         onRequestClose={closeAddPayingGuestModal}
@@ -63,10 +93,13 @@ const Dashboard = () => {
       >
         <AddPayingGuestModal
           isOpen={payingGuestModalIsOpen}
-          onRequestClose={closeAddPayingGuestModal}
+          onRequestClose={() => {
+            closeAddPayingGuestModal();
+            handleDataUpdate(); // Fetch new data after closing modal
+          }}
           selectedPGId={pgId}
           pgData={pgData}
-          onSnackbarOpen={handleSnackbarOpen} // Pass callback to handle snackbar
+          onSnackbarOpen={handleSnackbarOpen}
         />
       </Modal>
 
