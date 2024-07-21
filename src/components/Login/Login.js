@@ -69,7 +69,12 @@ const Login = () => {
       setLoading(true);
       await auth.signInWithEmailAndPassword(email, password);
       // Check if the logged-in user's email matches specific email ID
-      window.location.reload();
+      // Show loading overlay before reloading
+      document.body.classList.add('loading-overlay-visible');
+      // Delay the reload to allow the overlay to be visible
+      setTimeout(() => {
+        window.location.reload();
+      }, 100); // Adjust delay if needed
       if (email === 'sudarshanakpatil@gmail.com') {
         history.push({
           pathname: "/admin-dashboard",

@@ -1,36 +1,30 @@
 import React, { useState } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
-import { auth, db } from "../shared/firebase";
+import { auth } from "../shared/firebase";
 import Modal from "react-modal";
-import AddCustomerModal from "../AddCustomerModal/AddCustomerModal";
+import AddPayingGuestModal from "./AddPayingGuestModal/AddPayingGuestModal";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import "./dashboard.css";
 
 Modal.setAppElement('#root');
 
 const Dashboard = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [customerCount, setCustomerCount] = useState(0);
+  const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
 
-  const openAddCustomerModal = () => {
-    setModalIsOpen(true);
+  const openAddPayingGuestModal = () => {
+    setPayingGuestModalIsOpen(true);
   };
 
-  const closeAddCustomerModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const saveCustomerData = async (customerData) => {
-    try {
-      await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/CustomerData`).add(customerData);
-      setCustomerCount(customerCount + 1);
-      closeAddCustomerModal();
-    } catch (error) {
-      console.error("Error saving customer data:", error.message);
-    }
+  const closeAddPayingGuestModal = () => {
+    setPayingGuestModalIsOpen(false);
   };
 
   const handleLogout = async () => {
@@ -43,28 +37,50 @@ const Dashboard = () => {
     }
   };
 
+  const handleSnackbarOpen = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setOpenSnackbar(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
         <span className="pg-number">{pgData.number}</span>
         <span className="heading-text">{pgData.name} PG Management Center</span>
       </div>
-      <button className="add-customer-btn" onClick={openAddCustomerModal}>Add Customer</button>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
 
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeAddCustomerModal}
-        contentLabel="Add Customer Modal"
+        isOpen={payingGuestModalIsOpen}
+        onRequestClose={closeAddPayingGuestModal}
+        contentLabel="Add Paying Guest Modal"
       >
-        <AddCustomerModal
-          isOpen={modalIsOpen}
-          onRequestClose={closeAddCustomerModal}
-          onCustomerAdded={saveCustomerData}
+        <AddPayingGuestModal
+          isOpen={payingGuestModalIsOpen}
+          onRequestClose={closeAddPayingGuestModal}
           selectedPGId={pgId}
           pgData={pgData}
+          onSnackbarOpen={handleSnackbarOpen} // Pass callback to handle snackbar
         />
       </Modal>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
