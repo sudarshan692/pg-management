@@ -1,64 +1,42 @@
 .paying-guest-table {
-    margin: 20px;
-    padding: 10px;
-  }
-  
-  .paying-guest-table table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .paying-guest-table th, .paying-guest-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .paying-guest-table th {
-    background-color: #f2f2f2;
-  }
-  
-  .paying-guest-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  .box-container {
-    display: flex;
-    gap: 4px; /* Adjust gap as needed */
-  }
-  
-  .box {
-    padding: 4px 8px; /* Adjust padding as needed */
-    color: #333; /* Adjust text color as needed */
-    border-radius: 4px; /* Adjust border radius as needed */
-    font-size: 0.875rem; /* Adjust font size as needed */
-    display: inline-block;
-  }
-  
-  /* Different background colors for each box */
-  .box.floor {
-    background-color: #4D3C77; /* Light red */
-  }
-  
-  .box.room {
-    background-color: #A2678A; /* Light orange */
-  }
-  
-  .box.type {
-    background-color: #E19898; /* Light yellow */
-  }
-  
-.box-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  margin: 20px;
+  padding: 10px;
 }
 
-.box {
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  text-align: center;
- 
+.paying-guest-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.paying-guest-table th, .paying-guest-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.paying-guest-table th {
+  background-color: #f2f2f2;
+}
+
+.paying-guest-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.box-container {
+  display: flex;
+  gap: 4px; /* Adjust gap as needed */
+}
+
+.box.floor {
+  background-color: #4D3C77; /* Light red */
+}
+
+.box.room {
+  background-color: #A2678A; /* Light orange */
+}
+
+.box.type {
+  background-color: #E19898; /* Light yellow */
 }
 
 .box.deposit.green {
@@ -67,7 +45,10 @@
 
 .box.deposit.red {
   background-color: #E72929;
+}
 
+.box.deposit.yellow {
+  background-color: #FBC02D; /* Yellow color */
 }
 
 .no-data {
@@ -77,4 +58,46 @@
   color: rgb(211, 227, 253);
   width: 100%;
 }
+
+.label {
+  font-size: 0.65rem; /* Small font size for label */
+  position: absolute;
+  top: -12px; /* Position label above the box */
+  left: 50%;
+  transform: translateX(-50%);
+  color: inherit; /* Match label color with box */
+}
+
+.box {
+  margin-top: 8px;
+  padding: 4px 8px; /* Adjust padding as needed */
+  border-radius: 4px; /* Adjust border radius as needed */
+  font-size: 0.875rem; /* Adjust font size as needed */
+  position: relative;
+  text-align: center;
+  color: white; /* Adjust text color as needed */
+}
+.status-label {
+  font-size: 0.65rem; /* Small font size for status label */
+  position: absolute;
+  top: -12px; /* Position label above the box */
+  left: 50%;
+  transform: translateX(-50%);
+  color: inherit;
+}
+.no-deposit {
+  font-size: 0.875rem; /* Match font size to other text */
+  color: white; /* Ensure text color matches */
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+}
+.status-label.np {
+  top: -12px; /* Position NP above the box */
+}
+.box.full-deposit {
+  background-color: #059212; /* Green color for full deposit */
+  color: white; /* Ensure text color is visible */
+}
+
 

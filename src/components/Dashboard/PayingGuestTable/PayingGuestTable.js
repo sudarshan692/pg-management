@@ -9,19 +9,60 @@ const CustomNoDataComponent = () => (
   </div>
 );
 
-const BoxedCell = ({ value, className, color }) => (
-  <div className={`box ${className} ${color}`}>
-    {value}
-  </div>
-);
+const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
+  const isZeroDeposit = value.trim() === '0' || /^0+$/.test(value.trim());
+  const isFullDeposit = fullDeposit; // Assumes fullDeposit is a boolean indicating if it's full
+
+  let boxColor = color;
+
+  // Determine the color based on deposit status
+  if (isZeroDeposit) {
+    boxColor = 'red'; // Red color for zero deposit
+  } else if (isFullDeposit) {
+    boxColor = 'green'; // Green color for full deposit
+  } else {
+    boxColor = 'yellow'; // Default color for partial or other deposits
+  }
+
+  return (
+    <div className={`box ${className} ${boxColor}`}>
+      {fullDeposit !== undefined && !isZeroDeposit && (
+        <div className={`status-label ${fullDeposit ? 'done' : 'partial'}`}>
+          {fullDeposit ? 'D' : 'P'}
+        </div>
+      )}
+      {isZeroDeposit ? (
+        <>
+          <div className="status-label np">NP</div>
+          <div className="no-deposit">Not Paid</div>
+        </>
+      ) : (
+        <>
+          <div className="label">{label}</div>
+          {value}
+        </>
+      )}
+    </div>
+  );
+};
+
+
 
 const BoxContainer = ({ floorNo, roomNo, roomType }) => (
   <div className="box-container">
-    <BoxedCell value={floorNo || '-'} className="floor" />
-    <BoxedCell value={roomNo || '-'} className="room" />
-    <BoxedCell value={roomType || '-'} className="type" />
+    <BoxedCell value={floorNo || '-'} className="floor" color="floor" label="F" />
+    <BoxedCell value={roomNo || '-'} className="room" color="room" label="R" />
+    <BoxedCell value={roomType || '-'} className="type" color="type" label="T" />
   </div>
 );
+
+const depositAmountSort = (rowA, rowB, columnId, sortDirection) => {
+  // Assuming fullDeposit and depositPaid are the keys to determine sorting
+  const depositA = rowA.fullDeposit ? 1 : rowA.depositPaid ? 0.5 : 0;
+  const depositB = rowB.fullDeposit ? 1 : rowB.depositPaid ? 0.5 : 0;
+  
+  return sortDirection === 'asc' ? depositA - depositB : depositB - depositA;
+};
 
 const PayingGuestTable = ({ payingGuests }) => {
   const [searchText, setSearchText] = useState('');
@@ -37,7 +78,7 @@ const PayingGuestTable = ({ payingGuests }) => {
   );
 
   const columns = [
-    { name: 'Guest ID', selector: (row, index) => index + 1, sortable: true },
+    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true },
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
@@ -45,17 +86,19 @@ const PayingGuestTable = ({ payingGuests }) => {
       sortable: true 
     },
     { name: 'Date Of Admission', selector: (row) => row.dateOfAdmission || '-', sortable: true },
-    { 
-      name: 'Deposit Amount', 
-      cell: (row) => (
-        <BoxedCell
-          value={row.depositAmount || '-'}
-          className="deposit"
-          color={row.depositPaid ? 'green' : 'red'}
-        />
-      ), 
-      sortable: true 
-    },
+  { 
+    name: 'Deposit Amount', 
+    cell: (row) => (
+      <BoxedCell
+        value={row.depositAmount || '-'}
+        className="deposit"
+        color={row.depositPaid ? 'green' : 'red'} // Temporary color assignment for testing
+        fullDeposit={row.fullDeposit} // Pass fullDeposit value
+      />
+    ), 
+    sortable: true,
+    sortFunction: depositAmountSort // Custom sort function
+  },
     { name: 'Monthly Rent', selector: (row) => row.monthlyRent || '-', sortable: true },
     { name: 'Payment Status', selector: (row) => row.paymentStatus || '-', sortable: true },
     {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { db, auth } from "../../shared/firebase";
 import Modal from "react-modal";
 import "./addPayingGuestModal.css";
@@ -20,53 +20,97 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     monthlyRent: "",
     maintenanceCharges: "",
     depositPaid: false, // New field for deposit paid status
+    fullDeposit: false, // New field for full deposit
     rentPaid: false // New field for rent paid status
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Any initialization when modal opens
+    }
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setGuestData({ ...guestData, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const generateGuestID = async () => {
+    const counterDocRef = db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/Counters`).doc('guestIDCounter');
+    
     try {
-      const roomTypeMap = {
-        "Single": "S",
-        "Double": "D",
-        "Triple": "T"
-      };
-
-      const payingGuestMap = {
-        guestName: guestData.guestName,
-        guestMobileNo: guestData.guestMobileNo,
-        fatherName: guestData.fatherName,
-        fatherMobileNo: guestData.fatherMobileNo,
-        permanentAddress: guestData.permanentAddress,
-        presentStatus: guestData.presentStatus,
-        dateOfAdmission: guestData.dateOfAdmission,
-        floorNo: guestData.floorNo,
-        roomNo: guestData.roomNo,
-        roomType: roomTypeMap[guestData.roomType],
-        depositAmount: guestData.depositAmount,
-        monthlyRent: guestData.monthlyRent,
-        maintenanceCharges: guestData.maintenanceCharges,
-        depositPaid: guestData.depositPaid, // Save deposit paid status
-        rentPaid: guestData.rentPaid // Save rent paid status
-      };
-
-      await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-      onSnackbarOpen("Paying guest data saved successfully.", "success");
-      onRequestClose();
+      const newID = await db.runTransaction(async (transaction) => {
+        const counterDoc = await transaction.get(counterDocRef);
+        
+        let currentID = 1; // Default value if no counter exists
+        if (counterDoc.exists) {
+          currentID = counterDoc.data().currentID || 1;
+        }
+  
+        const nextID = currentID + 1;
+        transaction.set(counterDocRef, { currentID: nextID });
+  
+        return currentID; // Return the currentID before incrementing
+      });
+      
+      return newID;
     } catch (error) {
-      console.error("Error saving paying guest data:", error.message);
-      onSnackbarOpen("Error saving paying guest data.", "error");
-    } finally {
-      setLoading(false);
+      console.error("Error generating guest ID:", error);
+      throw error; // Propagate error
     }
   };
+  
+  
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const roomTypeMap = {
+      "Single": "S",
+      "Double": "D",
+      "Triple": "T"
+    };
+
+    const guestID = await generateGuestID();
+
+    if (guestID === undefined || guestID === null) {
+      throw new Error("Failed to generate a valid guestID.");
+    }
+
+    const payingGuestMap = {
+      guestID, // Ensure this value is not undefined
+      guestName: guestData.guestName,
+      guestMobileNo: guestData.guestMobileNo,
+      fatherName: guestData.fatherName,
+      fatherMobileNo: guestData.fatherMobileNo,
+      permanentAddress: guestData.permanentAddress,
+      presentStatus: guestData.presentStatus,
+      dateOfAdmission: guestData.dateOfAdmission,
+      floorNo: guestData.floorNo,
+      roomNo: guestData.roomNo,
+      roomType: roomTypeMap[guestData.roomType],
+      depositAmount: guestData.depositAmount,
+      monthlyRent: guestData.monthlyRent,
+      maintenanceCharges: guestData.maintenanceCharges,
+      depositPaid: guestData.depositPaid, // Save deposit paid status
+      fullDeposit: guestData.fullDeposit, // Save full deposit status
+      rentPaid: guestData.rentPaid // Save rent paid status
+    };
+
+    await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
+    onSnackbarOpen("Paying guest data saved successfully.", "success");
+    onRequestClose();
+  } catch (error) {
+    console.error("Error saving paying guest data:", error.message);
+    onSnackbarOpen("Error saving paying guest data.", "error");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  
 
   return (
     <>
@@ -79,7 +123,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
             border: 'none',
             maxWidth: '900px',
             width: '90%',
-            maxHeight: '72vh',
+            maxHeight: '75vh',
             height: 'auto',
             margin: 'auto',
             padding: '20px',
@@ -93,14 +137,14 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         }}
       >
         <div className="modal-content">
-        {loading && (
-        <div className="overlay">
-          <LoadingSpinner />
-        </div>
-      )}
+          {loading && (
+            <div className="overlay">
+              <LoadingSpinner />
+            </div>
+          )}
           <div className="heading-container">
-          <h2 className="add-guest-heading">Add Paying Guest</h2>
-        </div>
+            <h2 className="add-guest-heading">Add Paying Guest</h2>
+          </div>
           <form onSubmit={handleSubmit} className="form-grid">
             <div className="form-column">
               <input type="text" name="guestName" placeholder="Guest Name" value={guestData.guestName} onChange={handleChange} required />
@@ -112,6 +156,10 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <label className="checkbox-label">
                 <input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} />
                 Deposit Paid
+              </label>
+              <label className="checkbox-label">
+                <input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} />
+                Full Deposit
               </label>
               <label className="checkbox-label">
                 <input type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} />
