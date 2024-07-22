@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import "./addPayingGuestModal.css";
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
-const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onSnackbarOpen }) => {
+const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onSnackbarOpen, onDataSaved }) => {
   const [guestData, setGuestData] = useState({
     guestName: "",
     guestMobileNo: "",
@@ -100,7 +100,8 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     };
 
     await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-    onSnackbarOpen("Paying guest data saved successfully.", "success");
+    onSnackbarOpen("Paying guest added successfully!", "success");
+    onDataSaved(); // Notify Dashboard component that data was saved
     onRequestClose();
   } catch (error) {
     console.error("Error saving paying guest data:", error.message);
@@ -110,13 +111,16 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
   }
 };
 
+const handleClose = () => {
+  onRequestClose();
+};
   
 
   return (
     <>
       <Modal
         isOpen={isOpen}
-        onRequestClose={onRequestClose}
+        onRequestClose={handleClose}
         contentLabel="Add Paying Guest Modal"
         style={{
           content: {
@@ -182,7 +186,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
             </div>
             <div className="form-buttons">
               <button type="submit" disabled={loading}>Save</button>
-              <button type="button" onClick={onRequestClose} disabled={loading}>Cancel</button>
+              <button type="button" onClick={handleClose} disabled={loading}>Cancel</button>
             </div>
           </form>
         </div>

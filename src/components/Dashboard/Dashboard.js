@@ -34,6 +34,7 @@ const Dashboard = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [payingGuests, setPayingGuests] = useState([]);
+  const [dataSaved, setDataSaved] = useState(false); // Track if data was saved
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
@@ -46,10 +47,15 @@ const Dashboard = () => {
 
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
+    setDataSaved(false); // Reset save flag when opening the modal
   };
 
   const closeAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(false);
+    if (dataSaved) {
+      console.log("Updating data after closing modal"); // Log before fetching new data
+      fetchPayingGuests(pgId, setPayingGuests); // Fetch new data after modal closes if data was saved
+    }
   };
 
   const handleLogout = async () => {
@@ -72,9 +78,8 @@ const Dashboard = () => {
     setOpenSnackbar(false);
   };
 
-  const handleDataUpdate = async () => {
-    console.log("Updating data after closing modal"); // Log before fetching new data
-    await fetchPayingGuests(pgId, setPayingGuests); // Fetch new data after modal closes
+  const handleDataUpdate = () => {
+    setDataSaved(true); // Set flag to true when data is saved
   };
 
   return (
@@ -91,16 +96,16 @@ const Dashboard = () => {
         onRequestClose={closeAddPayingGuestModal}
         contentLabel="Add Paying Guest Modal"
       >
-        <AddPayingGuestModal
+      <AddPayingGuestModal
           isOpen={payingGuestModalIsOpen}
           onRequestClose={() => {
             closeAddPayingGuestModal();
-            handleDataUpdate(); // Fetch new data after closing modal
           }}
           selectedPGId={pgId}
           pgData={pgData}
           onSnackbarOpen={handleSnackbarOpen}
-        />
+          onDataSaved={handleDataUpdate} // Pass handleDataUpdate to the modal
+      />
       </Modal>
 
       {/* Snackbar for notifications */}
