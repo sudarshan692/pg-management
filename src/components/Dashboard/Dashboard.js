@@ -12,7 +12,7 @@ Modal.setAppElement('#root');
 
 const fetchPayingGuests = async (pgId, setPayingGuests) => {
   try {
-    console.log("Fetching paying guests for PG ID:", pgId); // Log when fetching starts
+    console.log("Fetching paying guests for PG ID:", pgId);
     const data = [];
     const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
     pgSnapshot.forEach(doc => {
@@ -22,7 +22,7 @@ const fetchPayingGuests = async (pgId, setPayingGuests) => {
       });
     });
     setPayingGuests(data);
-    console.log("Paying guests fetched successfully:", data); // Log when fetching is successful
+    console.log("Paying guests fetched successfully:", data);
   } catch (error) {
     console.error("Error fetching paying guests:", error);
   }
@@ -34,27 +34,27 @@ const Dashboard = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [payingGuests, setPayingGuests] = useState([]);
-  const [dataSaved, setDataSaved] = useState(false); // Track if data was saved
+  const [dataSaved, setDataSaved] = useState(false);
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
 
   useEffect(() => {
-    console.log("Dashboard mounted or PG ID changed:", pgId); // Log when component mounts or PG ID changes
+    console.log("Dashboard mounted or PG ID changed:", pgId);
     fetchPayingGuests(pgId, setPayingGuests);
   }, [pgId]);
 
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
-    setDataSaved(false); // Reset save flag when opening the modal
+    setDataSaved(false);
   };
 
   const closeAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(false);
     if (dataSaved) {
-      console.log("Updating data after closing modal"); // Log before fetching new data
-      fetchPayingGuests(pgId, setPayingGuests); // Fetch new data after modal closes if data was saved
+      console.log("Data updated, no need to refetch");
+      setDataSaved(false);
     }
   };
 
@@ -78,7 +78,8 @@ const Dashboard = () => {
     setOpenSnackbar(false);
   };
 
-  const handleDataUpdate = () => {
+  const handleDataUpdate = (newGuest) => {
+    setPayingGuests(prevGuests => [newGuest, ...prevGuests]); // Add the new guest to the local state
     setDataSaved(true); // Set flag to true when data is saved
   };
 
@@ -96,7 +97,7 @@ const Dashboard = () => {
         onRequestClose={closeAddPayingGuestModal}
         contentLabel="Add Paying Guest Modal"
       >
-      <AddPayingGuestModal
+        <AddPayingGuestModal
           isOpen={payingGuestModalIsOpen}
           onRequestClose={() => {
             closeAddPayingGuestModal();
@@ -105,10 +106,9 @@ const Dashboard = () => {
           pgData={pgData}
           onSnackbarOpen={handleSnackbarOpen}
           onDataSaved={handleDataUpdate} // Pass handleDataUpdate to the modal
-      />
+        />
       </Modal>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

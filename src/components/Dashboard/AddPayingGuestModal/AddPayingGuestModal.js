@@ -11,17 +11,17 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     fatherName: "",
     fatherMobileNo: "",
     permanentAddress: "",
-    presentStatus: "", // Employee/Student
+    presentStatus: "",
     dateOfAdmission: "",
     floorNo: "",
     roomNo: "",
-    roomType: "", // Single, Double, Triple
+    roomType: "",
     depositAmount: "",
     monthlyRent: "",
     maintenanceCharges: "",
-    depositPaid: false, // New field for deposit paid status
-    fullDeposit: false, // New field for full deposit
-    rentPaid: false // New field for rent paid status
+    depositPaid: false,
+    fullDeposit: false,
+    rentPaid: false
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +43,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
       const newID = await db.runTransaction(async (transaction) => {
         const counterDoc = await transaction.get(counterDocRef);
         
-        let currentID = 1; // Default value if no counter exists
+        let currentID = 1;
         if (counterDoc.exists) {
           currentID = counterDoc.data().currentID || 1;
         }
@@ -51,70 +51,70 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         const nextID = currentID + 1;
         transaction.set(counterDocRef, { currentID: nextID });
   
-        return currentID; // Return the currentID before incrementing
+        return currentID;
       });
       
       return newID;
     } catch (error) {
       console.error("Error generating guest ID:", error);
-      throw error; // Propagate error
+      throw error;
     }
   };
-  
-  
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    const roomTypeMap = {
-      "Single": "S",
-      "Double": "D",
-      "Triple": "T"
-    };
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const roomTypeMap = {
+        "Single": "S",
+        "Double": "D",
+        "Triple": "T"
+      };
 
-    const guestID = await generateGuestID();
+      const guestID = await generateGuestID();
 
-    if (guestID === undefined || guestID === null) {
-      throw new Error("Failed to generate a valid guestID.");
+      if (guestID === undefined || guestID === null) {
+        throw new Error("Failed to generate a valid guestID.");
+      }
+
+      const payingGuestMap = {
+        guestID,
+        guestName: guestData.guestName,
+        guestMobileNo: guestData.guestMobileNo,
+        fatherName: guestData.fatherName,
+        fatherMobileNo: guestData.fatherMobileNo,
+        permanentAddress: guestData.permanentAddress,
+        presentStatus: guestData.presentStatus,
+        dateOfAdmission: guestData.dateOfAdmission,
+        floorNo: guestData.floorNo,
+        roomNo: guestData.roomNo,
+        roomType: roomTypeMap[guestData.roomType],
+        depositAmount: guestData.depositAmount,
+        monthlyRent: guestData.monthlyRent,
+        maintenanceCharges: guestData.maintenanceCharges,
+        depositPaid: guestData.depositPaid,
+        fullDeposit: guestData.fullDeposit,
+        rentPaid: guestData.rentPaid
+      };
+
+      const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
+
+      const newGuest = { id: docRef.id, ...payingGuestMap };
+      onDataSaved(newGuest); // Pass the new guest to the Dashboard component
+
+      onSnackbarOpen("Paying guest added successfully!", "success");
+      onRequestClose();
+    } catch (error) {
+      console.error("Error saving paying guest data:", error.message);
+      onSnackbarOpen("Error saving paying guest data.", "error");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const payingGuestMap = {
-      guestID, // Ensure this value is not undefined
-      guestName: guestData.guestName,
-      guestMobileNo: guestData.guestMobileNo,
-      fatherName: guestData.fatherName,
-      fatherMobileNo: guestData.fatherMobileNo,
-      permanentAddress: guestData.permanentAddress,
-      presentStatus: guestData.presentStatus,
-      dateOfAdmission: guestData.dateOfAdmission,
-      floorNo: guestData.floorNo,
-      roomNo: guestData.roomNo,
-      roomType: roomTypeMap[guestData.roomType],
-      depositAmount: guestData.depositAmount,
-      monthlyRent: guestData.monthlyRent,
-      maintenanceCharges: guestData.maintenanceCharges,
-      depositPaid: guestData.depositPaid, // Save deposit paid status
-      fullDeposit: guestData.fullDeposit, // Save full deposit status
-      rentPaid: guestData.rentPaid // Save rent paid status
-    };
-
-    await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-    onSnackbarOpen("Paying guest added successfully!", "success");
-    onDataSaved(); // Notify Dashboard component that data was saved
+  const handleClose = () => {
     onRequestClose();
-  } catch (error) {
-    console.error("Error saving paying guest data:", error.message);
-    onSnackbarOpen("Error saving paying guest data.", "error");
-  } finally {
-    setLoading(false);
-  }
-};
-
-const handleClose = () => {
-  onRequestClose();
-};
-  
+  };
 
   return (
     <>
