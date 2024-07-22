@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaArrowUp } from 'react-icons/fa';
+import LoadingSpinner from '../../shared/LoadingSpinner'; // Adjust the path as needed
 import './payingGuestTable.css';
 
 const CustomNoDataComponent = () => (
@@ -46,8 +47,6 @@ const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   );
 };
 
-
-
 const BoxContainer = ({ floorNo, roomNo, roomType }) => (
   <div className="box-container">
     <BoxedCell value={floorNo || '-'} className="floor" color="floor" label="F" />
@@ -66,6 +65,18 @@ const depositAmountSort = (rowA, rowB, columnId, sortDirection) => {
 
 const PayingGuestTable = ({ payingGuests }) => {
   const [searchText, setSearchText] = useState('');
+  const [loading, setLoading] = useState(true); // Loading state
+
+  useEffect(() => {
+    // Simulate data fetching
+    const fetchData = async () => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -86,19 +97,19 @@ const PayingGuestTable = ({ payingGuests }) => {
       sortable: true 
     },
     { name: 'Date Of Admission', selector: (row) => row.dateOfAdmission || '-', sortable: true },
-  { 
-    name: 'Deposit Amount', 
-    cell: (row) => (
-      <BoxedCell
-        value={row.depositAmount || '-'}
-        className="deposit"
-        color={row.depositPaid ? 'green' : 'red'} // Temporary color assignment for testing
-        fullDeposit={row.fullDeposit} // Pass fullDeposit value
-      />
-    ), 
-    sortable: true,
-    sortFunction: depositAmountSort // Custom sort function
-  },
+    { 
+      name: 'Deposit Amount', 
+      cell: (row) => (
+        <BoxedCell
+          value={row.depositAmount || '-'}
+          className="deposit"
+          color={row.depositPaid ? 'green' : 'red'} // Temporary color assignment for testing
+          fullDeposit={row.fullDeposit} // Pass fullDeposit value
+        />
+      ), 
+      sortable: true,
+      sortFunction: depositAmountSort // Custom sort function
+    },
     { name: 'Monthly Rent', selector: (row) => row.monthlyRent || '-', sortable: true },
     { name: 'Payment Status', selector: (row) => row.paymentStatus || '-', sortable: true },
     {
@@ -154,31 +165,37 @@ const PayingGuestTable = ({ payingGuests }) => {
 
   return (
     <div>
-      <div className="search-container">
-        <input
-          className="search-input"
-          type="text"
-          value={searchText}
-          onChange={handleSearch}
-          placeholder="Search..."
-        />
-      </div>
-      <div className="table">
-        <DataTable
-          className="custom-data-table"
-          columns={columns}
-          data={filteredData}
-          pagination
-          paginationPerPage={10}
-          paginationRowsPerPageOptions={[10, 20, 30]}
-          highlightOnHover
-          pointerOnHover
-          sortIcon={<FaArrowUp />}
-          defaultSortField="id"
-          customStyles={customStyles}
-          noDataComponent={<CustomNoDataComponent />}
-        />
-      </div>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <div className="search-container">
+            <input
+              className="search-input"
+              type="text"
+              value={searchText}
+              onChange={handleSearch}
+              placeholder="Search..."
+            />
+          </div>
+          <div className="table">
+            <DataTable
+              className="custom-data-table"
+              columns={columns}
+              data={filteredData}
+              pagination
+              paginationPerPage={10}
+              paginationRowsPerPageOptions={[10, 20, 30]}
+              highlightOnHover
+              pointerOnHover
+              sortIcon={<FaArrowUp />}
+              defaultSortField="id"
+              customStyles={customStyles}
+              noDataComponent={<CustomNoDataComponent />}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
