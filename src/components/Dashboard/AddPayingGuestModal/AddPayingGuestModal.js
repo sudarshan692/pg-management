@@ -21,7 +21,9 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     maintenanceCharges: "",
     depositPaid: false,
     fullDeposit: false,
-    rentPaid: false
+    rentPaid: false,
+    totalFloors: "", // Add state for totalFloors
+    totalRooms: ""   // Add state for totalRooms
   });
   const [loading, setLoading] = useState(false);
 
@@ -118,79 +120,87 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={handleClose}
-        contentLabel="Add Paying Guest Modal"
-        style={{
-          content: {
-            border: 'none',
-            maxWidth: '900px',
-            width: '90%',
-            maxHeight: '75vh',
-            height: 'auto',
-            margin: 'auto',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-            backgroundColor: '#0d2136',
-          },
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }}
-      >
-        <div className="modal-content">
-          {loading && (
-            <div className="overlay">
-              <LoadingSpinner />
-            </div>
-          )}
-          <div className="heading-container">
-            <h2 className="add-guest-heading">Add Paying Guest</h2>
-          </div>
-          <form onSubmit={handleSubmit} className="form-grid">
-            <div className="form-column">
-              <input type="text" name="guestName" placeholder="Guest Name" value={guestData.guestName} onChange={handleChange} required />
-              <input type="text" name="guestMobileNo" placeholder="Guest Mobile No" value={guestData.guestMobileNo} onChange={handleChange} required />
-              <input type="text" name="fatherName" placeholder="Father Name" value={guestData.fatherName} onChange={handleChange} required />
-              <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
-              <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
-              <input type="text" name="presentStatus" placeholder="Present Status (Employee/Student)" value={guestData.presentStatus} onChange={handleChange} required />
-              <label className="checkbox-label">
-                <input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} />
-                Deposit Paid
-              </label>
-              <label className="checkbox-label">
-                <input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} />
-                Full Deposit
-              </label>
-              <label className="checkbox-label">
-                <input type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} />
-                Rent Paid
-              </label>
-            </div>
-            <div className="form-column">
-              <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />
-              <input type="text" name="floorNo" placeholder="Floor No" value={guestData.floorNo} onChange={handleChange} required />
-              <input type="text" name="roomNo" placeholder="Room No" value={guestData.roomNo} onChange={handleChange} required />
-              <select name="roomType" value={guestData.roomType} onChange={handleChange} required>
-                <option value="" disabled>Select Room Type</option>
-                <option value="Single">Single (S)</option>
-                <option value="Double">Double (D)</option>
-                <option value="Triple">Triple (T)</option>
-              </select>
-              <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
-              <input type="number" name="monthlyRent" placeholder="Monthly Rent" value={guestData.monthlyRent} onChange={handleChange} required />
-              <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
-            </div>
-            <div className="form-buttons">
-              <button type="submit" disabled={loading}>Save</button>
-              <button type="button" onClick={handleClose} disabled={loading}>Cancel</button>
-            </div>
-          </form>
+<Modal
+  isOpen={isOpen}
+  onRequestClose={handleClose}
+  contentLabel="Add Paying Guest Modal"
+  style={{
+    content: {
+      border: 'none',
+      maxWidth: '900px',
+      width: '90%',
+      maxHeight: '75vh',
+      height: 'auto',
+      margin: 'auto',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+      backgroundColor: '#0d2136',
+      position: 'relative', /* Relative positioning for button container */
+    },
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+  }}
+>
+  <div className="modal-content">
+    {loading && (
+      <div className="overlay">
+        <LoadingSpinner />
+      </div>
+    )}
+    <div className="heading-container">
+      <h2 className="add-guest-heading">Add Paying Guest</h2>
+    </div>
+    <form onSubmit={handleSubmit} className="form-grid">
+      <div className="form-column">
+        <input type="text" name="guestName" placeholder="Guest Name" value={guestData.guestName} onChange={handleChange} required />
+        <input type="text" name="guestMobileNo" placeholder="Guest Mobile No" value={guestData.guestMobileNo} onChange={handleChange} required />
+        <input type="text" name="fatherName" placeholder="Father Name" value={guestData.fatherName} onChange={handleChange} required />
+        <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
+        <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
+        <input type="text" name="presentStatus" placeholder="Present Status (Employee/Student)" value={guestData.presentStatus} onChange={handleChange} required />
+        <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
+        <input type="number" name="totalRooms" placeholder="Total Rooms" value={guestData.totalRooms} onChange={handleChange} required />
+      </div>
+      <div className="form-column">
+        <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />
+        <input type="text" name="floorNo" placeholder="Floor No" value={guestData.floorNo} onChange={handleChange} required />
+        <input type="text" name="roomNo" placeholder="Room No" value={guestData.roomNo} onChange={handleChange} required />
+        <select name="roomType" value={guestData.roomType} onChange={handleChange} required>
+          <option value="" disabled>Select Room Type</option>
+          <option value="Single">Single (S)</option>
+          <option value="Double">Double (D)</option>
+          <option value="Triple">Triple (T)</option>
+        </select>
+        <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
+        <input type="number" name="monthlyRent" placeholder="Monthly Rent" value={guestData.monthlyRent} onChange={handleChange} required />
+        <input type="number" name="totalFloors" placeholder="Total Floors" value={guestData.totalFloors} onChange={handleChange} required />
+        <div className="checkbox-container">
+          <label className="checkbox-label">
+            <input className="checkbox" type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} />
+            Deposit Paid
+          </label>
+          <label className="checkbox-label">
+            <input className="checkbox" type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} />
+            Full Deposit
+          </label>
+          <label className="checkbox-label">
+            <input className="checkbox" type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} />
+            Rent Paid
+          </label>
         </div>
-      </Modal>
+      </div>
+    </form>
+    <div className="form-buttons-container">
+      <div className="form-buttons">
+        <button type="submit" disabled={loading}>Save</button>
+        <button type="button" onClick={handleClose} disabled={loading}>Cancel</button>
+      </div>
+    </div>
+  </div>
+</Modal>
+
     </>
   );
 };
