@@ -177,7 +177,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="text" name="fatherName" placeholder="Father Name" value={guestData.fatherName} onChange={handleChange} required />
               <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
               <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
-              <input type="text" name="presentStatus" placeholder="Present Status (Employee/Student)" value={guestData.presentStatus} onChange={handleChange} required />
+              <input type="text" name="presentStatus" placeholder="Present Employee / Student" value={guestData.presentStatus} onChange={handleChange} required />
               <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
             </div>
             <div className="form-column">
@@ -193,7 +193,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
               <input type="number" name="monthlyRent" placeholder="Monthly Rent" value={guestData.monthlyRent} onChange={handleChange} required />
               <div className="checkbox-container">
-                <label><input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} /> Deposit Paid</label>
+                {/* <label><input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} /> Deposit Paid</label> */}
                 <label><input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} /> Full Deposit</label>
                 <label><input type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} /> Rent Paid</label>
               </div>
