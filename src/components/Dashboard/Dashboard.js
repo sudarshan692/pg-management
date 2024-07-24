@@ -7,6 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import "./dashboard.css";
 import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
+import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 
 Modal.setAppElement('#root');
 
@@ -29,6 +30,7 @@ const fetchPayingGuests = async (pgId, setPayingGuests) => {
 };
 
 const Dashboard = () => {
+  const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
   const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -58,6 +60,13 @@ const Dashboard = () => {
     }
   };
 
+  const openChangePasswordDialog = () => {
+    setChangePasswordDialogOpen(true);
+  };
+
+  const closeChangePasswordDialog = () => {
+    setChangePasswordDialogOpen(false);
+  };
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -89,6 +98,11 @@ const Dashboard = () => {
         <span className="pg-number">{pgData.number}</span>
         <span className="heading-text">{pgData.name} PG Management Center</span>
       </div>
+      <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
+      <ChangePasswordDialog
+        open={changePasswordDialogOpen}
+        onClose={closeChangePasswordDialog}
+      />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
       <PayingGuestTable payingGuests={payingGuests} />

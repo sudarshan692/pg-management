@@ -8,7 +8,7 @@
 .form-column {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Adjusted space between rows */
+  gap: 30px; /* Adjusted space between rows */
 }
 
 input, select {

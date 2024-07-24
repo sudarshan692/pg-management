@@ -99,5 +99,7 @@
   background-color: #059212; /* Green color for full deposit */
   color: white; /* Ensure text color is visible */
 }
-
+.search-input{
+  margin-top: 60px;
+}
 
