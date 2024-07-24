@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from "../shared/firebase";
 import { useHistory, useLocation } from "react-router-dom";
 import "./adminDashboard.css";
-import PgTable from '../PgTable/PgTable';
+import PgTable from './PgTable/PgTable';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';

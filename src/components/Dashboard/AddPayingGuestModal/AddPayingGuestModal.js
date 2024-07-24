@@ -66,19 +66,21 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log('Submitting guest data:', guestData); // Log guest data before submitting
+  
     try {
       const roomTypeMap = {
         "Single": "S",
         "Double": "D",
         "Triple": "T"
       };
-
+  
       const guestID = await generateGuestID();
-
+  
       if (guestID === undefined || guestID === null) {
         throw new Error("Failed to generate a valid guestID.");
       }
-
+  
       const payingGuestMap = {
         guestID,
         guestName: guestData.guestName,
@@ -98,12 +100,16 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         fullDeposit: guestData.fullDeposit,
         rentPaid: guestData.rentPaid
       };
-
+  
+      console.log('Paying guest data:', payingGuestMap); // Log paying guest data before adding to the database
+  
       const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-
+  
+      console.log('Document written with ID:', docRef.id); // Log success message
+  
       const newGuest = { id: docRef.id, ...payingGuestMap };
       onDataSaved(newGuest); // Pass the new guest to the Dashboard component
-
+  
       onSnackbarOpen("Paying guest added successfully!", "success");
       onRequestClose();
     } catch (error) {
@@ -113,6 +119,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
       setLoading(false);
     }
   };
+  
 
   const handleClose = () => {
     onRequestClose();
@@ -194,7 +201,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     </form>
     <div className="form-buttons-container">
       <div className="form-buttons">
-        <button type="submit" disabled={loading}>Save</button>
+        <button type="submit" onClick={handleSubmit} disabled={loading}>Save</button>
         <button type="button" onClick={handleClose} disabled={loading}>Cancel</button>
       </div>
     </div>

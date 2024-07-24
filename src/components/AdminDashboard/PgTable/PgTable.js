@@ -4,9 +4,9 @@ import { FaCopy, FaArrowUp, FaEdit, FaTrash } from 'react-icons/fa';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import './pgTable.css';
-import EditDialog from '../AdminDashboard/EditDialog/EditDialog';
-import DeleteDialog from '../AdminDashboard/DeleteDialog/DeleteDialog';
-import { db } from '../shared/firebase'; // Import Firestore database
+import EditDialog from '../EditDialog/EditDialog';
+import DeleteDialog from '../DeleteDialog/DeleteDialog';
+import { db } from '../../shared/firebase'; // Import Firestore database
 
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
