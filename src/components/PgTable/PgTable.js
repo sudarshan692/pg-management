@@ -22,8 +22,6 @@ const PgTable = ({ pgData, updatePgData }) => {
   const [editData, setEditData] = useState(null);
   const [deleteData, setDeleteData] = useState(null);
 
-  console.log("PG Data:", pgData);
-
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
