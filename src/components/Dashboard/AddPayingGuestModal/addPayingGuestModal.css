@@ -45,48 +45,6 @@ input[type="date"] {
   gap: 10px; /* Space between checkbox and label */
 }
 
-.form-buttons-container {
-  position: relative; /* Container to allow absolute positioning of buttons */
-  padding: 20px 0; /* Padding at the bottom */
-}
-
-.form-buttons {
-  position: absolute; /* Position absolute to place in bottom-right corner */
-  bottom: 0; /* Align with the bottom of the container */
-  right: 0; /* Align with the right of the container */
-  display: flex;
-  gap: 10px; /* Space between buttons */
-}
-
-.form-buttons button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.form-buttons button[type="submit"] {
-  background-color: #3f51b5;
-  color: rgb(211, 227, 253);
-}
-
-.form-buttons button[type="submit"]:hover {
-  background-color: rgb(3, 21, 37); /* Darker color on hover */
-  transform: scale(1.05); /* Slightly enlarge button on hover */
-}
-
-.form-buttons button[type="button"] {
-  background-color: #f44336;
-  color: rgb(211, 227, 253);
-}
-
-.form-buttons button[type="button"]:hover {
-  background-color: rgb(3, 21, 37); /* Darker color on hover */
-  transform: scale(1.05); /* Slightly enlarge button on hover */
-}
-
 .heading-container {
   text-align: center;
 }
@@ -113,4 +71,40 @@ input[type="date"] {
 .checkbox{
   width: 20px;
   height: 20px;
+}
+.button-container {
+  position: absolute;
+  bottom: 20px; /* Adjust this value as needed */
+  right: 20px; /* Adjust this value as needed */
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+.button-container button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button-container button[type="submit"] {
+  background-color: #3f51b5;
+  color: rgb(211, 227, 253);
+}
+
+.button-container button[type="submit"]:hover {
+  background-color: rgb(3, 21, 37); /* Darker color on hover */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+.button-container button[type="button"] {
+  background-color: #f44336;
+  color: rgb(211, 227, 253);
+}
+
+.button-container button[type="button"]:hover {
+  background-color: rgb(3, 21, 37); /* Darker color on hover */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
 }
