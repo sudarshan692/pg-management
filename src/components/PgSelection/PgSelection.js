@@ -136,7 +136,7 @@ const PgSelection = () => {
           <div key={pg.id} className="pg-card" onClick={() => handlePGClick(pg)}>
             <h2 className="pg-name">{pg.name}</h2>
             <p><strong>PG Number:</strong> {pg.number}</p>
-            <p><strong>Max Customers:</strong> {pg.maxCustomers}</p>
+            <p><strong>Max Customers:</strong> {pg.maxCustomers-1}</p>
             <p><strong>Owner Name:</strong> {pg.ownerName}</p>
             <p><strong>Owner Email:</strong> {pg.ownerEmail}</p>
             <p><strong>Address:</strong> {pg.address}</p>
