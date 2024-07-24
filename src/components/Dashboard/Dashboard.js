@@ -12,7 +12,7 @@ Modal.setAppElement('#root');
 
 const fetchPayingGuests = async (pgId, setPayingGuests) => {
   try {
-    console.log("Fetching paying guests for PG ID:", pgId);
+    // console.log("Fetching paying guests for PG ID:", pgId);
     const data = [];
     const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
     pgSnapshot.forEach(doc => {
@@ -41,7 +41,7 @@ const Dashboard = () => {
   const [pgData] = useState(location.state?.pgDetails || {});
 
   useEffect(() => {
-    console.log("Dashboard mounted or PG ID changed:", pgId);
+    // console.log("Dashboard mounted or PG ID changed:", pgId);
     fetchPayingGuests(pgId, setPayingGuests);
   }, [pgId]);
 

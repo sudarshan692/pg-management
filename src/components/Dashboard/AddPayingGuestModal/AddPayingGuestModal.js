@@ -22,8 +22,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     depositPaid: false,
     fullDeposit: false,
     rentPaid: false,
-    totalFloors: "", // Add state for totalFloors
-    totalRooms: ""   // Add state for totalRooms
   });
   const [loading, setLoading] = useState(false);
 
@@ -40,22 +38,17 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
 
   const generateGuestID = async () => {
     const counterDocRef = db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/Counters`).doc('guestIDCounter');
-    
     try {
       const newID = await db.runTransaction(async (transaction) => {
         const counterDoc = await transaction.get(counterDocRef);
-        
         let currentID = 1;
         if (counterDoc.exists) {
           currentID = counterDoc.data().currentID || 1;
         }
-  
         const nextID = currentID + 1;
         transaction.set(counterDocRef, { currentID: nextID });
-  
         return currentID;
       });
-      
       return newID;
     } catch (error) {
       console.error("Error generating guest ID:", error);
@@ -67,20 +60,16 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     e.preventDefault();
     setLoading(true);
     console.log('Submitting guest data:', guestData); // Log guest data before submitting
-  
     try {
       const roomTypeMap = {
         "Single": "S",
         "Double": "D",
         "Triple": "T"
       };
-  
       const guestID = await generateGuestID();
-  
       if (guestID === undefined || guestID === null) {
         throw new Error("Failed to generate a valid guestID.");
       }
-  
       const payingGuestMap = {
         guestID,
         guestName: guestData.guestName,
@@ -100,16 +89,9 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         fullDeposit: guestData.fullDeposit,
         rentPaid: guestData.rentPaid
       };
-  
-      console.log('Paying guest data:', payingGuestMap); // Log paying guest data before adding to the database
-  
       const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-  
-      console.log('Document written with ID:', docRef.id); // Log success message
-  
       const newGuest = { id: docRef.id, ...payingGuestMap };
       onDataSaved(newGuest); // Pass the new guest to the Dashboard component
-  
       onSnackbarOpen("Paying guest added successfully!", "success");
       onRequestClose();
     } catch (error) {
@@ -168,7 +150,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
         <input type="text" name="presentStatus" placeholder="Present Status (Employee/Student)" value={guestData.presentStatus} onChange={handleChange} required />
         <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
-        <input type="number" name="totalRooms" placeholder="Total Rooms" value={guestData.totalRooms} onChange={handleChange} required />
       </div>
       <div className="form-column">
         <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />
@@ -182,7 +163,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         </select>
         <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
         <input type="number" name="monthlyRent" placeholder="Monthly Rent" value={guestData.monthlyRent} onChange={handleChange} required />
-        <input type="number" name="totalFloors" placeholder="Total Floors" value={guestData.totalFloors} onChange={handleChange} required />
         <div className="checkbox-container">
           <label className="checkbox-label">
             <input className="checkbox" type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} />
