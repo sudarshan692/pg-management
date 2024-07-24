@@ -85,9 +85,10 @@ const PgTable = ({ pgData, updatePgData }) => {
   const handleDeleteConfirm = async () => {
     try {
       const pgRef = db.collection(`users/${deleteData.userId}/PGs`).doc(deleteData.id);
-      const customerDataRef = pgRef.collection('CustomerData');
-  
+      const customerDataRef = pgRef.collection('PayingGuestData');
+      const customerDataRef1 = pgRef.collection('Counters');
       await deleteCollection(customerDataRef); // Delete CustomerData collection first
+      await deleteCollection(customerDataRef1);
       await pgRef.delete(); // Then delete the PG document itself
   
       console.log('Deleting Data:', deleteData);
