@@ -11,7 +11,8 @@ const CustomNoDataComponent = () => (
 );
 
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
-  const isZeroDeposit = value.trim() === '0' || /^0+$/.test(value.trim());
+  // Check if value is a number and handle "Not Paid" case
+  const isZeroDeposit = value === 0;
   const isFullDeposit = fullDeposit; // Assumes fullDeposit is a boolean indicating if it's full
 
   let boxColor = color;
@@ -101,11 +102,11 @@ const PayingGuestTable = ({ payingGuests }) => {
       name: 'Deposit Amount', 
       cell: (row) => (
         <BoxedCell
-          value={row.depositAmount || '-'}
-          className="deposit"
-          color={row.depositPaid ? 'green' : 'red'} // Temporary color assignment for testing
-          fullDeposit={row.fullDeposit} // Pass fullDeposit value
-        />
+        value={row.depositAmount} // Assuming depositAmount is a number
+        className="deposit"
+        color={row.depositAmount === 0 ? 'red' : 'yellow'} // Adjust based on deposit status
+        fullDeposit={row.fullDeposit} // Pass fullDeposit value if needed
+      />
       ), 
       sortable: true,
       sortFunction: depositAmountSort // Custom sort function
