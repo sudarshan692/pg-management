@@ -16,6 +16,7 @@ const CustomNoDataComponent = () => (
 
 const PgTable = ({ pgData, updatePgData }) => {
   const [searchText, setSearchText] = useState('');
+  const [searchMode, setSearchMode] = useState('relative'); // 'relative' or 'exact'
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -26,6 +27,10 @@ const PgTable = ({ pgData, updatePgData }) => {
     setSearchText(e.target.value);
   };
 
+  const handleSearchModeChange = (e) => {
+    setSearchMode(e.target.value);
+  };
+
   const handleCopy = (userId) => {
     navigator.clipboard.writeText(userId);
     setSnackbarMessage(`Copied User ID: ${userId}`);
@@ -33,11 +38,18 @@ const PgTable = ({ pgData, updatePgData }) => {
     setShowSnackbar(true);
   };
 
-  const filteredData = pgData.filter((item) =>
-    Object.values(item).some(
-      (value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+  const filteredData = pgData.filter((item) => {
+    return Object.values(item).some((value) => {
+      if (value) {
+        const valueStr = value.toString().toLowerCase();
+        const searchStr = searchText.toLowerCase();
+        return searchMode === 'exact'
+          ? valueStr === searchStr
+          : valueStr.includes(searchStr);
+      }
+      return false;
+    });
+  });
 
   const handleEdit = (row) => {
     setEditData(row);
@@ -52,13 +64,13 @@ const PgTable = ({ pgData, updatePgData }) => {
       const { userId, ...pgDetails } = updatedData;
       const pgRef = db.collection(`users/${userId}/PGs`).doc(updatedData.id);
       await pgRef.update({ PGDetails: pgDetails });
-  
+
       // Log the updated data
       console.log("Data updated successfully:", { id: updatedData.id, ...pgDetails });
-  
+
       // Use the updatePgData function passed as a prop
       updatePgData({ id: updatedData.id, action: 'update', updatedData: pgDetails });
-  
+
       setSnackbarMessage('Data updated successfully');
       setSnackbarSeverity('success');
       setShowSnackbar(true);
@@ -71,7 +83,6 @@ const PgTable = ({ pgData, updatePgData }) => {
       setEditData(null);
     }
   };
-  
 
   const deleteCollection = async (collectionRef) => {
     const snapshot = await collectionRef.get();
@@ -90,12 +101,12 @@ const PgTable = ({ pgData, updatePgData }) => {
       await deleteCollection(customerDataRef); // Delete CustomerData collection first
       await deleteCollection(customerDataRef1);
       await pgRef.delete(); // Then delete the PG document itself
-  
+
       console.log('Deleting Data:', deleteData);
-  
+
       // Use the updatePgData function passed as a prop to remove the deleted item
       updatePgData({ id: deleteData.id, action: 'delete' });
-  
+
       setSnackbarMessage('Data deleted successfully');
       setSnackbarSeverity('success');
       setShowSnackbar(true);
@@ -108,7 +119,6 @@ const PgTable = ({ pgData, updatePgData }) => {
       setDeleteData(null);
     }
   };
-  
 
   const columns = [
     {
@@ -200,6 +210,10 @@ const PgTable = ({ pgData, updatePgData }) => {
           onChange={handleSearch}
           placeholder="Search..."
         />
+        <select value={searchMode} onChange={handleSearchModeChange}>
+          <option value="relative">Relative</option>
+          <option value="exact">Exact</option>
+        </select>
       </div>
       <div className="table">
         <DataTable
