@@ -103,3 +103,15 @@
   margin-top: 60px;
 }
 
+.add-payment-button {
+  background-color: #0056b3;; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.add-payment-button:hover {
+  background-color: #0d2136;; /* Darker green */
+}

@@ -64,7 +64,7 @@ const depositAmountSort = (rowA, rowB, columnId, sortDirection) => {
   return sortDirection === 'asc' ? depositA - depositB : depositB - depositA;
 };
 
-const PayingGuestTable = ({ payingGuests }) => {
+const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -117,10 +117,12 @@ const PayingGuestTable = ({ payingGuests }) => {
       name: 'Actions',
       cell: (row) => (
         <div>
-          {/* Add your action icons here */}
+          <button onClick={() => onAddPayment(row)} className="add-payment-button">
+            +
+          </button>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const customStyles = {

@@ -61,7 +61,7 @@ const ChangePasswordDialog = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} className="change-password-dialog">
-      <DialogTitle>Change Password</DialogTitle>
+      <DialogTitle className='dialog-title'>Change Password</DialogTitle>
       <DialogContent>
         {loading && <div className="loading-overlay"><LoadingSpinner /></div>}
         <TextField

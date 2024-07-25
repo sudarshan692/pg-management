@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import "./dashboard.css";
 import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
+import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
 
 Modal.setAppElement('#root');
 
@@ -37,6 +38,9 @@ const Dashboard = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [payingGuests, setPayingGuests] = useState([]);
   const [dataSaved, setDataSaved] = useState(false);
+  const [selectedGuest, setSelectedGuest] = useState(null);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false); // Add state for payment dialog
+
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
@@ -67,6 +71,17 @@ const Dashboard = () => {
   const closeChangePasswordDialog = () => {
     setChangePasswordDialogOpen(false);
   };
+
+  const openAddPaymentDialog = (guest) => {
+    setSelectedGuest(guest);
+    setPaymentDialogOpen(true);
+  };
+
+  const closeAddPaymentDialog = () => {
+    setPaymentDialogOpen(false);
+    setSelectedGuest(null);
+  };
+
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -105,7 +120,7 @@ const Dashboard = () => {
       />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
-      <PayingGuestTable payingGuests={payingGuests} />
+      <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog}/>
       <Modal
         isOpen={payingGuestModalIsOpen}
         onRequestClose={closeAddPayingGuestModal}
@@ -121,6 +136,20 @@ const Dashboard = () => {
           onSnackbarOpen={handleSnackbarOpen}
           onDataSaved={handleDataUpdate} // Pass handleDataUpdate to the modal
         />
+      </Modal>
+
+      <Modal
+        isOpen={paymentDialogOpen}
+        onRequestClose={closeAddPaymentDialog}
+        contentLabel="Add Payment Modal"
+      >
+      <AddPaymentDialog
+         isOpen={paymentDialogOpen}
+         onRequestClose={closeAddPaymentDialog}
+         selectedGuest={selectedGuest}
+         selectedPGId={pgId}
+         onSnackbarOpen={handleSnackbarOpen}
+      />
       </Modal>
 
       <Snackbar
