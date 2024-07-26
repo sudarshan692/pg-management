@@ -57,6 +57,7 @@ input[type="date"] {
   color: #3f51b5; /* Text color */
 }
 .checkbox-container {
+  color: rgb(211, 227, 253);
   display: flex;
   flex-wrap: wrap; /* Allows wrapping if necessary */
   gap: 20px; /* Space between checkboxes */
