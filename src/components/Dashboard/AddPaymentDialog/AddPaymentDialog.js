@@ -12,12 +12,15 @@ import './addPaymentDialog.css';
 const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen }) => {
     const [paymentDate, setPaymentDate] = useState('');
     const [paymentAmount, setPaymentAmount] = useState('');
+    const [loading, setLoading] = useState(false); // State to track loading
 
     const handleSave = async () => {
         if (!paymentDate || !paymentAmount || !selectedGuest.id || !selectedPGId) {
             onSnackbarOpen("Please fill in all fields and make sure IDs are valid.", "error");
             return;
         }
+
+        setLoading(true); // Set loading to true when starting to save
 
         try {
             const paymentId = uuidv4(); // Generate a unique ID for the payment
@@ -33,6 +36,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 paymentId,
                 paymentDate,
                 paymentAmount: parseFloat(paymentAmount),
+                paymentStatus: 'Done'
             });
 
             // Update the document with the new payments list
@@ -43,6 +47,8 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
         } catch (error) {
             console.error("Error adding payment:", error);
             onSnackbarOpen("Error adding payment. Please try again.", "error");
+        } finally {
+            setLoading(false); // Set loading to false after operation
         }
     };
 
@@ -69,8 +75,23 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 />
             </DialogContent>
             <DialogActions className="dialog-actions">
-                <Button onClick={handleSave} variant="contained" color="primary" className="button-save">Save</Button>
-                <Button onClick={onRequestClose} variant="outlined" className="button-cancel">Cancel</Button>
+                <Button 
+                    onClick={handleSave} 
+                    variant="contained" 
+                    color="primary" 
+                    className="button-save"
+                    disabled={loading} // Disable the button if loading
+                >
+                    {loading ? 'Saving...' : 'Save'}
+                </Button>
+                <Button 
+                    onClick={onRequestClose} 
+                    variant="outlined" 
+                    className="button-cancel"
+                    disabled={loading} // Optionally disable cancel button if needed
+                >
+                    Cancel
+                </Button>
             </DialogActions>
         </Dialog>
     );
