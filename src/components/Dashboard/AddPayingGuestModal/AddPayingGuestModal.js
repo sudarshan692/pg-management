@@ -17,11 +17,8 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     roomNo: "",
     roomType: "",
     depositAmount: "",
-    monthlyRent: "",
     maintenanceCharges: "",
-    depositPaid: false,
     fullDeposit: false,
-    rentPaid: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -101,11 +98,8 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         roomNo: Number(guestData.roomNo),
         roomType: roomTypeMap[guestData.roomType],
         depositAmount: Number(guestData.depositAmount),
-        monthlyRent: Number(guestData.monthlyRent),
         maintenanceCharges: Number(guestData.maintenanceCharges),
-        depositPaid: guestData.depositPaid,
         fullDeposit: guestData.fullDeposit,
-        rentPaid: guestData.rentPaid
       };
 
       // Add the new guest to Firestore
@@ -178,7 +172,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
               <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
               <input type="text" name="presentStatus" placeholder="Present Employee / Student" value={guestData.presentStatus} onChange={handleChange} required />
-              <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
             </div>
             <div className="form-column">
               <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />
@@ -191,11 +184,9 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
                 <option value="Triple">Triple (T)</option>
               </select>
               <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
-              <input type="number" name="monthlyRent" placeholder="Monthly Rent" value={guestData.monthlyRent} onChange={handleChange} required />
+              <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
               <div className="checkbox-container">
-                {/* <label><input type="checkbox" name="depositPaid" checked={guestData.depositPaid} onChange={handleChange} /> Deposit Paid</label> */}
-                <label><input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} /> Full Deposit</label>
-                <label><input type="checkbox" name="rentPaid" checked={guestData.rentPaid} onChange={handleChange} /> Rent Paid</label>
+                <label><input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} /> Full Deposit Paid </label>
               </div>
             </div>
             <div className="button-container">
