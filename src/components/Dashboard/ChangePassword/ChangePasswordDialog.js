@@ -35,7 +35,7 @@ const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
 
       setSnackbarMessage('Password updated successfully.');
       setSnackbarSeverity('success');
-      handleLogout();f
+      handleLogout();
       // You might want to refresh or update the UI accordingly
       onClose(); // Close the dialog
     } catch (error) {
