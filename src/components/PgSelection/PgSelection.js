@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 const PgSelection = () => {
   const { pgData, setPgData, loading, setLoading, setError } = usePgContext();
   const [selectedPG, setSelectedPG] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false); // Separate loading state for payment details
   const history = useHistory();
   const location = useLocation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -63,7 +64,7 @@ const PgSelection = () => {
   }, [pgData, fetchPGs]);
 
   useEffect(() => {
-    if (!loading && selectedPG) {
+    if (!loading && !paymentLoading && selectedPG) {
       console.log('Navigating to dashboard:', selectedPG);
       history.push({
         pathname: `/dashboard/${selectedPG.id}`,
@@ -71,7 +72,7 @@ const PgSelection = () => {
       });
       setSelectedPG(null);
     }
-  }, [loading, selectedPG, history]);
+  }, [loading, paymentLoading, selectedPG, history]);
 
   useEffect(() => {
     if (location.state && location.state.showSnackbar) {
@@ -87,6 +88,8 @@ const PgSelection = () => {
   }, [location, history]);
 
   const addPaymentDetailsIfNotExists = async (pgId) => {
+    setPaymentLoading(true); // Start payment loading
+
     try {
       console.log('Adding payment details for PG ID:', pgId);
 
@@ -155,6 +158,8 @@ const PgSelection = () => {
       console.log('Payment details updated.');
     } catch (error) {
       console.error('Error adding payment details:', error.message);
+    } finally {
+      setPaymentLoading(false); // End payment loading
     }
   };
 
@@ -167,16 +172,7 @@ const PgSelection = () => {
       await addPaymentDetailsIfNotExists(pg.id);
 
       setLoading(false);
-
-      // Dynamic delay based on loading state
-      const timer = setTimeout(() => {
-        history.push({
-          pathname: `/dashboard/${pg.id}`,
-          state: { pgDetails: pg }
-        });
-      }, 300); // Reduced delay for smoother experience
-
-      return () => clearTimeout(timer);
+      
     } catch (error) {
       console.error('Error in handlePGClick:', error.message);
       setLoading(false);
@@ -209,7 +205,7 @@ const PgSelection = () => {
 
   return (
     <div>
-      {loading && (
+      {(loading || paymentLoading) && (
         <div className="overlay">
           <LoadingSpinner />
         </div>

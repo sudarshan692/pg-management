@@ -14,21 +14,31 @@ Modal.setAppElement('#root');
 
 const fetchPayingGuests = async (pgId, setPayingGuests) => {
   try {
-    // console.log("Fetching paying guests for PG ID:", pgId);
+    console.log("Fetching paying guests for PG ID:", pgId);
     const data = [];
+    
+    // Fetch the paying guests collection
     const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
+    
+    // Iterate through each document in the collection
     pgSnapshot.forEach(doc => {
+      const docData = doc.data();
+      
+      // Assuming each document has a `payingGuestMap` field and a `paymentDetails` map
       data.push({
         id: doc.id,
-        ...doc.data().payingGuestMap
+        ...docData.payingGuestMap, // Spread payingGuestMap
+        paymentDetails: docData.paymentDetails // Add paymentDetails map
       });
     });
+    
     setPayingGuests(data);
     console.log("Paying guests fetched successfully:", data);
   } catch (error) {
     console.error("Error fetching paying guests:", error);
   }
 };
+
 
 const Dashboard = () => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
