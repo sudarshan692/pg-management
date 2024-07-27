@@ -111,8 +111,6 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       sortable: true,
       sortFunction: depositAmountSort // Custom sort function
     },
-    { name: 'Monthly Rent', selector: (row) => row.monthlyRent || '-', sortable: true },
-    { name: 'Payment Status', selector: (row) => row.paymentStatus || 'Pending', sortable: true },
     {
       name: 'Actions',
       cell: (row) => (
