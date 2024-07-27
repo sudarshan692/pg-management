@@ -11,21 +11,18 @@ const CustomNoDataComponent = () => (
 );
 
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
-  // Check if value is a number and handle "Not Paid" case
   const isZeroDeposit = value === 0;
-  const isFullDeposit = fullDeposit; // Assumes fullDeposit is a boolean indicating if it's full
-
+  const isFullDeposit = fullDeposit;
+  
   let boxColor = color;
-
-  // Determine the color based on deposit status
+  
   if (isZeroDeposit) {
-    boxColor = 'red'; // Red color for zero deposit
+    boxColor = 'red';
   } else if (isFullDeposit) {
-    boxColor = 'green'; // Green color for full deposit
+    boxColor = 'green';
   } else {
-    boxColor = 'yellow'; // Default color for partial or other deposits
+    boxColor = 'yellow';
   }
-
   return (
     <div className={`box ${className} ${boxColor}`}>
       {fullDeposit !== undefined && !isZeroDeposit && (
@@ -57,25 +54,29 @@ const BoxContainer = ({ floorNo, roomNo, roomType }) => (
 );
 
 const depositAmountSort = (rowA, rowB, columnId, sortDirection) => {
-  // Assuming fullDeposit and depositPaid are the keys to determine sorting
   const depositA = rowA.fullDeposit ? 1 : rowA.depositPaid ? 0.5 : 0;
   const depositB = rowB.fullDeposit ? 1 : rowB.depositPaid ? 0.5 : 0;
-  
   return sortDirection === 'asc' ? depositA - depositB : depositB - depositA;
+};
+
+const formatDate = (date) => {
+  if (!date) return '-';
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
 };
 
 const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(true); // Loading state
-
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
-    // Simulate data fetching
     const fetchData = async () => {
-      // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       setLoading(false);
     };
-
     fetchData();
   }, []);
 
@@ -97,19 +98,23 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       cell: (row) => <BoxContainer floorNo={row.floorNo} roomNo={row.roomNo} roomType={row.roomType} />, 
       sortable: true 
     },
-    { name: 'Date Of Admission', selector: (row) => row.dateOfAdmission || '-', sortable: true },
+    { 
+      name: 'Date Of Admission', 
+      selector: (row) => formatDate(row.dateOfAdmission), 
+      sortable: true 
+    },
     { 
       name: 'Deposit Amount', 
       cell: (row) => (
         <BoxedCell
-        value={row.depositAmount} // Assuming depositAmount is a number
-        className="deposit"
-        color={row.depositAmount === 0 ? 'red' : 'yellow'} // Adjust based on deposit status
-        fullDeposit={row.fullDeposit} // Pass fullDeposit value if needed
-      />
+          value={row.depositAmount}
+          className="deposit"
+          color={row.depositAmount === 0 ? 'red' : 'yellow'}
+          fullDeposit={row.fullDeposit}
+        />
       ), 
       sortable: true,
-      sortFunction: depositAmountSort // Custom sort function
+      sortFunction: depositAmountSort
     },
     {
       name: 'Actions',
