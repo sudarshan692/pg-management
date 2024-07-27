@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { v4 as uuidv4 } from 'uuid'; 
 import './addPaymentDialog.css'; 
 
-const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen }) => {
+const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen, onPaymentUpdate }) => {
     const [paymentAmount, setPaymentAmount] = useState('');
     const [paymentStatus, setPaymentStatus] = useState('Complete');
     const [month, setMonth] = useState(new Date().getMonth()); // Set default to current month
@@ -39,12 +39,10 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
             // Retrieve the current payment details
             const guestDoc = await guestRef.get();
             const guestData = guestDoc.data();
-            const currentPayments = guestData.paymentDetails || {};
+            const currentPayments = guestData.paymentDetails || [];
 
-            // Get current month and year
+            // Get current date and time
             const currentDate = new Date();
-            // const currentMonth = months[currentDate.getMonth()];
-            // const currentYear = currentDate.getFullYear();
 
             // Create a new payment detail
             const newPaymentDetail = {
@@ -56,32 +54,37 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 paymentForYear: year // Store selected year
             };
 
-            // Find if there's an existing entry for the selected month and year
-            const existingPayment = Object.values(currentPayments).find(payment => {
-                const createdAt = payment.createdAt?.toDate();
-                return createdAt && 
-                    createdAt.getMonth() === month && 
+            // Check if a payment already exists for the selected month and year
+            const existingPaymentIndex = currentPayments.findIndex(payment => {
+                // Convert Firestore Timestamp to JavaScript Date if needed
+                const createdAt = payment.createdAt instanceof Date ? payment.createdAt : payment.createdAt?.toDate();
+                return createdAt &&
+                    createdAt.getMonth() === month &&
                     createdAt.getFullYear() === year;
             });
 
-            if (existingPayment) {
+            if (existingPaymentIndex !== -1) {
                 // Update the existing entry
-                existingPayment.paymentDate = newPaymentDetail.paymentDate;
-                existingPayment.paymentAmount = newPaymentDetail.paymentAmount;
-                existingPayment.paymentStatus = newPaymentDetail.paymentStatus;
-                existingPayment.paymentForMonth = newPaymentDetail.paymentForMonth;
-                existingPayment.paymentForYear = newPaymentDetail.paymentForYear;
+                currentPayments[existingPaymentIndex] = {
+                    ...currentPayments[existingPaymentIndex],
+                    ...newPaymentDetail,
+                    createdAt: new Date(year, month) // Update createdAt to the selected month and year
+                };
             } else {
                 // Add a new payment detail
-                currentPayments[paymentId] = {
+                currentPayments.push({
                     ...newPaymentDetail,
-                    createdAt: new Date(year, month) // Set createdAt to first day of the selected month and year
-                };
+                    createdAt: new Date(year, month) // Set createdAt to the first day of the selected month and year
+                });
             }
 
             // Update the document with the new payments list
             await guestRef.update({ paymentDetails: currentPayments });
-
+            // Notify the parent component about the payment update
+            onPaymentUpdate({
+                ...selectedGuest,
+                paymentDetails: currentPayments
+            });
             onSnackbarOpen("Payment added successfully!", "success");
             onRequestClose();
         } catch (error) {

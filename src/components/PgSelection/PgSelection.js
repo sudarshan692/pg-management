@@ -114,11 +114,11 @@ const PgSelection = () => {
 
       for (const doc of pgSnapshot.docs) {
         const guestData = doc.data();
-        const paymentDetails = guestData.paymentDetails || {};
+        const paymentDetails = guestData.paymentDetails || [];
 
         console.log('Existing payment details:', paymentDetails);
 
-        paymentExists = Object.values(paymentDetails).some(payment => {
+        paymentExists = paymentDetails.some(payment => {
           const createdAt = payment.createdAt?.toDate();
           return createdAt && createdAt.getMonth() + 1 === currentMonth && createdAt.getFullYear() === currentYear;
         });
@@ -137,10 +137,7 @@ const PgSelection = () => {
 
           console.log('Adding new payment detail:', newPaymentDetail);
 
-          const updatedPaymentDetails = {
-            ...paymentDetails,
-            [paymentId]: newPaymentDetail
-          };
+          const updatedPaymentDetails = [...paymentDetails, newPaymentDetail];
 
           console.log('Updated payment details:', updatedPaymentDetails);
 

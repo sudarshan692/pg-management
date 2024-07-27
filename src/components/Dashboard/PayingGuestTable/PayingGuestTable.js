@@ -80,6 +80,30 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
     fetchData();
   }, []);
 
+  const PaymentDetails = ({ paymentDetails }) => {
+    if (!paymentDetails || Object.keys(paymentDetails).length === 0) {
+      return <div>No Payment Details</div>;
+    }
+  
+    // Get the payment IDs and sort them
+    const paymentIds = Object.keys(paymentDetails).sort();
+    const highestIndexId = paymentIds[paymentIds.length - 1]; // Get the highest key
+  
+    // Retrieve the payment details with the highest index
+    const highestPayment = paymentDetails[highestIndexId];
+  
+    return (
+      <div className="payment-details">
+        <div>Date: {formatDate(highestPayment.paymentDate)}</div>
+        <div>Amount: {highestPayment.paymentAmount}</div>
+        <div>Status: {highestPayment.paymentStatus}</div>
+      </div>
+    );
+  };
+  
+  
+  
+
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
@@ -115,6 +139,10 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       ), 
       sortable: true,
       sortFunction: depositAmountSort
+    },
+    {
+      name: 'Payment Details',
+      cell: (row) => <PaymentDetails paymentDetails={row.paymentDetails} />,
     },
     {
       name: 'Actions',

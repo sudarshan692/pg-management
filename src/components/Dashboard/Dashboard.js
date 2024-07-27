@@ -10,7 +10,6 @@ import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
 
-
 Modal.setAppElement('#root');
 
 const fetchPayingGuests = async (pgId, setPayingGuests) => {
@@ -40,7 +39,6 @@ const fetchPayingGuests = async (pgId, setPayingGuests) => {
   }
 };
 
-
 const Dashboard = () => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
   const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
@@ -58,7 +56,6 @@ const Dashboard = () => {
   const [pgData] = useState(location.state?.pgDetails || {});
 
   useEffect(() => {
-    // console.log("Dashboard mounted or PG ID changed:", pgId);
     fetchPayingGuests(pgId, setPayingGuests);
   }, [pgId]);
 
@@ -118,6 +115,14 @@ const Dashboard = () => {
     setDataSaved(true); // Set flag to true when data is saved
   };
 
+  const handlePaymentUpdate = (updatedGuest) => {
+    setPayingGuests(prevGuests => {
+      return prevGuests.map(guest =>
+        guest.id === updatedGuest.id ? updatedGuest : guest
+      );
+    });
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
@@ -132,7 +137,11 @@ const Dashboard = () => {
       />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
-      <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog}/>
+      <PayingGuestTable 
+        payingGuests={payingGuests} 
+        onAddPayment={openAddPaymentDialog}
+        onPaymentUpdate={handlePaymentUpdate} // Pass the function to update payment details
+      />
 
       <Modal
         isOpen={payingGuestModalIsOpen}
@@ -156,13 +165,14 @@ const Dashboard = () => {
         onRequestClose={closeAddPaymentDialog}
         contentLabel="Add Payment Modal"
       >
-      <AddPaymentDialog
-         isOpen={paymentDialogOpen}
-         onRequestClose={closeAddPaymentDialog}
-         selectedGuest={selectedGuest}
-         selectedPGId={pgId}
-         onSnackbarOpen={handleSnackbarOpen}
-      />
+        <AddPaymentDialog
+          isOpen={paymentDialogOpen}
+          onRequestClose={closeAddPaymentDialog}
+          selectedGuest={selectedGuest}
+          selectedPGId={pgId}
+          onSnackbarOpen={handleSnackbarOpen}
+          onPaymentUpdate={handlePaymentUpdate} // Pass the function to update payment details
+        />
       </Modal>
 
       <Snackbar
