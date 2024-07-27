@@ -6,16 +6,26 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import { v4 as uuidv4 } from 'uuid'; 
 import './addPaymentDialog.css'; 
 
 const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen }) => {
-    const [paymentDate, setPaymentDate] = useState('');
     const [paymentAmount, setPaymentAmount] = useState('');
+    const [paymentStatus, setPaymentStatus] = useState('Complete');
+    const [month, setMonth] = useState(new Date().getMonth()); // Set default to current month
+    const [year, setYear] = useState(new Date().getFullYear()); // Set default to current year
     const [loading, setLoading] = useState(false); // State to track loading
 
+    // List of months and years
+    const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    const years = Array.from({ length: 27 }, (_, i) => 2024 + i); // Years from 2024 to 2050
+
     const handleSave = async () => {
-        if (!paymentDate || !paymentAmount || !selectedGuest.id || !selectedPGId) {
+        if (!paymentAmount || !selectedGuest.id || !selectedPGId) {
             onSnackbarOpen("Please fill in all fields and make sure IDs are valid.", "error");
             return;
         }
@@ -29,15 +39,45 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
             // Retrieve the current payment details
             const guestDoc = await guestRef.get();
             const guestData = guestDoc.data();
-            const currentPayments = guestData.paymentDetails || [];
+            const currentPayments = guestData.paymentDetails || {};
 
-            // Add new payment to the list
-            currentPayments.push({
+            // Get current month and year
+            const currentDate = new Date();
+            // const currentMonth = months[currentDate.getMonth()];
+            // const currentYear = currentDate.getFullYear();
+
+            // Create a new payment detail
+            const newPaymentDetail = {
                 paymentId,
-                paymentDate,
+                paymentDate: currentDate.toISOString().split('T')[0], // Current date in yyyy-mm-dd format
                 paymentAmount: parseFloat(paymentAmount),
-                paymentStatus: 'Done'
+                paymentStatus: paymentStatus === 'Complete' ? 'Done' : 'Pending',
+                paymentForMonth: months[month], // Store selected month
+                paymentForYear: year // Store selected year
+            };
+
+            // Find if there's an existing entry for the selected month and year
+            const existingPayment = Object.values(currentPayments).find(payment => {
+                const createdAt = payment.createdAt?.toDate();
+                return createdAt && 
+                    createdAt.getMonth() === month && 
+                    createdAt.getFullYear() === year;
             });
+
+            if (existingPayment) {
+                // Update the existing entry
+                existingPayment.paymentDate = newPaymentDetail.paymentDate;
+                existingPayment.paymentAmount = newPaymentDetail.paymentAmount;
+                existingPayment.paymentStatus = newPaymentDetail.paymentStatus;
+                existingPayment.paymentForMonth = newPaymentDetail.paymentForMonth;
+                existingPayment.paymentForYear = newPaymentDetail.paymentForYear;
+            } else {
+                // Add a new payment detail
+                currentPayments[paymentId] = {
+                    ...newPaymentDetail,
+                    createdAt: new Date(year, month) // Set createdAt to first day of the selected month and year
+                };
+            }
 
             // Update the document with the new payments list
             await guestRef.update({ paymentDetails: currentPayments });
@@ -57,15 +97,6 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
             <DialogTitle className="dialog-title">Add Payment</DialogTitle>
             <DialogContent className="dialog-content">
                 <TextField
-                    className="textfield-spacing"
-                    label="Payment Date"
-                    type="date"
-                    value={paymentDate}
-                    onChange={(e) => setPaymentDate(e.target.value)}
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                />
-                <TextField
                     label="Payment Amount"
                     type="number"
                     value={paymentAmount}
@@ -73,6 +104,45 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     fullWidth
                     className="textfield-spacing"
                 />
+                <TextField
+                    select
+                    label="Payment Status"
+                    value={paymentStatus}
+                    onChange={(e) => setPaymentStatus(e.target.value)}
+                    fullWidth
+                    className="textfield-spacing"
+                >
+                    <MenuItem value="Complete">Complete</MenuItem>
+                    <MenuItem value="Partial">Partial</MenuItem>
+                </TextField>
+                <TextField
+                    select
+                    label="Month"
+                    value={month}
+                    onChange={(e) => setMonth(Number(e.target.value))}
+                    fullWidth
+                    className="textfield-spacing"
+                >
+                    {months.map((monthName, index) => (
+                        <MenuItem key={index} value={index}>
+                            {monthName}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    select
+                    label="Year"
+                    value={year}
+                    onChange={(e) => setYear(Number(e.target.value))}
+                    fullWidth
+                    className="textfield-spacing"
+                >
+                    {years.map((yearOption) => (
+                        <MenuItem key={yearOption} value={yearOption}>
+                            {yearOption}
+                        </MenuItem>
+                    ))}
+                </TextField>
             </DialogContent>
             <DialogActions className="dialog-actions">
                 <Button 

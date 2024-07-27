@@ -126,6 +126,8 @@ const PgSelection = () => {
             paymentId,
             paymentDate: '',
             paymentAmount: '',
+            paymentForMonth: '',
+            paymentForYear: '',
             paymentStatus: 'pending',
             createdAt: new Date()
           };

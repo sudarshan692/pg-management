@@ -32,16 +32,18 @@
 .button-cancel:hover {
     background-color: #e0e0e0; /* Light grey for hover */
 }
-/* Add space between input fields */
-.textfield-spacing {
-    margin-top: 16px; /* Space between input fields */
-}
+
 
 /* Add top margin for the first input field */
 .textfield-spacing:first-of-type {
-    margin-bottom: 20px;
     margin-top: 20px; /* Top margin for the first input field */
 }
+
+/* Add additional space between fields */
+.textfield-spacing:not(:first-of-type) {
+    margin-top: 20px; /* More space between fields after the first one */
+}
+
 .MuiTextField-root .MuiInputBase-input {
     color: black; /* Text color inside text fields */
 }
