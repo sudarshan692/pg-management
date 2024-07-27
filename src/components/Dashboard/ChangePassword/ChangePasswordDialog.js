@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar, Alert } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar, Alert} from '@mui/material';
 import { auth } from '../../shared/firebase';
 import firebase from 'firebase/compat/app';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 import './changePasswordDialog.css'; // Import the CSS for styling
 
-const ChangePasswordDialog = ({ open, onClose }) => {
+const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,7 @@ const ChangePasswordDialog = ({ open, onClose }) => {
 
       setSnackbarMessage('Password updated successfully.');
       setSnackbarSeverity('success');
+      handleLogout()
       // You might want to refresh or update the UI accordingly
       onClose(); // Close the dialog
     } catch (error) {

@@ -10,6 +10,7 @@ import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
 
+
 Modal.setAppElement('#root');
 
 const fetchPayingGuests = async (pgId, setPayingGuests) => {
@@ -125,12 +126,14 @@ const Dashboard = () => {
       </div>
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
       <ChangePasswordDialog
+        handleLogout ={handleLogout}
         open={changePasswordDialogOpen}
         onClose={closeChangePasswordDialog}
       />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
       <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog}/>
+
       <Modal
         isOpen={payingGuestModalIsOpen}
         onRequestClose={closeAddPayingGuestModal}
