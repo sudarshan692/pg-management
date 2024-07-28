@@ -149,7 +149,7 @@ const Login = () => {
             e.target.style.backgroundColor = "rgb(3, 21, 37)";
           }}
           onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "#1a73e8";
+            e.target.style.backgroundColor = "#3f51b5";
           }}
         >
           LOG IN
