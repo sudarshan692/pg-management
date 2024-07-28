@@ -207,7 +207,7 @@ const PgSelection = () => {
           <LoadingSpinner />
         </div>
       )}
-      <h1 className="dashboard-nav-heading">PG Selection Dashboard</h1>
+      <h1 className="pg-selection-heading">PG Selection Dashboard</h1>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       <div className="pg-container">
         {pgData.map(pg => (
