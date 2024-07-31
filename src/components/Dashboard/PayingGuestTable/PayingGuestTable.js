@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import { FaArrowUp, FaExclamationTriangle } from 'react-icons/fa';
+import {FaPlus, FaArrowUp, FaExclamationTriangle } from 'react-icons/fa';
 import LoadingSpinner from '../../shared/LoadingSpinner'; // Adjust the path as needed
 import './payingGuestTable.css';
 
@@ -297,7 +297,8 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
         return (
           <div className="actions-container">
             <button onClick={() => onAddPayment(row)} className="add-payment-button">
-              +
+            <FaPlus className="add-icon" />
+            
             </button>
             {showAlert && (
               <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />

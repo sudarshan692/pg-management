@@ -103,18 +103,40 @@
   margin-top: 60px;
 }
 
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between button and alert icon */
+}
+
 .add-payment-button {
-  background-color: #0056b3;; /* Green */
+  background-color: #3f51b5; /* Base color */
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 4px 8px;
+  color: white;
+  border-radius: 25px;
+  padding: 5px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 
 .add-payment-button:hover {
-  background-color: #0d2136;; /* Darker green */
+  background-color: #C80036; /* Darker color on hover */
+  color: #e0f7fa; /* Light cyan text color on hover */
+  transform: scale(1.05); /* Slightly larger on hover */
 }
+
+.add-payment-button:active {
+  background-color: #005b69; /* Even darker color on active */
+  transform: scale(0.98); /* Slightly smaller on active */
+}
+
+.add-icon {
+  font-size: 12px; /* Adjust size as needed */
+}
+
 /* Add this to your CSS file */
 .status-box {
   display: flex;
