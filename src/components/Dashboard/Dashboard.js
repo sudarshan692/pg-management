@@ -136,13 +136,15 @@ const Dashboard = () => {
         onClose={closeChangePasswordDialog}
       />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
-      <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
+     
       <PayingGuestTable 
         payingGuests={payingGuests} 
         onAddPayment={openAddPaymentDialog}
         onPaymentUpdate={handlePaymentUpdate} // Pass the function to update payment details
       />
-
+  <div className="add-paying-guest-container">
+    <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
+  </div>
       <Modal
         isOpen={payingGuestModalIsOpen}
         onRequestClose={closeAddPayingGuestModal}
