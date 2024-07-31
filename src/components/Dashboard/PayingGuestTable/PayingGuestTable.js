@@ -197,11 +197,23 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
     setSearchText(e.target.value);
   };
 
-  const filteredData = payingGuests.filter((item) =>
-    Object.values(item).some(
+  const filteredData = payingGuests.filter((item) => {
+    // Check if any property of the item matches the search text
+    const itemMatches = Object.values(item).some(
       (value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+    );
+  
+    // Check if any payment detail matches the search text
+    const paymentDetailsMatches = Object.values(item.paymentDetails || {}).some(
+      (detail) => {
+        const detailValues = Object.values(detail);
+        return detailValues.some(value => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+      }
+    );
+  
+    return itemMatches || paymentDetailsMatches;
+  });
+  
 
   const columns = [
     { name: 'Guest ID', selector: (row) => row.guestID, sortable: true},
