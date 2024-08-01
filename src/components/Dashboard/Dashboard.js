@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 import { auth, db } from "../shared/firebase";
 import Modal from "react-modal";
@@ -9,35 +9,9 @@ import "./dashboard.css";
 import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
+import LoadingSpinner from '../shared/LoadingSpinner'; // Ensure you have a loading spinner component
 
 Modal.setAppElement('#root');
-
-const fetchPayingGuests = async (pgId, setPayingGuests) => {
-  try {
-    console.log("Fetching paying guests for PG ID:", pgId);
-    const data = [];
-    
-    // Fetch the paying guests collection
-    const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
-    
-    // Iterate through each document in the collection
-    pgSnapshot.forEach(doc => {
-      const docData = doc.data();
-      
-      // Assuming each document has a `payingGuestMap` field and a `paymentDetails` map
-      data.push({
-        id: doc.id,
-        ...docData.payingGuestMap, // Spread payingGuestMap
-        paymentDetails: docData.paymentDetails // Add paymentDetails map
-      });
-    });
-    
-    setPayingGuests(data);
-    console.log("Paying guests fetched successfully:", data);
-  } catch (error) {
-    console.error("Error fetching paying guests:", error);
-  }
-};
 
 const Dashboard = () => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
@@ -48,16 +22,54 @@ const Dashboard = () => {
   const [payingGuests, setPayingGuests] = useState([]);
   const [dataSaved, setDataSaved] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
-  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false); // Add state for payment dialog
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
 
+  const previousPgIdRef = useRef(null); // Track previous pgId
+
+  const fetchPayingGuests = useCallback(async (pgId) => {
+    setLoading(true);
+    try {
+      const data = [];
+      
+      const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
+      pgSnapshot.forEach(doc => {
+        const docData = doc.data();
+        data.push({
+          id: doc.id,
+          ...docData.payingGuestMap,
+          paymentDetails: docData.paymentDetails
+        });
+      });
+      
+      setPayingGuests(data);
+      console.log("Paying guests fetched successfully:");
+    } catch (error) {
+      console.error("Error fetching paying guests:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    fetchPayingGuests(pgId, setPayingGuests);
-  }, [pgId]);
+    if (pgId) {
+      // Check if pgId is a primitive value or extract the value if it's an object
+      const currentPgId = typeof pgId === 'object' ? pgId.id || pgId.value : pgId;
+
+      console.log("Current pgId:", currentPgId);
+      console.log("Previous pgId:", previousPgIdRef.current);
+
+      if (currentPgId !== previousPgIdRef.current) {
+        fetchPayingGuests(currentPgId);
+        previousPgIdRef.current = currentPgId; // Update the ref to the new pgId
+      }
+    }
+  }, [pgId, fetchPayingGuests]);
 
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
@@ -111,8 +123,8 @@ const Dashboard = () => {
   };
 
   const handleDataUpdate = (newGuest) => {
-    setPayingGuests(prevGuests => [newGuest, ...prevGuests]); // Add the new guest to the local state
-    setDataSaved(true); // Set flag to true when data is saved
+    setPayingGuests(prevGuests => [newGuest, ...prevGuests]);
+    setDataSaved(true);
   };
 
   const handlePaymentUpdate = (updatedGuest) => {
@@ -131,20 +143,27 @@ const Dashboard = () => {
       </div>
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
       <ChangePasswordDialog
-        handleLogout ={handleLogout}
+        handleLogout={handleLogout}
         open={changePasswordDialogOpen}
         onClose={closeChangePasswordDialog}
       />
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
-     
+
+      {loading && (
+        <div className="overlay">
+          <LoadingSpinner /> {/* Ensure you have a loading spinner component */}
+        </div>
+      )}
+
       <PayingGuestTable 
         payingGuests={payingGuests} 
         onAddPayment={openAddPaymentDialog}
-        onPaymentUpdate={handlePaymentUpdate} // Pass the function to update payment details
+        onPaymentUpdate={handlePaymentUpdate}
       />
-  <div className="add-paying-guest-container">
-    <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
-  </div>
+      <div className="add-paying-guest-container">
+        <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
+      </div>
+
       <Modal
         isOpen={payingGuestModalIsOpen}
         onRequestClose={closeAddPayingGuestModal}
@@ -152,13 +171,11 @@ const Dashboard = () => {
       >
         <AddPayingGuestModal
           isOpen={payingGuestModalIsOpen}
-          onRequestClose={() => {
-            closeAddPayingGuestModal();
-          }}
+          onRequestClose={closeAddPayingGuestModal}
           selectedPGId={pgId}
           pgData={pgData}
           onSnackbarOpen={handleSnackbarOpen}
-          onDataSaved={handleDataUpdate} // Pass handleDataUpdate to the modal
+          onDataSaved={handleDataUpdate}
         />
       </Modal>
 
@@ -173,7 +190,7 @@ const Dashboard = () => {
           selectedGuest={selectedGuest}
           selectedPGId={pgId}
           onSnackbarOpen={handleSnackbarOpen}
-          onPaymentUpdate={handlePaymentUpdate} // Pass the function to update payment details
+          onPaymentUpdate={handlePaymentUpdate}
         />
       </Modal>
 

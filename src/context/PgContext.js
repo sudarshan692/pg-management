@@ -13,6 +13,7 @@ export const PgProvider = ({ children }) => {
   const [pgData, setPgData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [previousPgId, setPreviousPgId] = useState(null); 
 
   // Context value
   const value = {
@@ -21,7 +22,9 @@ export const PgProvider = ({ children }) => {
     loading,
     setLoading,
     error,
-    setError
+    setError,
+    previousPgId, 
+    setPreviousPgId
   };
 
   return (

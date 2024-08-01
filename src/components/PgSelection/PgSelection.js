@@ -30,8 +30,6 @@ const PgSelection = () => {
 
     try {
       setLoading(true);
-      console.log('Fetching PG data...');
-
       const userID = getCurrentUserID();
       if (!userID) throw new Error('User ID not found.');
       const snapshot = await db.collection(`users/${userID}/PGs`).get();
@@ -52,7 +50,7 @@ const PgSelection = () => {
       });
       const sortedPgs = pgsData.sort((a, b) => a.number.localeCompare(b.number));
       setPgData(sortedPgs);
-      console.log('PG data fetched:', sortedPgs);
+      console.log('PG data fetched:');
     } catch (error) {
       console.error('Error fetching PGs:', error.message);
       setError(error.message);
@@ -65,13 +63,13 @@ const PgSelection = () => {
     if (!pgData || pgData.length === 0) {
       fetchPGs();
     } else {
-      console.log('PG data already exists:', pgData);
+      console.log('PG data already exists:');
     }
   }, [pgData, fetchPGs]);
 
   useEffect(() => {
     if (!loading && !paymentLoading && selectedPG) {
-      console.log('Navigating to dashboard:', selectedPG);
+      console.log('Navigating to dashboard:');
       history.push({
         pathname: `/dashboard/${selectedPG.id}`,
         state: { pgDetails: selectedPG }
@@ -97,38 +95,27 @@ const PgSelection = () => {
     setPaymentLoading(true); // Start payment loading
 
     try {
-      console.log('Adding payment details for PG ID:', pgId);
-
       if (!auth.currentUser) {
         throw new Error('User not authenticated.');
       }
-
       const userID = auth.currentUser.uid;
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
-
       const pgRef = db.collection(`users/${userID}/PGs/${pgId}/PayingGuestData`);
       const pgSnapshot = await pgRef.get();
-
       if (pgSnapshot.empty) {
         console.log('No PayingGuestData found.');
         return;
       }
-
       let paymentExists = false;
       const updatePromises = [];
-
       for (const doc of pgSnapshot.docs) {
         const guestData = doc.data();
         const paymentDetails = guestData.paymentDetails || [];
-
-        console.log('Existing payment details:', paymentDetails);
-
         paymentExists = paymentDetails.some(payment => {
           const createdAt = payment.createdAt?.toDate();
           return createdAt && createdAt.getMonth() + 1 === currentMonth && createdAt.getFullYear() === currentYear;
         });
-
         if (!paymentExists) {
           const paymentId = uuidv4();
           const newPaymentDetail = {
@@ -140,13 +127,8 @@ const PgSelection = () => {
             paymentStatus: 'Not Paid',
             createdAt: new Date()
           };
-
-          console.log('Adding new payment detail:', newPaymentDetail);
-
           const updatedPaymentDetails = [...paymentDetails, newPaymentDetail];
-
-          console.log('Updated payment details:', updatedPaymentDetails);
-
+          console.log('Updated payment details:');
           updatePromises.push(
             doc.ref.update({
               paymentDetails: updatedPaymentDetails
@@ -158,7 +140,6 @@ const PgSelection = () => {
       }
 
       await Promise.all(updatePromises);
-      console.log('Payment details updated.');
     } catch (error) {
       console.error('Error adding payment details:', error.message);
     } finally {
@@ -167,7 +148,7 @@ const PgSelection = () => {
   };
 
   const handlePGClick = async (pg) => {
-    console.log('PG clicked:', pg);
+    console.log('PG clicked:');
     setSelectedPG(pg);
     setLoading(true);
 
