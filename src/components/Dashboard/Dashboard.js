@@ -24,19 +24,16 @@ const Dashboard = () => {
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
-
-  const previousPgIdRef = useRef(null); // Track previous pgId
+  const previousPgIdRef = useRef(null);
 
   const fetchPayingGuests = useCallback(async (pgId) => {
     setLoading(true);
     try {
       const data = [];
-      
       const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
       pgSnapshot.forEach(doc => {
         const docData = doc.data();
@@ -46,7 +43,6 @@ const Dashboard = () => {
           paymentDetails: docData.paymentDetails
         });
       });
-      
       setPayingGuests(data);
       console.log("Paying guests fetched successfully:");
     } catch (error) {
@@ -58,12 +54,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (pgId) {
-      // Check if pgId is a primitive value or extract the value if it's an object
       const currentPgId = typeof pgId === 'object' ? pgId.id || pgId.value : pgId;
-
       console.log("Current pgId:", currentPgId);
       console.log("Previous pgId:", previousPgIdRef.current);
-
       if (currentPgId !== previousPgIdRef.current) {
         fetchPayingGuests(currentPgId);
         previousPgIdRef.current = currentPgId; // Update the ref to the new pgId
@@ -160,6 +153,7 @@ const Dashboard = () => {
         onAddPayment={openAddPaymentDialog}
         onPaymentUpdate={handlePaymentUpdate}
       />
+      
       <div className="add-paying-guest-container">
         <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
       </div>

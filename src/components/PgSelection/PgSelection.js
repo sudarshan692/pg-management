@@ -25,9 +25,9 @@ const PgSelection = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
+
   const fetchPGs = useCallback(async () => {
     if (pgData && pgData.length > 0) return;
-
     try {
       setLoading(true);
       const userID = getCurrentUserID();
@@ -69,7 +69,7 @@ const PgSelection = () => {
 
   useEffect(() => {
     if (!loading && !paymentLoading && selectedPG) {
-      console.log('Navigating to dashboard:');
+      console.log('Navigating to dashboard');
       history.push({
         pathname: `/dashboard/${selectedPG.id}`,
         state: { pgDetails: selectedPG }
@@ -80,7 +80,6 @@ const PgSelection = () => {
 
   useEffect(() => {
     if (location.state && location.state.showSnackbar) {
-      console.log('Snackbar state:', location.state);
       setSnackbarMessage(location.state.message);
       setSnackbarSeverity(location.state.severity);
       setSnackbarOpen(true);
@@ -148,15 +147,12 @@ const PgSelection = () => {
   };
 
   const handlePGClick = async (pg) => {
-    console.log('PG clicked:');
+    console.log('PG clicked');
     setSelectedPG(pg);
     setLoading(true);
-
     try {
       await addPaymentDetailsIfNotExists(pg.id);
-
       setLoading(false);
-      
     } catch (error) {
       console.error('Error in handlePGClick:', error.message);
       setLoading(false);
