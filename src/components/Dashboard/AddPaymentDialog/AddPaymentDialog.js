@@ -11,10 +11,16 @@ import { v4 as uuidv4 } from 'uuid';
 import './addPaymentDialog.css'; 
 
 const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen, onPaymentUpdate }) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
     const [paymentAmount, setPaymentAmount] = useState('');
     const [paymentStatus, setPaymentStatus] = useState('Complete');
-    const [month, setMonth] = useState(new Date().getMonth()); // Set default to current month
-    const [year, setYear] = useState(new Date().getFullYear()); // Set default to current year
+    const [month, setMonth] = useState(currentMonth); // Set default to current month
+    const [year, setYear] = useState(currentYear); // Set default to current year
     const [loading, setLoading] = useState(false); // State to track loading
 
     // List of months and years
@@ -22,38 +28,45 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    const years = Array.from({ length: 27 }, (_, i) => 2024 + i); // Years from 2024 to 2050
+    const monthsOptions = [currentMonth, previousMonth];
+    const yearsOptions = [currentYear, previousYear];
 
     const handleSave = async () => {
-        if (!paymentAmount || !selectedGuest.id || !selectedPGId) {
-            onSnackbarOpen("Please fill in all fields and make sure IDs are valid.", "error");
+        // Check if paymentAmount is required
+        if (paymentStatus !== 'Not Paid' && !paymentAmount) {
+            onSnackbarOpen("Please enter a payment amount.", "error");
             return;
         }
-
+    
+        if (!selectedGuest.id || !selectedPGId) {
+            onSnackbarOpen("Please ensure IDs are valid.", "error");
+            return;
+        }
+    
         setLoading(true); // Set loading to true when starting to save
-
+    
         try {
             const paymentId = uuidv4(); // Generate a unique ID for the payment
             const guestRef = db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).doc(selectedGuest.id);
-
+    
             // Retrieve the current payment details
             const guestDoc = await guestRef.get();
             const guestData = guestDoc.data();
             const currentPayments = guestData.paymentDetails || [];
-
+    
             // Get current date and time
-            const currentDate = new Date();
-
+            const currentDate = paymentStatus === 'Not Paid' ? '' : new Date().toISOString().split('T')[0]; // Use '-' if status is Not Paid
+    
             // Create a new payment detail
             const newPaymentDetail = {
                 paymentId,
-                paymentDate: currentDate.toISOString().split('T')[0], // Current date in yyyy-mm-dd format
-                paymentAmount: parseFloat(paymentAmount),
-                paymentStatus: paymentStatus === 'Complete' ? 'Done' : 'Partial',
+                paymentDate: currentDate, // Set to '-' if status is Not Paid
+                paymentAmount: paymentStatus === 'Not Paid' ? '-' : parseFloat(paymentAmount), // Set to '-' if status is Not Paid
+                paymentStatus: paymentStatus === 'Complete' ? 'Done' : paymentStatus === 'Partial' ? 'Partial' : 'Not Paid',
                 paymentForMonth: months[month], // Store selected month
                 paymentForYear: year // Store selected year
             };
-
+    
             // Check if a payment already exists for the selected month and year
             const existingPaymentIndex = currentPayments.findIndex(payment => {
                 // Convert Firestore Timestamp to JavaScript Date if needed
@@ -62,7 +75,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     createdAt.getMonth() === month &&
                     createdAt.getFullYear() === year;
             });
-
+    
             if (existingPaymentIndex !== -1) {
                 // Update the existing entry
                 currentPayments[existingPaymentIndex] = {
@@ -77,6 +90,13 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     createdAt: new Date(year, month) // Set createdAt to the first day of the selected month and year
                 });
             }
+    
+            // Sort the payments by year and month
+            currentPayments.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateA - dateB;
+            });
 
             // Update the document with the new payments list
             await guestRef.update({ paymentDetails: currentPayments });
@@ -117,6 +137,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 >
                     <MenuItem value="Complete">Complete</MenuItem>
                     <MenuItem value="Partial">Partial</MenuItem>
+                    <MenuItem value="Not Paid">Not Paid</MenuItem>
                 </TextField>
                 <TextField
                     select
@@ -126,9 +147,9 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     fullWidth
                     className="textfield-spacing"
                 >
-                    {months.map((monthName, index) => (
-                        <MenuItem key={index} value={index}>
-                            {monthName}
+                    {monthsOptions.map((m) => (
+                        <MenuItem key={m} value={m}>
+                            {months[m]}
                         </MenuItem>
                     ))}
                 </TextField>
@@ -140,9 +161,9 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     fullWidth
                     className="textfield-spacing"
                 >
-                    {years.map((yearOption) => (
-                        <MenuItem key={yearOption} value={yearOption}>
-                            {yearOption}
+                    {yearsOptions.map((y) => (
+                        <MenuItem key={y} value={y}>
+                            {y}
                         </MenuItem>
                     ))}
                 </TextField>

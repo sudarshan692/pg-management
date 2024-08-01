@@ -9,6 +9,12 @@ import Alert from '@mui/material/Alert';
 import { usePgContext } from '../../context/PgContext';
 import { v4 as uuidv4 } from 'uuid'; 
 
+
+const monthNames = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
+
 const PgSelection = () => {
   const { pgData, setPgData, loading, setLoading, setError } = usePgContext();
   const [selectedPG, setSelectedPG] = useState(null);
@@ -129,8 +135,8 @@ const PgSelection = () => {
             paymentId,
             paymentDate: '',
             paymentAmount: '-',
-            paymentForMonth: '',
-            paymentForYear: '',
+            paymentForMonth: monthNames[currentMonth-1],
+            paymentForYear: currentYear,
             paymentStatus: 'Not Paid',
             createdAt: new Date()
           };

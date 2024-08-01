@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import { FaArrowUp } from 'react-icons/fa';
+import { FaArrowUp, FaExclamationTriangle } from 'react-icons/fa';
 import LoadingSpinner from '../../shared/LoadingSpinner'; // Adjust the path as needed
 import './payingGuestTable.css';
 
@@ -30,7 +30,6 @@ const StatusBoxedCell = ({ status }) => {
   );
 };
 
-
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   const isZeroDeposit = value === 0;
   const isFullDeposit = fullDeposit;
@@ -44,6 +43,7 @@ const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   } else {
     boxColor = 'yellow';
   }
+  
   return (
     <div className={`box ${className} ${boxColor}`}>
       {fullDeposit !== undefined && !isZeroDeposit && (
@@ -131,7 +131,7 @@ const sortPaymentAmount = (rowA, rowB, sortDirection) => {
 };
 
 const sortPaymentStatus = (rowA, rowB, sortDirection) => {
-  const statusOrder = { 'Not Paid': 1, 'Done': 2, 'Partisl': 3 }; // Define status order
+  const statusOrder = { 'Not Paid': 1, 'Done': 2, 'Partial': 3 }; // Define status order
   const highestPaymentA = getHighestPayment(rowA.paymentDetails);
   const highestPaymentB = getHighestPayment(rowB.paymentDetails);
 
@@ -146,6 +146,39 @@ const sortPaymentStatus = (rowA, rowB, sortDirection) => {
   const orderB = statusOrder[statusB] || 0; // Default to 0 if status not found
 
   return sortDirection === 'asc' ? orderA - orderB : orderB - orderA;
+};
+
+const getPreviousMonthPaymentStatus = (paymentDetails) => {
+  const paymentEntries = Object.keys(paymentDetails).map(key => ({
+    ...paymentDetails[key],
+    index: key
+  }));
+
+  // If there's only one entry, return 'Not Paid'
+  if (paymentEntries.length <= 1) {
+    return 'Not Paid';
+  }
+
+  // Sort by index to find the latest and previous payments
+  paymentEntries.sort((a, b) => a.index.localeCompare(b.index));
+
+  // Check the previous month's entry
+  const previousMonthEntry = paymentEntries[paymentEntries.length - 2];
+  const status = previousMonthEntry.paymentStatus || 'Not Paid';
+
+  // Return 'Partial' or 'Not Paid' if applicable
+  return status === 'Partial' || status === 'Not Paid' ? status : 'Paid';
+};
+
+const getCurrentMonthYear = () => {
+  const now = new Date();
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  const currentMonth = months[now.getMonth()];
+  const currentYear = now.getFullYear();
+  return { currentMonth, currentYear };
 };
 
 const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
@@ -171,7 +204,7 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   );
 
   const columns = [
-    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true },
+    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true},
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
@@ -195,6 +228,24 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       ), 
       sortable: true,
       sortFunction: depositAmountSort
+    },
+    { 
+      name: 'Payment Month',
+      cell: (row) => {
+        const highestPayment = getHighestPayment(row.paymentDetails);
+        const currentMonth = getCurrentMonthYear().currentMonth;
+        return highestPayment ? highestPayment.paymentForMonth : currentMonth;
+      },
+      sortable: true
+    },
+    { 
+      name: 'Payment Year',
+      cell: (row) => {
+        const highestPayment = getHighestPayment(row.paymentDetails);
+        const currentYear = getCurrentMonthYear().currentYear;
+        return highestPayment ? highestPayment.paymentForYear : currentYear;
+      },
+      sortable: true
     },
     {
       name: 'Payment Date',
@@ -228,13 +279,20 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
     },
     {
       name: 'Actions',
-      cell: (row) => (
-        <div>
-          <button onClick={() => onAddPayment(row)} className="add-payment-button">
-            +
-          </button>
-        </div>
-      ),
+      cell: (row) => {
+        const paymentEntries = row.paymentDetails ? Object.keys(row.paymentDetails) : [];
+        const showAlert = paymentEntries.length > 1 && (getPreviousMonthPaymentStatus(row.paymentDetails) === 'Partial' || getPreviousMonthPaymentStatus(row.paymentDetails) === 'Not Paid');
+        return (
+          <div className="actions-container">
+            <button onClick={() => onAddPayment(row)} className="add-payment-button">
+              +
+            </button>
+            {showAlert && (
+              <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />
+            )}
+          </div>
+        );
+      },
     },
   ];
 
