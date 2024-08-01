@@ -49,7 +49,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 paymentId,
                 paymentDate: currentDate.toISOString().split('T')[0], // Current date in yyyy-mm-dd format
                 paymentAmount: parseFloat(paymentAmount),
-                paymentStatus: paymentStatus === 'Complete' ? 'Done' : 'Pending',
+                paymentStatus: paymentStatus === 'Complete' ? 'Done' : 'Partial',
                 paymentForMonth: months[month], // Store selected month
                 paymentForYear: year // Store selected year
             };

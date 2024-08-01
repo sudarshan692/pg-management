@@ -128,10 +128,10 @@ const PgSelection = () => {
           const newPaymentDetail = {
             paymentId,
             paymentDate: '',
-            paymentAmount: '',
+            paymentAmount: '-',
             paymentForMonth: '',
             paymentForYear: '',
-            paymentStatus: 'pending',
+            paymentStatus: 'Not Paid',
             createdAt: new Date()
           };
 

@@ -10,6 +10,27 @@ const CustomNoDataComponent = () => (
   </div>
 );
 
+const StatusBoxedCell = ({ status }) => {
+  let boxColor = 'red';
+  let displayText = 'NP';
+
+  if (status === 'Done') {
+    boxColor = 'green';
+    displayText = 'D';
+  } else if (status === 'Partial') {
+    boxColor = 'yellow';
+    displayText = 'P';
+  }
+
+  return (
+    <div className={`box status-box ${boxColor}`}>
+      <div className="status-label">{displayText}</div>
+      <div className="status-text">{displayText === 'D' ? 'Done' : displayText === 'P' ? 'Partial' : 'Not Paid'}</div>
+    </div>
+  );
+};
+
+
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   const isZeroDeposit = value === 0;
   const isFullDeposit = fullDeposit;
@@ -68,6 +89,65 @@ const formatDate = (date) => {
   return `${day}-${month}-${year}`;
 };
 
+const parseDate = (dateString) => {
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? new Date(0) : date; // Return epoch if invalid
+};
+
+const getHighestPayment = (paymentDetails) => {
+  if (!paymentDetails || Object.keys(paymentDetails).length === 0) {
+    return null;
+  }
+  const highestIndexId = Object.keys(paymentDetails).sort().pop();
+  return paymentDetails[highestIndexId] || null;
+};
+
+const sortPaymentDate = (rowA, rowB, sortDirection) => {
+  const highestPaymentA = getHighestPayment(rowA.paymentDetails);
+  const highestPaymentB = getHighestPayment(rowB.paymentDetails);
+
+  if (!highestPaymentA || !highestPaymentB) {
+    return 0;
+  }
+
+  const dateA = parseDate(highestPaymentA.paymentDate);
+  const dateB = parseDate(highestPaymentB.paymentDate);
+
+  return sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+};
+
+const sortPaymentAmount = (rowA, rowB, sortDirection) => {
+  const highestPaymentA = getHighestPayment(rowA.paymentDetails);
+  const highestPaymentB = getHighestPayment(rowB.paymentDetails);
+
+  if (!highestPaymentA || !highestPaymentB) {
+    return 0;
+  }
+
+  const amountA = highestPaymentA.paymentAmount || 0;
+  const amountB = highestPaymentB.paymentAmount || 0;
+
+  return sortDirection === 'asc' ? amountA - amountB : amountB - amountA;
+};
+
+const sortPaymentStatus = (rowA, rowB, sortDirection) => {
+  const statusOrder = { 'Not Paid': 1, 'Done': 2, 'Partisl': 3 }; // Define status order
+  const highestPaymentA = getHighestPayment(rowA.paymentDetails);
+  const highestPaymentB = getHighestPayment(rowB.paymentDetails);
+
+  if (!highestPaymentA || !highestPaymentB) {
+    return 0;
+  }
+
+  const statusA = highestPaymentA.paymentStatus || 'Not Paid';
+  const statusB = highestPaymentB.paymentStatus || 'Not Paid';
+
+  const orderA = statusOrder[statusA] || 0; // Default to 0 if status not found
+  const orderB = statusOrder[statusB] || 0; // Default to 0 if status not found
+
+  return sortDirection === 'asc' ? orderA - orderB : orderB - orderA;
+};
+
 const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
@@ -79,30 +159,6 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
     };
     fetchData();
   }, []);
-
-  const PaymentDetails = ({ paymentDetails }) => {
-    if (!paymentDetails || Object.keys(paymentDetails).length === 0) {
-      return <div>No Payment Details</div>;
-    }
-  
-    // Get the payment IDs and sort them
-    const paymentIds = Object.keys(paymentDetails).sort();
-    const highestIndexId = paymentIds[paymentIds.length - 1]; // Get the highest key
-  
-    // Retrieve the payment details with the highest index
-    const highestPayment = paymentDetails[highestIndexId];
-  
-    return (
-      <div className="payment-details">
-        <div>Date: {formatDate(highestPayment.paymentDate)}</div>
-        <div>Amount: {highestPayment.paymentAmount}</div>
-        <div>Status: {highestPayment.paymentStatus}</div>
-      </div>
-    );
-  };
-  
-  
-  
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -141,8 +197,34 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       sortFunction: depositAmountSort
     },
     {
-      name: 'Payment Details',
-      cell: (row) => <PaymentDetails paymentDetails={row.paymentDetails} />,
+      name: 'Payment Date',
+      cell: (row) => {
+        const highestPayment = getHighestPayment(row.paymentDetails);
+        return highestPayment ? formatDate(highestPayment.paymentDate) : '-';
+      },
+      sortable: true,
+      sortFunction: sortPaymentDate
+    },
+    {
+      name: 'Payment Amount',
+      cell: (row) => {
+        const highestPayment = getHighestPayment(row.paymentDetails);
+        return highestPayment ? highestPayment.paymentAmount : '-';
+      },
+      sortable: true,
+      sortFunction: sortPaymentAmount
+    },
+    {
+      name: 'Payment Status',
+      cell: (row) => {
+        const highestPayment = getHighestPayment(row.paymentDetails);
+        const status = highestPayment ? highestPayment.paymentStatus : 'Not Paid';
+        return (
+          <StatusBoxedCell status={status} />
+        );
+      },
+      sortable: true,
+      sortFunction: sortPaymentStatus
     },
     {
       name: 'Actions',
@@ -223,7 +305,7 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
               highlightOnHover
               pointerOnHover
               sortIcon={<FaArrowUp />}
-              defaultSortField="id"
+              defaultSortField="guestID"
               customStyles={customStyles}
               noDataComponent={<CustomNoDataComponent />}
             />

@@ -115,3 +115,31 @@
 .add-payment-button:hover {
   background-color: #0d2136;; /* Darker green */
 }
+/* Add this to your CSS file */
+.status-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 4px;
+  color: white;
+}
+
+.status-box.green {
+  background-color: #059212;;
+}
+
+.status-box.yellow {
+  background-color: #FBC02D;
+  color: white; /* Ensure text is readable on yellow background */
+}
+
+.status-box.red {
+  background-color: #E72929;;
+}
+
+
+
+.status-text {
+  font-size: 0.75rem;
+}
