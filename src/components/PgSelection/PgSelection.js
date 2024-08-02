@@ -195,14 +195,22 @@ const PgSelection = () => {
       <div className="pg-container">
         {pgData.map(pg => (
           <div key={pg.id} className="pg-card" onClick={() => handlePGClick(pg)}>
-            <h2 className="pg-name">{pg.name}</h2>
-            <p><strong>PG Number:</strong> {pg.number}</p>
-            <p><strong>Max Customers:</strong> {pg.maxCustomers - 1}</p>
-            <p><strong>Owner Name:</strong> {pg.ownerName}</p>
-            <p><strong>Owner Email:</strong> {pg.ownerEmail}</p>
-            <p><strong>Address:</strong> {pg.address}</p>
-            <p><strong>Mobile:</strong> {pg.mobile}</p>
-          </div>
+  <div className="pg-header">
+    <h2 className="pg-name">{pg.name}</h2>
+    <p className="pg-number">{pg.number}</p>
+  </div>
+  <div className="pg-details">
+    <p className='max-customers'>{pg.maxCustomers - 1}</p>
+    <p className='owner-name'>{pg.ownerName}</p>
+    <p className='pg-address'>{pg.address}</p>
+  </div>
+  <div className="pg-footer">
+    <p className="pg-mobile">{pg.mobile}</p>
+    <p className="pg-email">{pg.ownerEmail}</p>
+  </div>
+</div>
+
+       
         ))}
       </div>
       <Snackbar

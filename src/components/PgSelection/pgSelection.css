@@ -12,25 +12,9 @@
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-weight: 300;
     font-style: normal;
+    
   }
-  
-  .pg-item {
-    color: rgb(211, 227, 253);
-    border-radius: 15px;
-    background-color: #0d2136; /* Light grey background */
-    border: 1px solid #3f51b5; /* Light grey border */
-    padding: 10px; /* Adjust the padding as needed */
-    box-sizing: border-box;
-    cursor: pointer;
-    text-align: center; /* Center text */
-    width: 250px; /* Set the width of each item */
-    height: 150px; /* Set the height of each item */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    display: flex; /* Use flexbox for the item itself */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-  }
-  
+
   .pg-container {
     display: flex;
     flex-wrap: wrap;
@@ -42,33 +26,85 @@
     background-color: #0d2136;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    width: calc(25% - 1rem); /* Adjust based on number of columns you want */
+    width: calc(25% - 1rem); /* Adjust based on the number of columns you want */
     box-sizing: border-box;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
     color: rgb(211, 227, 253);
+    position: relative; /* Add relative positioning */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   
   .pg-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #3f51b5;
+    background-color: #162c46;
+  }
+  
+  .pg-header {
+    height: 80px; /* Fixed height for the header */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0 10px; /* Adjusted padding */
+    color: rgb(211, 227, 253);
+    background-color: rgba(0, 0, 0, 0.5);
   }
   
   .pg-name {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
   }
   
-  .pg-card p {
-    margin: 0.5rem 0;
-    font-size: 0.875rem;
+  .pg-number {
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: #3f51b5;
+    color: rgb(211, 227, 253);
+    padding: 8px 10px;
+    border-radius: 25px;
   }
   
-  .pg-card strong {
+  .pg-details {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: -10px;
+    flex: 1;
+  }
+  .owner-name{
+    font-weight: bold;
+    color: #3f51b5;
+  }
+  .pg-address{
+    font-size: 12px;
+    color: #3f51b5;
+  }
+  .max-customers{
+    margin-top: 0px;
+    color: #3f51b5;
     font-weight: bold;
   }
+  .pg-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: rgb(211, 227, 253);
+  }
+  
+  .pg-mobile,
+  .pg-email {
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for contrast */
+    padding: 6px 6px;
+    border-radius: 4px;
+  }
+  
+  
   
   
