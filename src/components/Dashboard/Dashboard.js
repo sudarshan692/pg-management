@@ -10,6 +10,7 @@ import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
 import LoadingSpinner from '../shared/LoadingSpinner'; // Ensure you have a loading spinner component
+import PgDetailsDialog from '../Dashboard/PgDetailsDialog/PgDetailsDialog';
 
 Modal.setAppElement('#root');
 
@@ -29,6 +30,7 @@ const Dashboard = () => {
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
   const previousPgIdRef = useRef(null);
+  const [isPgDetailsDialogOpen, setIsPgDetailsDialogOpen] = useState(false);
 
   const fetchPayingGuests = useCallback(async (pgId) => {
     try {
@@ -127,6 +129,42 @@ const Dashboard = () => {
     });
   };
 
+  const handleAddPgDetailsClick = () => {
+    setIsPgDetailsDialogOpen(true);
+  };
+
+  const handlePgDetailsDialogClose = () => {
+    setIsPgDetailsDialogOpen(false);
+  };
+
+  const handleSavePgDetails = async (newDetails) => {
+    try {
+      if (pgId) {
+        const pgRef = db.collection(`users/${auth.currentUser.uid}/PGs`).doc(pgId);
+        // Fetch the existing document
+        const docSnapshot = await pgRef.get();
+        if (!docSnapshot.exists) {
+          console.error('PG document does not exist.');
+          return;
+        }
+        const existingDetails = docSnapshot.data().PGDetails || {};
+        // Merge existing details with new details
+        const mergedDetails = { ...existingDetails, ...newDetails };
+        // Update the document with merged details
+        await pgRef.update({
+          PGDetails: mergedDetails
+        });
+        console.log('PG Details updated with ID:', pgId);
+      } else {
+        console.error('PG ID is not available.');
+      }
+    } catch (error) {
+      console.error('Error saving PG Details:', error);
+    }
+    handlePgDetailsDialogClose();
+  };
+  
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
@@ -146,7 +184,7 @@ const Dashboard = () => {
           <LoadingSpinner /> {/* Ensure you have a loading spinner component */}
         </div>
       )}
-
+            <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button>
       <PayingGuestTable 
         payingGuests={payingGuests} 
         onAddPayment={openAddPaymentDialog}
@@ -197,6 +235,9 @@ const Dashboard = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      {isPgDetailsDialogOpen && (
+            <PgDetailsDialog onClose={handlePgDetailsDialogClose} onSave={handleSavePgDetails} />
+          )}
     </div>
   );
 };

@@ -120,3 +120,19 @@
   text-decoration: underline; /* Underline on hover */
   border-color: #007bff; /* Border color on hover */
 }
+.add-pg-details-link{
+  position: absolute;
+  left: 0;
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Optional: make the text bold */
+  cursor: pointer; /* Change cursor to pointer */
+  display: inline-block; /* Align with other inline elements */
+  padding: 8px 10px; /* Padding for better spacing */
+  border: none;
+  background-color: transparent;
+}
+.add-pg-details-link:hover {
+  text-decoration: underline; /* Underline on hover */
+  border-color: #007bff; /* Border color on hover */
+}

@@ -45,7 +45,12 @@ const PgSelection = () => {
           ownerName: pgDetails.ownerName || '',
           ownerEmail: pgDetails.ownerEmail || '',
           address: pgDetails.address || '',
-          mobile: pgDetails.mobile || ''
+          mobile: pgDetails.mobile || '',
+          totalFloors: pgDetails.totalFloors || '',
+          totalRoomsPerFloor: pgDetails.totalRoomsPerFloor || '',
+          totalSingleBeds: pgDetails.totalSingleBeds || '',
+          totalDoubleSharingBeds: pgDetails.totalDoubleSharingBeds || '',
+          totalTripleSharingBeds: pgDetails.totalTripleSharingBeds || '',
         };
       });
       const sortedPgs = pgsData.sort((a, b) => a.number.localeCompare(b.number));
