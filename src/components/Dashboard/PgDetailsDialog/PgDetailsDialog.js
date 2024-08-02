@@ -6,9 +6,9 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
   const [details, setDetails] = useState({
     totalFloors: '',
     totalRoomsPerFloor: '',
-    totalSingleBeds: '',
-    totalDoubleSharingBeds: '',
-    totalTripleSharingBeds: '',
+    singleBedsPerRoom: '',
+    doubleSharingBedsPerRoom: '',
+    tripleSharingBedsPerRoom: '',
   });
 
   const handleChange = (e) => {
@@ -52,30 +52,30 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
         className='text-input-field'
       />
       <TextField
-        label="Total Single Beds"
-        name="totalSingleBeds"
+        label="Single Beds Per Room"
+        name="singleBedsPerRoom"
         type="number"
-        value={details.totalSingleBeds}
+        value={details.singleBedsPerRoom}
         onChange={handleChange}
         fullWidth
         margin="normal"
         className='text-input-field'
       />
       <TextField
-        label="Total Double Sharing Beds"
-        name="totalDoubleSharingBeds"
+        label="Double Sharing Beds Per Room"
+        name="doubleSharingBedsPerRoom"
         type="number"
-        value={details.totalDoubleSharingBeds}
+        value={details.doubleSharingBedsPerRoom}
         onChange={handleChange}
         fullWidth
         margin="normal"
         className='text-input-field'
       />
       <TextField
-        label="Total Triple Sharing Beds"
-        name="totalTripleSharingBeds"
+        label="Triple Sharing Beds Per Room"
+        name="tripleSharingBedsPerRoom"
         type="number"
-        value={details.totalTripleSharingBeds}
+        value={details.tripleSharingBedsPerRoom}
         onChange={handleChange}
         fullWidth
         margin="normal"

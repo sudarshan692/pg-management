@@ -48,9 +48,9 @@ const PgSelection = () => {
           mobile: pgDetails.mobile || '',
           totalFloors: pgDetails.totalFloors || '',
           totalRoomsPerFloor: pgDetails.totalRoomsPerFloor || '',
-          totalSingleBeds: pgDetails.totalSingleBeds || '',
-          totalDoubleSharingBeds: pgDetails.totalDoubleSharingBeds || '',
-          totalTripleSharingBeds: pgDetails.totalTripleSharingBeds || '',
+          singleBedsPerRoom: pgDetails.singleBedsPerRoom || '',
+          doubleSharingBedsPerRoom: pgDetails.doubleSharingBedsPerRoom || '',
+          tripleSharingBedsPerRoom: pgDetails.tripleSharingBedsPerRoom || '',
         };
       });
       const sortedPgs = pgsData.sort((a, b) => a.number.localeCompare(b.number));
