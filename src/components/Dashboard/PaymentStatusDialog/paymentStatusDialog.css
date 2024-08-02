@@ -21,7 +21,6 @@
     overflow: auto; /* Enables scrolling for both axes */
     position: relative; /* Required for positioning the close button */
   }
-  
   .close-button {
     position: absolute;
     top: 10px;
@@ -30,10 +29,18 @@
     color: white;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
+  
+  .close-button:hover {
+    background: #283593;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  
   
   table {
     width: 100%;
