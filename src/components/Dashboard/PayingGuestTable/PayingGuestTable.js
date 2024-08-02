@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import {FaPlus, FaArrowUp, FaExclamationTriangle } from 'react-icons/fa';
+import { FaPlus, FaArrowUp, FaExclamationTriangle } from 'react-icons/fa';
 import LoadingSpinner from '../../shared/LoadingSpinner'; // Adjust the path as needed
+import PaymentStatusDialog from '../PaymentStatusDialog/PaymentStatusDialog';
 import './payingGuestTable.css';
 
 const CustomNoDataComponent = () => (
@@ -184,7 +185,8 @@ const getCurrentMonthYear = () => {
 const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
-  
+  const [selectedGuest, setSelectedGuest] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -213,10 +215,17 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   
     return itemMatches || paymentDetailsMatches;
   });
-  
+
+  const handleRowClicked = (row) => {
+    setSelectedGuest(row);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedGuest(null);
+  };
 
   const columns = [
-    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true},
+    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true },
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
@@ -297,8 +306,7 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
         return (
           <div className="actions-container">
             <button onClick={() => onAddPayment(row)} className="add-payment-button">
-            <FaPlus className="add-icon" />
-            
+              <FaPlus className="add-icon" />
             </button>
             {showAlert && (
               <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />
@@ -379,8 +387,12 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
               defaultSortField="guestID"
               customStyles={customStyles}
               noDataComponent={<CustomNoDataComponent />}
+              onRowClicked={handleRowClicked}
             />
           </div>
+          {selectedGuest && (
+            <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} />
+          )}
         </>
       )}
     </div>

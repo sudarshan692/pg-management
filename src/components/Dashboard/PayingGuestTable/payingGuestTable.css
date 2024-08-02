@@ -182,3 +182,17 @@
   font-size: 1.2rem; /* Adjust size as needed */
 }
 
+/* src/components/payingGuestTable.css */
+.view-status-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.view-status-button:hover {
+  background-color: #2980b9;
+}

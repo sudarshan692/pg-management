@@ -31,7 +31,6 @@ const Dashboard = () => {
   const previousPgIdRef = useRef(null);
 
   const fetchPayingGuests = useCallback(async (pgId) => {
-    setLoading(true);
     try {
       const data = [];
       const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
