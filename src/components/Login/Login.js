@@ -5,6 +5,7 @@ import "./login.css";
 import LoadingSpinner from "../shared/LoadingSpinner";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import logo from "../../assets/logo2.png"
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -117,7 +118,10 @@ const Login = () => {
           <LoadingSpinner />
         </div>
       )}
-      <h1 className="login-nav-heading">Welcome to PG Management Application</h1>
+      <div className="image-container">
+         <img className="img1" src={logo} alt="logo" />
+      </div>
+
       <div className="login-card">
         <h2 className="card-heading">Admin Login</h2>
         <div>

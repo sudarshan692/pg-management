@@ -20,7 +20,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 8%;
+    margin-top: 0%;
     margin-left: 36%;
     margin-right: 36%;
     /* border: 1px solid #3f51b5; */
@@ -128,5 +128,16 @@
   justify-content: center;
   z-index: 9999;
 }
+.image-container {
+  display: flex;
+  justify-content: left;
+  width: 100%;
+}
 
-  
+.img1 {
+  padding: 20px;
+  margin-top: 0%;
+  width: 300px; /* Adjust as needed */
+  background-color: transparent; /* If you have control over the image background color */
+}
+
