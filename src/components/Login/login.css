@@ -38,12 +38,12 @@
     font-size: 1.6em;
     position: relative;
     color: #fff;
-    background: linear-gradient(45deg, #ff007f, #ff7f00, #7fff00, #00ff7f);
-    background-size: 400% 400%;
+    background: linear-gradient(45deg, #3f51b5, #ff007f, #3f51b5); /* Blue to pink gradient */
+    background-size: 300% 300%;
     animation: slideGradient 6s linear infinite;
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
+    color: transparent; /* Ensure text color is transparent */
   }
   
   @keyframes slideGradient {
@@ -85,16 +85,26 @@
     justify-content: center;
     padding: 15px;
     border-width: 0px;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
+    border-radius: 25px; /* Combined border-radius property */
     color: rgb(211, 227, 253);
-    background-color: #3f51b5;
+    background: linear-gradient(45deg, #3f51b5, #ff007f); /* Blue to pink gradient */
     cursor: pointer;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
+  
+  /* Hover effect with inverted gradient */
+  .login-button:hover {
+    background: linear-gradient(45deg, #ff007f, #3f51b5); /* Pink to blue gradient on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+  }
+  
+  /* Active state for when the button is clicked */
+  .login-button:active {
+    background: linear-gradient(45deg, #c51162, #303f9f); /* Darker pink and blue gradient */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+  }
+  
   .login-validation-message {
     color: red;
     margin-bottom: 10px;
