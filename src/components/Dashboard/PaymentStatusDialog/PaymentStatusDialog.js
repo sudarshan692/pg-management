@@ -26,7 +26,7 @@ const PaymentStatusDialog = ({ guest, onClose }) => {
     <div className="dialog-overlay">
       <div className="dialog-card">
         <div className="card-header">
-          <h3>Guest Details</h3>
+          <h3>Guest details</h3>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         <div className="card-content">

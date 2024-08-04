@@ -48,6 +48,9 @@
 }
 .payment-details{
   margin-top: -10px;
+  border-bottom: 2px solid #3f51b5;
+  width: 100%;
+  padding-bottom: 5px;
 }
 .close-button:hover {
   background: #3f51b5;
@@ -67,6 +70,7 @@
   font-size: 24px;
   border-bottom: 2px solid #3f51b5;
   padding-bottom: 10px;
+  width: 100%;
 }
 
 .card-header button {
@@ -92,23 +96,16 @@
 /* Guest details styling */
 .guest-details {
   background: rgb(13, 33, 54);
-  padding: 15px;
+  padding-left: 15px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-.guest-details h4 {
-  margin-top: 0;
-  border-bottom: 2px solid #3f51b5;
-  padding-bottom: 10px;
-  font-size: 22px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); */
 }
 
 .guest-details .detail-item {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 5px;
-  padding: 5px;
+  gap: 4px;
+  padding: 4px;
   margin-bottom: 0px;
 }
 
@@ -118,11 +115,6 @@
 
 .guest-details .detail-item span {
   color: #f0f0f0;
-}
-
-/* Table styling */
-.table-container {
-  margin-top: 10px;
 }
 
 table {
