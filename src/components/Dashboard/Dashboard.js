@@ -3,16 +3,17 @@ import { useHistory, useParams, useLocation } from "react-router-dom";
 import { auth, db } from "../shared/firebase";
 import Modal from "react-modal";
 import AddPayingGuestModal from "./AddPayingGuestModal/AddPayingGuestModal";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import "./dashboard.css";
 import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
-import LoadingSpinner from '../shared/LoadingSpinner'; // Ensure you have a loading spinner component
-import PgDetailsDialog from '../Dashboard/PgDetailsDialog/PgDetailsDialog';
+import LoadingSpinner from "../shared/LoadingSpinner"; // Ensure you have a loading spinner component
+import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
+import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const Dashboard = () => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
@@ -25,23 +26,35 @@ const Dashboard = () => {
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPgDetailsDialogOpen, setIsPgDetailsDialogOpen] = useState(false);
+  const [isRoomMatrixDialogOpen, setIsRoomMatrixDialogOpen] = useState(false);
+
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
   const previousPgIdRef = useRef(null);
-  const [isPgDetailsDialogOpen, setIsPgDetailsDialogOpen] = useState(false);
+
+  // Use pgDetails from location state
+  const pgDetails = location.state?.pgDetails || {};
+  const pgData1 = location.state?.pgData || {};
+
+  const toggleRoomMatrixDialog = () => {
+    setIsRoomMatrixDialogOpen((prevState) => !prevState);
+  };
 
   const fetchPayingGuests = useCallback(async (pgId) => {
     try {
       const data = [];
-      const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).get();
-      pgSnapshot.forEach(doc => {
+      const pgSnapshot = await db
+        .collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`)
+        .get();
+      pgSnapshot.forEach((doc) => {
         const docData = doc.data();
         data.push({
           id: doc.id,
           ...docData.payingGuestMap,
-          paymentDetails: docData.paymentDetails
+          paymentDetails: docData.paymentDetails,
         });
       });
       setPayingGuests(data);
@@ -55,7 +68,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (pgId) {
-      const currentPgId = typeof pgId === 'object' ? pgId.id || pgId.value : pgId;
+      const currentPgId =
+        typeof pgId === "object" ? pgId.id || pgId.value : pgId;
       console.log("Current pgId:", currentPgId);
       console.log("Previous pgId:", previousPgIdRef.current);
       if (currentPgId !== previousPgIdRef.current) {
@@ -117,13 +131,13 @@ const Dashboard = () => {
   };
 
   const handleDataUpdate = (newGuest) => {
-    setPayingGuests(prevGuests => [newGuest, ...prevGuests]);
+    setPayingGuests((prevGuests) => [newGuest, ...prevGuests]);
     setDataSaved(true);
   };
 
   const handlePaymentUpdate = (updatedGuest) => {
-    setPayingGuests(prevGuests => {
-      return prevGuests.map(guest =>
+    setPayingGuests((prevGuests) => {
+      return prevGuests.map((guest) =>
         guest.id === updatedGuest.id ? updatedGuest : guest
       );
     });
@@ -140,11 +154,13 @@ const Dashboard = () => {
   const handleSavePgDetails = async (newDetails) => {
     try {
       if (pgId) {
-        const pgRef = db.collection(`users/${auth.currentUser.uid}/PGs`).doc(pgId);
+        const pgRef = db
+          .collection(`users/${auth.currentUser.uid}/PGs`)
+          .doc(pgId);
         // Fetch the existing document
         const docSnapshot = await pgRef.get();
         if (!docSnapshot.exists) {
-          console.error('PG document does not exist.');
+          console.error("PG document does not exist.");
           return;
         }
         const existingDetails = docSnapshot.data().PGDetails || {};
@@ -152,18 +168,17 @@ const Dashboard = () => {
         const mergedDetails = { ...existingDetails, ...newDetails };
         // Update the document with merged details
         await pgRef.update({
-          PGDetails: mergedDetails
+          PGDetails: mergedDetails,
         });
-        console.log('PG Details updated with ID:', pgId);
+        console.log("PG Details updated with ID:", pgId);
       } else {
-        console.error('PG ID is not available.');
+        console.error("PG ID is not available.");
       }
     } catch (error) {
-      console.error('Error saving PG Details:', error);
+      console.error("Error saving PG Details:", error);
     }
     handlePgDetailsDialogClose();
   };
-  
 
   return (
     <div className="dashboard-page">
@@ -171,28 +186,53 @@ const Dashboard = () => {
         <span className="pg-number">{pgData.number}</span>
         <span className="heading-text">{pgData.name} PG Management Center</span>
       </div>
-      <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
+      <button
+        className="change-password-link"
+        onClick={openChangePasswordDialog}
+      >
+        Change Password
+      </button>
+      <button className="matrix" onClick={toggleRoomMatrixDialog}>
+        Available Beds
+      </button>
+
+      <RoomMatrixDialog
+        open={isRoomMatrixDialogOpen}
+        onClose={toggleRoomMatrixDialog}
+        pgDetails={pgDetails}
+        payingGuests={payingGuests}
+      />
+
       <ChangePasswordDialog
         handleLogout={handleLogout}
         open={changePasswordDialogOpen}
         onClose={closeChangePasswordDialog}
       />
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
 
       {loading && (
         <div className="overlay">
-          <LoadingSpinner /> {/* Ensure you have a loading spinner component */}
+          <LoadingSpinner />
         </div>
       )}
-            <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button>
-      <PayingGuestTable 
-        payingGuests={payingGuests} 
+      <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>
+        Add PG Details
+      </button>
+      <PayingGuestTable
+        payingGuests={payingGuests}
         onAddPayment={openAddPaymentDialog}
         onPaymentUpdate={handlePaymentUpdate}
       />
-      
+
       <div className="add-paying-guest-container">
-        <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
+        <button
+          className="add-paying-guest-btn"
+          onClick={openAddPayingGuestModal}
+        >
+          Add Paying Guest
+        </button>
       </div>
 
       <Modal
@@ -229,15 +269,22 @@ const Dashboard = () => {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
       {isPgDetailsDialogOpen && (
-            <PgDetailsDialog onClose={handlePgDetailsDialogClose} onSave={handleSavePgDetails} />
-          )}
+        <PgDetailsDialog
+          onClose={handlePgDetailsDialogClose}
+          onSave={handleSavePgDetails}
+        />
+      )}
     </div>
   );
 };

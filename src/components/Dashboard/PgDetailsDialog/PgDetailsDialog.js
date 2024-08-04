@@ -22,7 +22,7 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
   const handleSave = () => {
     // Convert details to numbers before saving
     const convertedDetails = Object.keys(details).reduce((acc, key) => {
-      acc[key] = details[key] === '' ? 0 : Number(details[key]);
+      acc[key] = details[key] === '' ? -1 : Number(details[key]);
       return acc;
     }, {});
     onSave(convertedDetails);

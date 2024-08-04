@@ -14,7 +14,7 @@ const PaymentStatusDialog = ({ guest, onClose }) => {
   const renderStatusColor = (status) => {
     switch (status) {
       case 'Done': return 'green';
-      case 'Partial': return 'yellow';
+      case 'Partial': return '#FBC02D';
       case 'Not Paid': return 'red';
       default: return 'grey';
     }

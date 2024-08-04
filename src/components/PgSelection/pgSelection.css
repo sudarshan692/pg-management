@@ -53,7 +53,7 @@
     margin-bottom: 0.5rem;
     padding: 0 10px; /* Adjusted padding */
     color: rgb(211, 227, 253);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #3f51b5;
   }
   
   .pg-name {
@@ -64,7 +64,7 @@
   .pg-number {
     font-size: 0.9rem;
     font-weight: bold;
-    background-color: #3f51b5;
+    background-color: rgba(0, 0, 0, 0.5);
     color: rgb(211, 227, 253);
     padding: 8px 10px;
     border-radius: 25px;
@@ -77,10 +77,12 @@
     flex: 1;
   }
   .owner-name{
+    margin-top: -5px;
     font-weight: bold;
     color: rgb(211, 227, 253);
   }
   .pg-address{
+    margin-top: -10px;
     font-size: 12px;
     color: rgb(211, 227, 253);
     opacity: 0.6;
@@ -102,8 +104,8 @@
     margin-left: 10px;
     margin-right: 10px;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for contrast */
-    padding: 6px 6px;
-    border-radius: 4px;
+    padding: 5px 10px;
+    border-radius: 25px;
   }
   
   

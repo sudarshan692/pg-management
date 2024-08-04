@@ -22,6 +22,12 @@
 }
 
 .pg-number {
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(211, 227, 253);
+  padding: 8px 10px;
+  border-radius: 25px;
   margin-left: 10px;
   margin-right: 20px; /* Spacing between PG number and heading text */
 }
@@ -135,4 +141,30 @@
 .add-pg-details-link:hover {
   text-decoration: underline; /* Underline on hover */
   border-color: #007bff; /* Border color on hover */
+}
+.matrix{
+  position: absolute;
+  right: 0;
+  margin-top: 62px;
+  margin-right: 450px;
+  padding: 10px 20px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* Existing styles... */
+
+.room-matrix-dialog {
+  position: relative;
+  padding: 20px;
+  max-width: 80vw; /* Adjust as needed */
+  max-height: 80vh; /* Adjust as needed */
+  overflow: auto;
+}
+
+.room-matrix-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
 }

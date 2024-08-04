@@ -1,0 +1,134 @@
+/* RoomMatrixDialog.css */
+
+.room-matrix-dialog .MuiDialog-paper {
+    background-color: rgb(13, 33, 54);
+    border-radius: 8px; /* Rounded corners for the dialog */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    margin: auto; /* Center the dialog horizontally */
+    display: flex; /* Ensure the dialog is flexible */
+    flex-direction: column; /* Stack children vertically */
+    position: absolute; /* Ensure it's positioned absolutely to center */
+    top: 50%; /* Center vertically */
+    left: 61%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Offset by half its width and height */
+    width: 9000px; /* Increased width for the dialog */
+    overflow: hidden;
+}
+
+.room-matrix-dialog .MuiDialogTitle-root {
+    color: white;
+    font-weight: bold; /* Bold title text */
+}
+
+.room-matrix-dialog .MuiDialogContent-root {
+    padding: 20px; /* Space around the content */
+    overflow: auto; 
+}
+
+.room-matrix-dialog .MuiDialogActions-root {
+    padding: 10px 20px; /* Padding for the action buttons */
+}
+
+.room-matrix-dialog .MuiButton-root {
+    text-transform: none; /* Preserve button text case */
+}
+
+.room-matrix-dialog .MuiButton-contained {
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* White text on the button */
+}
+
+.room-matrix-dialog .MuiButton-contained:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    margin-top: -41px;
+}
+
+.legend-item {
+    color: rgb(211, 227, 253);
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.color-box {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ddd;
+    margin-right: 8px;
+}
+
+.color-box.available {
+    background-color: orange;
+}
+
+.color-box.filled {
+    background-color: green;
+}
+
+.empty {
+    margin-top: 10px;
+}
+.floor1 {
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+}
+
+.room-container {
+    background-color: rgb(3, 21, 37);
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    min-width: 90px; /* Adjust as needed */
+    height: 95px;    /* Adjust as needed */
+    box-sizing: border-box;
+    margin: 5px; /* Add some space between boxes */
+}
+
+.room-header {
+    font-weight: bolder;
+    background-color: white;
+    padding: none;
+    margin-bottom: 5px;
+}
+
+.room-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bolder;
+}
+
+.room-compartment {
+    margin: 2px;
+    /* border: 1px solid #ddd; */
+    padding: 1px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+/* Styles for available and filled compartments */
+.room-compartment.available {
+    background-color: orange;
+}
+
+.room-compartment.filled {
+    background-color: green;
+    color: rgb(211, 227, 253);; /* Optional: Change text color for better visibility */
+}
+/* Existing styles... */
+
+  
