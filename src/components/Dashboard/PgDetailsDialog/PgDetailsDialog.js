@@ -10,6 +10,7 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
     doubleSharingBedsPerRoom: '',
     tripleSharingBedsPerRoom: '',
   });
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,13 +20,23 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setIsLoading(true); // Set loading to true
+    
     // Convert details to numbers before saving
     const convertedDetails = Object.keys(details).reduce((acc, key) => {
       acc[key] = details[key] === '' ? -1 : Number(details[key]);
       return acc;
     }, {});
-    onSave(convertedDetails);
+
+    try {
+      await onSave(convertedDetails); // Call the onSave function and wait for it to complete
+    } catch (error) {
+      console.error('Error saving details:', error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+      onClose(); // Close the dialog after saving
+    }
   };
 
   return (
@@ -82,10 +93,20 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
         className='text-input-field'
       />
       <div className="dialog-buttons">
-        <Button variant="contained" color="primary" onClick={handleSave}>
-          Save
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleSave} 
+          disabled={isLoading}
+        >
+          {isLoading ? 'Saving...' : 'Save'}
         </Button>
-        <Button variant="outlined" color="secondary" onClick={onClose}>
+        <Button 
+          variant="outlined" 
+          color="secondary" 
+          onClick={onClose}
+          disabled={isLoading}
+        >
           Cancel
         </Button>
       </div>

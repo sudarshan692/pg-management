@@ -1,52 +1,68 @@
-/* RoomMatrixDialog.css */
+.room-matrix-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it sits above other content */
+}
 
-.room-matrix-dialog .MuiDialog-paper {
+.room-matrix-dialog {
     background-color: rgb(13, 33, 54);
-    border-radius: 8px; /* Rounded corners for the dialog */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
-    margin: auto; /* Center the dialog horizontally */
-    display: flex; /* Ensure the dialog is flexible */
-    flex-direction: column; /* Stack children vertically */
-    position: absolute; /* Ensure it's positioned absolutely to center */
-    top: 50%; /* Center vertically */
-    left: 61%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Offset by half its width and height */
-    width: 9000px; /* Increased width for the dialog */
-    overflow: hidden;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative; /* Make this relative to position the close button */
+    max-width: 70vw; /* Ensure it doesn't exceed viewport width */
+    max-height: 70vh; /* Ensure it doesn't exceed viewport height */
+    overflow: hidden; /* Hide overflow to manage scrolling */
+    display: flex;
+    flex-direction: column;
 }
 
-.room-matrix-dialog .MuiDialogTitle-root {
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 0; /* Stick to the top */
+    background-color: rgb(13, 33, 54); /* Match background color */
+    padding-right: 40px; /* Space for close button */
+    z-index: 1001; /* Make sure it sits above other content */
+}
+
+.dialog-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.close-button {
+    background: none;
+    border: none;
     color: white;
-    font-weight: bold; /* Bold title text */
+    font-size: 24px;
+    cursor: pointer;
 }
 
-.room-matrix-dialog .MuiDialogContent-root {
-    padding: 20px; /* Space around the content */
-    overflow: auto; 
+.close-button:hover {
+    color: #ccc; /* Adjust hover color */
 }
 
-.room-matrix-dialog .MuiDialogActions-root {
-    padding: 10px 20px; /* Padding for the action buttons */
-}
-
-.room-matrix-dialog .MuiButton-root {
-    text-transform: none; /* Preserve button text case */
-}
-
-.room-matrix-dialog .MuiButton-contained {
-    background-color: #007bff; /* Primary button color */
-    color: #fff; /* White text on the button */
-}
-
-.room-matrix-dialog .MuiButton-contained:hover {
-    background-color: #0056b3; /* Darker shade for hover effect */
+.dialog-content {
+    overflow: auto; /* Enable scrolling if content overflows */
 }
 
 .legend {
     display: flex;
     justify-content: center;
     margin-bottom: 16px;
-    margin-top: -41px;
 }
 
 .legend-item {
@@ -74,11 +90,17 @@
 .empty {
     margin-top: 10px;
 }
+
 .floor1 {
     font-weight: bold;
     display: flex;
     flex-direction: row;
     font-size: 12px;
+}
+
+.room-matrix {
+    display: flex;
+    flex-direction: column;
 }
 
 .room-container {
@@ -114,7 +136,6 @@
 
 .room-compartment {
     margin: 2px;
-    /* border: 1px solid #ddd; */
     padding: 1px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -127,8 +148,5 @@
 
 .room-compartment.filled {
     background-color: green;
-    color: rgb(211, 227, 253);; /* Optional: Change text color for better visibility */
+    color: rgb(211, 227, 253); /* Optional: Change text color for better visibility */
 }
-/* Existing styles... */
-
-  

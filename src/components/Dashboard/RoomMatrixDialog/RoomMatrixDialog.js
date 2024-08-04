@@ -1,5 +1,4 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import './roomMatrixDialog.css'; // Import the CSS file
 
 const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
@@ -44,71 +43,73 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
 
   if (!hasData) {
     return (
-      <Dialog open={open} onClose={onClose} className="room-matrix-dialog">
-        <DialogTitle>Room Matrix</DialogTitle>
-        <DialogContent>
+      <div className="room-matrix-dialog-overlay" style={{ display: open ? 'flex' : 'none' }}>
+        <div className="room-matrix-dialog">
+          <div className="dialog-header">
+            <div className="dialog-title">Room Matrix</div>
+            <button className="close-button" onClick={onClose}>×</button>
+          </div>
           <div className='empty'>No data available</div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary">Close</Button>
-        </DialogActions>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Dialog open={open} onClose={onClose} className="room-matrix-dialog">
-      <DialogTitle>Room Matrix</DialogTitle>
-      <div className="legend">
-        <div className="legend-item">
-          <div className="color-box available"></div>
-          <span>Available Beds</span>
+    <div className="room-matrix-dialog-overlay" style={{ display: open ? 'flex' : 'none' }}>
+      <div className="room-matrix-dialog">
+        <div className="dialog-header">
+          <div className="dialog-title">Room Matrix</div>
+          <button className="close-button" onClick={onClose}>×</button>
         </div>
-        <div className="legend-item">
-          <div className="color-box filled"></div>
-          <span>Full Beds</span>
+        <div className="legend">
+          <div className="legend-item">
+            <div className="color-box available"></div>
+            <span>Available Beds</span>
+          </div>
+          <div className="legend-item">
+            <div className="color-box filled"></div>
+            <span>Full Beds</span>
+          </div>
+        </div>
+        <div className="dialog-content">
+          <div className="room-matrix">
+            {[...Array(pgDetails.totalFloors)].map((_, floorIndex) => {
+              const floor = floorIndex + 1;
+              return (
+                <div key={floor} className="floor1">
+                  {[...Object.keys(roomStatus[floor])].map(roomNo => {
+                    const room = (roomStatus[floor] && roomStatus[floor][roomNo]) || { single: -1, double: -1, triple: -1 };
+                    return (
+                      <div key={roomNo} className="room-container">
+                        <div className="room-header">F{floor}R{roomNo}</div>
+                        <div className="room-content">
+                          {room.single !== -1 && (
+                            <div className={`room-compartment ${room.single === 0 ? 'filled' : 'available'}`}>
+                              {room.single}(S)
+                            </div>
+                          )}
+                          {room.double !== -1 && (
+                            <div className={`room-compartment ${room.double === 0 ? 'filled' : 'available'}`}>
+                              {room.double}(D)
+                            </div>
+                          )}
+                          {room.triple !== -1 && (
+                            <div className={`room-compartment ${room.triple === 0 ? 'filled' : 'available'}`}>
+                              {room.triple}(T)
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <DialogContent>
-        <div className="room-matrix">
-          {[...Array(pgDetails.totalFloors)].map((_, floorIndex) => {
-            const floor = floorIndex + 1;
-            return (
-              <div key={floor} className="floor1">
-                {[...Object.keys(roomStatus[floor])].map(roomNo => {
-                  const room = (roomStatus[floor] && roomStatus[floor][roomNo]) || { single: -1, double: -1, triple: -1 };
-                  return (
-                    <div key={roomNo} className="room-container">
-                      <div className="room-header">F{floor}R{roomNo}</div>
-                      <div className="room-content">
-                        {room.single !== -1 && (
-                          <div className={`room-compartment ${room.single === 0 ? 'filled' : 'available'}`}>
-                            {room.single}(S)
-                          </div>
-                        )}
-                        {room.double !== -1 && (
-                          <div className={`room-compartment ${room.double === 0 ? 'filled' : 'available'}`}>
-                            {room.double}(D)
-                          </div>
-                        )}
-                        {room.triple !== -1 && (
-                          <div className={`room-compartment ${room.triple === 0 ? 'filled' : 'available'}`}>
-                            {room.triple}(T)
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">Close</Button>
-      </DialogActions>
-    </Dialog>
+    </div>
   );
 };
 
