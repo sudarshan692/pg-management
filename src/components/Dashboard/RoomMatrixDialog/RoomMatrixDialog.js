@@ -36,9 +36,10 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
 
   // Check if there are any rooms with data
   const hasData = Object.keys(roomStatus).some(floor =>
-    Object.keys(roomStatus[floor]).some(room =>
-      roomStatus[floor][room].single >= 0 || roomStatus[floor][room].double >= 0 || roomStatus[floor][room].triple >= 0
-    )
+    Object.keys(roomStatus[floor]).some(room => {
+      const { single, double, triple } = roomStatus[floor][room];
+      return (single >= 0 || double >= 0 || triple >= 0);
+    })
   );
 
   if (!hasData) {
@@ -75,7 +76,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
             return (
               <div key={floor} className="floor1">
                 {[...Object.keys(roomStatus[floor])].map(roomNo => {
-                  const room = roomStatus[floor] && roomStatus[floor][roomNo] || { single: -1, double: -1, triple: -1 };
+                  const room = (roomStatus[floor] && roomStatus[floor][roomNo]) || { single: -1, double: -1, triple: -1 };
                   return (
                     <div key={roomNo} className="room-container">
                       <div className="room-header">F{floor}R{roomNo}</div>
