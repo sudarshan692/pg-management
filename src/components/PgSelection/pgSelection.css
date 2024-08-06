@@ -8,7 +8,7 @@
     padding-bottom: 0.4vw;
     padding-top: 0.4vw;
     background-color: #3f51b5;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0vw 2px 5px rgba(0, 0, 0, 0.5);
     font-weight: 300;
     font-style: normal;
   }
@@ -20,7 +20,7 @@
   }
   .pg-card {
     background-color: #0d2136;
-    border-radius: 8px;
+    border-radius: 0.4vw;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(25% - 1rem);
     box-sizing: border-box;
@@ -38,64 +38,69 @@
     background-color: #162c46;
   }
   .pg-header {
-    height: 80px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    height: 4vw;
+    border-top-left-radius: 0.4vw;
+    border-top-right-radius: 0.4vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
-    padding: 0 10px;
+    margin-bottom: 0.6vw;
+    padding: 0 0.3vw;
     color: rgb(211, 227, 253);
     background-color: #3f51b5;
   }
   .pg-name {
-    font-size: 1.25rem;
+    font-size: 1vw;
     font-weight: bold;
   }
   .pg-number {
-    font-size: 0.9rem;
+    font-size: 1vw;
     font-weight: bold;
     background-color: rgba(0, 0, 0, 0.5);
     color: rgb(211, 227, 253);
-    padding: 8px 10px;
-    border-radius: 25px;
+    border-radius: 0.5vw;
+    padding-left: 0.4vw;
+    padding-right: 0.4vw;
+    padding-top: 0.2vw;
+    padding-bottom: 0.2vw;
   }
   .pg-details {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: -10px;
+    margin-left: 0.6vw;
+    margin-right: 0.6vw;
+    margin-bottom: -0.6vw;
     flex: 1;
   }
   .owner-name{
-    margin-top: -5px;
+    font-size: 0.8vw;
+    margin-top: -0.3vw;
     font-weight: bold;
     color: rgb(211, 227, 253);
   }
   .pg-address{
-    margin-top: -10px;
-    font-size: 12px;
+    margin-top: -0.6vw;
+    font-size: 0.7vw;
     color: rgb(211, 227, 253);
     opacity: 0.6;
   }
   .max-customers{
-    margin-top: 0px;
+    font-size: 0.8vw;
+    margin-top: 0vw;
     color: #3f51b5;
     font-weight: bold;
   }
   .pg-footer {
     display: flex;
     justify-content: space-between;
-    font-size: 0.75rem;
+    font-size: 0.6vw;
     color: rgb(211, 227, 253);
   }
   .pg-mobile,
   .pg-email {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 25px;
+    padding: 0.3vw 0.6vw;
+    border-radius: 0.7vw;
   }
   
   
