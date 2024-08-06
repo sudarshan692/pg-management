@@ -3,64 +3,56 @@
     align-items: center;
     justify-content: center;
     color: rgb(211, 227, 253);
-    font-size: 1.8em;
+    font-size: 1.5vw;
     margin-top: 0;
-    padding-bottom: 8px;
-    padding-top: 8px;
+    padding-bottom: 0.4vw;
+    padding-top: 0.4vw;
     background-color: #3f51b5;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
     font-weight: 300;
     font-style: normal;
-    
   }
-
   .pg-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1vw;
+    padding: 1vw;
   }
-  
   .pg-card {
     background-color: #0d2136;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(25% - 1rem); /* Adjust based on the number of columns you want */
+    width: calc(25% - 1rem);
     box-sizing: border-box;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
     color: rgb(211, 227, 253);
-    position: relative; /* Add relative positioning */
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-  
   .pg-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #162c46;
   }
-  
   .pg-header {
-    height: 80px; /* Fixed height for the header */
+    height: 80px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-    padding: 0 10px; /* Adjusted padding */
+    padding: 0 10px;
     color: rgb(211, 227, 253);
     background-color: #3f51b5;
   }
-  
   .pg-name {
     font-size: 1.25rem;
     font-weight: bold;
   }
-  
   .pg-number {
     font-size: 0.9rem;
     font-weight: bold;
@@ -69,7 +61,6 @@
     padding: 8px 10px;
     border-radius: 25px;
   }
-  
   .pg-details {
     margin-left: 10px;
     margin-right: 10px;
@@ -98,12 +89,11 @@
     font-size: 0.75rem;
     color: rgb(211, 227, 253);
   }
-  
   .pg-mobile,
   .pg-email {
     margin-left: 10px;
     margin-right: 10px;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for contrast */
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 5px 10px;
     border-radius: 25px;
   }

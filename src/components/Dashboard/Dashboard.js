@@ -37,7 +37,7 @@ const Dashboard = () => {
 
   // Use pgDetails from location state
   const pgDetails = location.state?.pgDetails || {};
-  const pgData1 = location.state?.pgData || {};
+  // const pgData1 = location.state?.pgData || {};
 
   const toggleRoomMatrixDialog = () => {
     setIsRoomMatrixDialogOpen((prevState) => !prevState);
@@ -111,12 +111,15 @@ const Dashboard = () => {
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       await auth.signOut();
       history.push("/login");
       console.log("Logout successful");
     } catch (error) {
       console.error("Error logging out:", error.message);
+    }finally {
+      setLoading(false);
     }
   };
 

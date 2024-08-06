@@ -1,20 +1,5 @@
-.login-nav-heading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(211, 227, 253);
-    font-size: 1.8em;
-    margin-top: 0;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    background-color: #3f51b5;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-  }
   .login-card {
-    border-radius: 15px;
+    border-radius: 1vw;
     background-color: #0d2136;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -23,29 +8,26 @@
     margin-top: 0%;
     margin-left: 36%;
     margin-right: 36%;
-    /* border: 1px solid #3f51b5; */
     box-sizing: border-box;
   }
   .card-heading {
-    margin-bottom: 80px;
+    margin-bottom: 4vw;
     display: flex;
-    padding: 5px;
     justify-content: center;
     align-items: center;
     font-family: "Rubik Doodle Shadow", system-ui;
     font-weight: 600;
     font-style: normal;
-    font-size: 1.9em;
+    font-size: 1.6vw;
     position: relative;
     color: #fff;
-    background: linear-gradient(45deg, #3f51b5, #ff007f, #3f51b5); /* Blue to pink gradient */
+    background: linear-gradient(45deg, #3f51b5, #ff007f, #3f51b5);
     background-size: 300% 300%;
     animation: slideGradient 6s linear infinite;
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent; /* Ensure text color is transparent */
+    color: transparent;
   }
-  
   @keyframes slideGradient {
     0% {
       background-position: 0% 0%;
@@ -57,60 +39,60 @@
       background-position: 0% 0%;
     }
   }
-  
   .login-labels {
-    color: rgb(211, 227, 253);
+    color: #fff;
+    background: linear-gradient(45deg, #3f51b5, #ff007f, #3f51b5);
+    background-size: 300% 300%;
+    animation: slideGradient 6s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bold;
   }
   .login-inputboxes {
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 0.6vw;
+    margin-top: 0.6vw;
     display: flex;
     flex-direction: column;
-    font-size: 15px;
-    height: 30px;
-    padding: 10px;
-    width: 400px;
+    font-size: 0.8vw;
+    height: 1vw;
+    width: 21vw;
     background: rgb(3, 21, 37);
-    border-width: 0px;
+    border-width: 0vw;
     border-color: #092635;
     color: rgb(211, 227, 253);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .login-button {
-    margin-top: 25px;
-    margin-bottom: 60px;
-    font-size: 15px;
+    margin-top: 1.5vw;
+    margin-bottom: 2.5vw;
+    font-size: 0.8vw;
     display: flex;
-    width: 420px; /* Set the width to match the input boxes */
+    font-weight: bold;
+    width: 22.7vw;
     justify-content: center;
-    padding: 15px;
-    border-width: 0px;
-    border-radius: 25px; /* Combined border-radius property */
+    padding: 0.8vw;
+    border-width: 0vw;
+    border-radius: 2.5vw;
     color: rgb(211, 227, 253);
-    background: linear-gradient(45deg, #3f51b5, #ff007f); /* Blue to pink gradient */
+    background: linear-gradient(45deg, #3f51b5, #ff007f);
     cursor: pointer;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     transition: background 0.3s ease, box-shadow 0.3s ease;
   }
-  
-  /* Hover effect with inverted gradient */
   .login-button:hover {
-    background: linear-gradient(45deg, #ff007f, #3f51b5); /* Pink to blue gradient on hover */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    background: linear-gradient(45deg, #ff007f, #3f51b5); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
   }
-  
-  /* Active state for when the button is clicked */
   .login-button:active {
-    background: linear-gradient(45deg, #c51162, #303f9f); /* Darker pink and blue gradient */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+    background: linear-gradient(45deg, #c51162, #303f9f); 
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
   }
-  
   .login-validation-message {
     color: red;
-    margin-bottom: 10px;
-    font-size: 13px;
+    margin-bottom: 0.5vw;
+    font-size: 0.8vw;
   }
-/* Styles for the loading overlay */
 .loading-overlay-visible::before {
   content: '';
   position: fixed;
@@ -124,8 +106,6 @@
   align-items: center;
   justify-content: center;
 }
-
-/* Styles for the loading spinner */
 .overlay {
   position: fixed;
   top: 0;
@@ -143,11 +123,10 @@
   justify-content: left;
   width: 100%;
 }
-
 .img1 {
-  padding: 20px;
+  padding: 0.8vw;
   margin-top: 0%;
-  width: 300px; /* Adjust as needed */
-  background-color: transparent; /* If you have control over the image background color */
+  width: 15vw; 
+  background-color: transparent; 
 }
 

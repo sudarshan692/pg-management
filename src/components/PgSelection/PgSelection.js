@@ -165,6 +165,7 @@ const PgSelection = () => {
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       console.log('Logging out...');
       await auth.signOut();
@@ -178,6 +179,8 @@ const PgSelection = () => {
       setSnackbarMessage('Error logging out');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+    } finally{
+      setLoading(false);
     }
   };
 

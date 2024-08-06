@@ -4,34 +4,17 @@ body {
   height: 100%;
   background: rgb(3, 21, 37);
 }
-.logout-btn {
-  position: fixed;
-  padding: 8px;
-  border-radius: 5px;
-  top: 5px;
-  right: 10px;
-  border-width: 0px;
-  color: rgb(211, 227, 253);
-  background-color: #3f51b5;
-  cursor: pointer;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
-}
-/* LoadingSpinner.css */
-/* Overlay styles */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* background-color: rgba(255, 255, 255, 0.7); */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
 }
-/* Spinner styles */
 .custom-spinner-container {
   display: flex;
   align-items: center;
@@ -39,11 +22,11 @@ body {
   height: 100vh;
 }
 .custom-spinner {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #3498db;
+  border: 0.4vw solid #f3f3f3;
+  border-top: 0.4vw solid #3498db;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 2vw;
+  height: 2vw;
   animation: spin 1s linear infinite;
 }
 @keyframes spin {
@@ -54,5 +37,5 @@ body {
     transform: rotate(360deg);
   }
 }
-/* LoadingSpinner.css */
+
 
