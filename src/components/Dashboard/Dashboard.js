@@ -16,7 +16,8 @@ import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 Modal.setAppElement("#root");
 
 const Dashboard = () => {
-  const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
+  const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
+    useState(false);
   const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -118,7 +119,7 @@ const Dashboard = () => {
       console.log("Logout successful");
     } catch (error) {
       console.error("Error logging out:", error.message);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -186,9 +187,12 @@ const Dashboard = () => {
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
-        <span className="pg-number">{pgData.number}</span>
-        <span className="heading-text">{pgData.name} PG Management Center</span>
+        <span className="pg-number-dashboard">{pgData.number}</span>
+        <span className="heading-text">{pgData.name} Management Center</span>
       </div>
+      <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>
+        Add PG Details
+      </button>
       <button
         className="change-password-link"
         onClick={openChangePasswordDialog}
@@ -220,9 +224,7 @@ const Dashboard = () => {
           <LoadingSpinner />
         </div>
       )}
-      <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>
-        Add PG Details
-      </button>
+
       <PayingGuestTable
         payingGuests={payingGuests}
         onAddPayment={openAddPaymentDialog}
