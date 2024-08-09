@@ -105,13 +105,13 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
           <div className="totals">
             <div className="total-beds-heading">Total Available Beds</div>
             <div>
-              Single Beds: <span className="value">{totalAvailableSingle}</span>
+              <span className="total-beds">Single Beds</span> <span className="value">{totalAvailableSingle}</span>
             </div>
             <div>
-              Double Beds: <span className="value">{totalAvailableDouble}</span>
+              <span className="total-beds">Double Beds</span> <span className="value">{totalAvailableDouble}</span>
             </div>
             <div>
-              Triple Beds: <span className="value">{totalAvailableTriple}</span>
+              <span className="total-beds">Triple Beds</span> <span className="value">{totalAvailableTriple}</span>
             </div>
           </div>
 

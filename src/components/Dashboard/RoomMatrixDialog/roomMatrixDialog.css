@@ -181,8 +181,8 @@
 
 .room-header {
   font-weight: 700;
-  background-color: #ffffff; /* White background for header */
-  color: #34495e; /* Dark text color */
+  background-color: #caa3a3; /* White background for header */
+  color: rgb(39, 14, 14); /* Dark text color */
   padding: 8px;
   border-bottom: 1px solid #2c3e50; /* Border for separation */
 }
@@ -232,5 +232,9 @@
   font-size: 12px; /* Small font size */
   color: #fff; /* White text for contrast */
 
+}
+.total-beds{
+  font-weight: bold;
+  color: #27ae60;
 }
 
