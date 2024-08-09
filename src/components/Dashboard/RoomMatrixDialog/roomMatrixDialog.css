@@ -135,7 +135,7 @@
 }
 
 .totals .value {
-    font-weight: bold;
+  font-weight: bold;
   color: #27ae60;
   margin-left: auto; /* Push the value to the rightmost side */
 }
@@ -173,7 +173,7 @@
   border: 1px solid #2c3e50;
   text-align: center;
   min-width: 150px; /* Adjust width as needed */
-  height: 120px; /* Adjust height as needed */
+  height: 130px; /* Adjust height as needed */
   box-sizing: border-box;
   margin: 5px; /* Space between rooms */
   overflow: hidden; /* Prevent overflow of contents */
@@ -214,12 +214,23 @@
 
 /* Styles for available and filled compartments */
 .room-compartment.available {
-  margin-top: -20px;
+  margin-top: -40px;
   background-color: #f39c12; /* Modern orange color */
 }
 
 .room-compartment.filled {
   background-color: #27ae60;
-  margin-top: -20px;
+  margin-top: -40px;
   color: #ffffff;
 }
+.guest-ids {
+  margin-top: 40px; /* Adjust spacing as needed */
+}
+
+.guest-id {
+  margin-left: -50px;
+  font-size: 12px; /* Small font size */
+  color: #fff; /* White text for contrast */
+
+}
+

@@ -2,7 +2,7 @@ import React from "react";
 import "./roomMatrixDialog.css"; // Import the CSS file
 
 const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
-  // Initialize room status with total beds based on pgDetails
+  // Initialize room status with total beds and empty guests array
   const roomStatus = {};
 
   let roomCounter = 1; // Initialize room number counter
@@ -12,9 +12,9 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
     roomStatus[floor] = {};
     for (let room = 1; room <= pgDetails.totalRoomsPerFloor; room++) {
       roomStatus[floor][roomCounter] = {
-        single: pgDetails.singleBedsPerRoom,
-        double: pgDetails.doubleSharingBedsPerRoom,
-        triple: pgDetails.tripleSharingBedsPerRoom,
+        single: { count: pgDetails.singleBedsPerRoom, guests: [] },
+        double: { count: pgDetails.doubleSharingBedsPerRoom, guests: [] },
+        triple: { count: pgDetails.tripleSharingBedsPerRoom, guests: [] },
       };
       roomCounter++; // Increment room number for each room
     }
@@ -22,7 +22,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
 
   // Update roomStatus based on payingGuests
   payingGuests.forEach((guest) => {
-    const { floorNo, roomNo, roomType } = guest;
+    const { floorNo, roomNo, roomType, guestID } = guest;
     const roomTypeMapping = { S: "single", D: "double", T: "triple" };
     const type = roomTypeMapping[roomType];
 
@@ -31,7 +31,8 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
       roomStatus[floorNo][roomNo] &&
       roomStatus[floorNo][roomNo][type] !== undefined
     ) {
-      roomStatus[floorNo][roomNo][type] -= 1;
+      roomStatus[floorNo][roomNo][type].count -= 1;
+      roomStatus[floorNo][roomNo][type].guests.push(guestID);
     }
   });
 
@@ -41,7 +42,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
       return (
         total +
         Object.values(floor).reduce((floorTotal, room) => {
-          return floorTotal + (room[type] > 0 ? room[type] : 0);
+          return floorTotal + (room[type].count > 0 ? room[type].count : 0);
         }, 0)
       );
     }, 0);
@@ -55,7 +56,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
   const hasData = Object.keys(roomStatus).some((floor) =>
     Object.keys(roomStatus[floor]).some((room) => {
       const { single, double, triple } = roomStatus[floor][room];
-      return single >= 0 || double >= 0 || triple >= 0;
+      return single.count >= 0 || double.count >= 0 || triple.count >= 0;
     })
   );
 
@@ -120,11 +121,10 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
               return (
                 <div key={floor} className="floor1">
                   {[...Object.keys(roomStatus[floor])].map((roomNo) => {
-                    const room = (roomStatus[floor] &&
-                      roomStatus[floor][roomNo]) || {
-                      single: -1,
-                      double: -1,
-                      triple: -1,
+                    const room = roomStatus[floor][roomNo] || {
+                      single: { count: -1, guests: [] },
+                      double: { count: -1, guests: [] },
+                      triple: { count: -1, guests: [] },
                     };
                     return (
                       <div key={roomNo} className="room-container">
@@ -132,33 +132,48 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
                           F{floor}R{roomNo}
                         </div>
                         <div className="room-content">
-                          {room.single !== -1 && (
+                          {room.single.count !== -1 && (
                             <div
                               className={`room-compartment ${
-                                room.single === 0 ? "filled" : "available"
+                                room.single.count === 0 ? "filled" : "available"
                               }`}
                             >
-                              {room.single}(S)
+                              {room.single.count}(S)
                             </div>
                           )}
-                          {room.double !== -1 && (
+                          <div className="guest-ids">
+                            {room.single.guests.map((id) => (
+                              <div key={`S-${id}`} className="guest-id">G{id}</div>
+                            ))}
+                          </div>
+                          {room.double.count !== -1 && (
                             <div
                               className={`room-compartment ${
-                                room.double === 0 ? "filled" : "available"
+                                room.double.count === 0 ? "filled" : "available"
                               }`}
                             >
-                              {room.double}(D)
+                              {room.double.count}(D)
                             </div>
                           )}
-                          {room.triple !== -1 && (
+                          <div className="guest-ids">
+                            {room.double.guests.map((id) => (
+                              <div key={`D-${id}`} className="guest-id">G{id}</div>
+                            ))}
+                          </div>
+                          {room.triple.count !== -1 && (
                             <div
                               className={`room-compartment ${
-                                room.triple === 0 ? "filled" : "available"
+                                room.triple.count === 0 ? "filled" : "available"
                               }`}
                             >
-                              {room.triple}(T)
+                              {room.triple.count}(T)
                             </div>
                           )}
+                          <div className="guest-ids">
+                            {room.triple.guests.map((id) => (
+                              <div key={`T-${id}`} className="guest-id">G{id}</div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     );
