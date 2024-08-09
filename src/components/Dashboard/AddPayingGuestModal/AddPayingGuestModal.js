@@ -19,6 +19,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     depositAmount: "",
     maintenanceCharges: "",
     fullDeposit: false,
+    aadharNumber: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -100,6 +101,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         depositAmount: Number(guestData.depositAmount),
         maintenanceCharges: Number(guestData.maintenanceCharges),
         fullDeposit: guestData.fullDeposit,
+        aadharNumber: Number(guestData.aadharNumber),
       };
 
       // Add the new guest to Firestore
@@ -172,6 +174,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="text" name="fatherMobileNo" placeholder="Father Mobile No" value={guestData.fatherMobileNo} onChange={handleChange} required />
               <input type="text" name="permanentAddress" placeholder="Permanent Address" value={guestData.permanentAddress} onChange={handleChange} required />
               <input type="text" name="presentStatus" placeholder="Present Employee / Student" value={guestData.presentStatus} onChange={handleChange} required />
+              <input type="number" name="aadharNumber" placeholder="Aadhar Number" value={guestData.aadharNumber} onChange={handleChange} required />
             </div>
             <div className="form-column">
               <input className="date" type="date" name="dateOfAdmission" value={guestData.dateOfAdmission} onChange={handleChange} required />

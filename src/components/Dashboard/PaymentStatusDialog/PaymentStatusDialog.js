@@ -10,12 +10,21 @@ const PaymentStatusDialog = ({ guest, onClose }) => {
     return payment || { paymentStatus: 'Not Paid', paymentAmount: 0 };
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   const renderStatusColor = (status) => {
     switch (status) {
-      case 'Done': return 'green';
-      case 'Partial': return '#FBC02D';
-      case 'Not Paid': return 'red';
-      default: return 'grey';
+      case 'Done': return '#32cd32'; // Bright green for done
+      case 'Partial': return '#ffa500'; // Vibrant orange for partial
+      case 'Not Paid': return '#e74c3c'; // Bold red for not paid
+      default: return '#95a5a6'; // Grey for unknown
     }
   };
 
@@ -23,71 +32,35 @@ const PaymentStatusDialog = ({ guest, onClose }) => {
   const years = [...new Set(Object.values(guest.paymentDetails || {}).map(payment => payment.paymentForYear))].sort();
 
   return (
-    <div className="dialog-overlay">
+    <div className="dialog-overlay" style={{ display: 'flex' }}>
       <div className="dialog-card">
         <div className="card-header">
-          <h3>Guest details</h3>
+          <h3>Guest Details</h3>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         <div className="card-content">
           {/* Display Guest Details */}
           <div className="guest-details">
-            <div className="detail-item">
-              <strong>Guest ID:</strong>
-              <span>{guest.guestID}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Name:</strong>
-              <span>{guest.guestName}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Mobile No:</strong>
-              <span>{guest.guestMobileNo}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Father's Name:</strong>
-              <span>{guest.fatherName}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Father's Mobile No:</strong>
-              <span>{guest.fatherMobileNo}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Floor No:</strong>
-              <span>{guest.floorNo}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Room No:</strong>
-              <span>{guest.roomNo}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Room Type:</strong>
-              <span>{guest.roomType}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Date of Admission:</strong>
-              <span>{guest.dateOfAdmission}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Permanent Address:</strong>
-              <span>{guest.permanentAddress}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Present Status:</strong>
-              <span>{guest.presentStatus}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Deposit Amount:</strong>
-              <span>{guest.depositAmount}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Maintenance Charges:</strong>
-              <span>{guest.maintenanceCharges}</span>
-            </div>
-            <div className="detail-item">
-              <strong>Full Deposit:</strong>
-              <span>{guest.fullDeposit ? 'Yes' : 'No'}</span>
-            </div>
+            {[
+              { label: 'Guest ID', value: guest.guestID },
+              { label: 'Name', value: guest.guestName },
+              { label: 'Mobile Number', value: guest.guestMobileNo },
+              { label: 'Father\'s Name', value: guest.fatherName },
+              { label: 'Father\'s Mobile Number', value: guest.fatherMobileNo },
+              { label: 'Aadhar Number', value: guest.aadharNumber },
+              { label: 'Date of Admission', value: formatDate(guest.dateOfAdmission) },
+              { label: 'Permanent Address', value: guest.permanentAddress },
+              { label: 'Floor/Room/Type', value: `${guest.floorNo}/${guest.roomNo}/${guest.roomType}` },
+              { label: 'Present Status', value: guest.presentStatus },
+              { label: 'Deposit Amount', value: `₹${guest.depositAmount}` },
+              { label: 'Maintenance Charges', value: `₹${guest.maintenanceCharges}` },
+              { label: 'Full Deposit', value: guest.fullDeposit ? 'Yes' : 'No' }
+            ].map(({ label, value }) => (
+              <div key={label} className="detail-item">
+                <strong>{label}:</strong>
+                <span>{value}</span>
+              </div>
+            ))}
           </div>
           
           {/* Display Payment Status Table */}
@@ -109,7 +82,7 @@ const PaymentStatusDialog = ({ guest, onClose }) => {
                       return (
                         <td
                           key={month}
-                          style={{ backgroundColor: renderStatusColor(paymentStatus), textAlign: 'center', fontSize: '12px', color: paymentAmount > 0 ? '#f0f0f0' : 'inherit' }}
+                          style={{ backgroundColor: renderStatusColor(paymentStatus), color: paymentAmount > 0 ? '#fff' : '#f0f0f0' }}
                         >
                           {paymentAmount > 0 ? `${paymentAmount.toFixed(2)}` : ''}
                         </td>

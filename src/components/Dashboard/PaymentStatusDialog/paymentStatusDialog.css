@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,16 +14,16 @@
 
 /* Card styling for the dialog */
 .dialog-card {
-  background: rgb(13, 33, 54);
-  color: #f0f0f0;
+  background: #2e3b4e; /* Match background color from RoomMatrixDialog */
+  color: #f5f5f5; /* Light color for text */
   padding: 20px;
   border-radius: 12px;
   width: 90vw; /* Adjust width as needed */
   max-width: 1100px; /* Max width to prevent too wide cards */
-  height: 600px; /* Adjust height as needed */
+  height: 650px; /* Adjust height as needed */
   overflow: auto; /* Enables scrolling for content */
   position: relative; /* Required for positioning the close button */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Shadow for depth */
+  border: 1px solid #333; /* Border to match RoomMatrixDialog */
   display: flex;
   flex-direction: column;
 }
@@ -33,9 +33,9 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #3f51b5;
-  color: white;
-  border: none;
+  background: none;
+  color: #f5f5f5;
+  border: 1px solid #f5f5f5;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -44,17 +44,13 @@
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
-.payment-details{
-  margin-top: -10px;
-  border-bottom: 2px solid #3f51b5;
-  width: 100%;
-  padding-bottom: 5px;
-}
+
 .close-button:hover {
-  background: #3f51b5;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background: #f5f5f5;
+  color: #1e2a38; /* Match the card background */
+  border-color: #1e2a38; /* Match the card background */
 }
 
 /* Card header styling */
@@ -66,28 +62,17 @@
 }
 
 .card-header h3 {
+  padding-left: 10px;
   margin: 0;
   font-size: 24px;
-  border-bottom: 2px solid #3f51b5;
+  border-bottom: 1px solid #34495e; /* Header color to match RoomMatrixDialog */
   padding-bottom: 10px;
   width: 100%;
 }
 
-.card-header button {
-  background: #3f51b5;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.card-header button:hover {
-  background: #3f51b5;
-}
-
 /* Guest details and payment status container */
 .card-content {
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -95,10 +80,11 @@
 
 /* Guest details styling */
 .guest-details {
-  background: rgb(13, 33, 54);
+  margin-top: -20px;
+  padding: 10px;
+  /* border: 1px solid #34495e; */
   padding-left: 15px;
   border-radius: 8px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); */
 }
 
 .guest-details .detail-item {
@@ -110,11 +96,11 @@
 }
 
 .guest-details .detail-item strong {
-  color: #3f51b5;
+  color: #3498db; /* Highlight color */
 }
 
 .guest-details .detail-item span {
-  color: #f0f0f0;
+  color: #f5f5f5; /* Light color for text */
 }
 
 table {
@@ -124,13 +110,13 @@ table {
 
 th, td {
   border: 1px solid #555;
-  padding: 2px;
+  padding: 8px; /* Increased padding for readability */
   text-align: center;
 }
 
 th {
-  background-color: #3f51b5;
-  color: white;
+  background-color: #3498db; /* Header color to match RoomMatrixDialog */
+  color: #f5f5f5;
 }
 
 td {
@@ -143,4 +129,8 @@ tr:nth-child(even) td {
 
 tr:hover td {
   background-color: rgba(255, 255, 255, 0.25); /* Hover effect for rows */
+}
+.payment-details{
+  padding-bottom: 5px;
+  border-bottom: 1px solid #34495e;
 }
