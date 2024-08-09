@@ -31,7 +31,18 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
     }
   });
 
-  console.log('Updated room status:', roomStatus);
+  // Function to calculate total available beds
+  const calculateTotalAvailableBeds = (type) => {
+    return Object.values(roomStatus).reduce((total, floor) => {
+      return total + Object.values(floor).reduce((floorTotal, room) => {
+        return floorTotal + (room[type] > 0 ? room[type] : 0);
+      }, 0);
+    }, 0);
+  };
+
+  const totalAvailableSingle = calculateTotalAvailableBeds('single');
+  const totalAvailableDouble = calculateTotalAvailableBeds('double');
+  const totalAvailableTriple = calculateTotalAvailableBeds('triple');
 
   // Check if there are any rooms with data
   const hasData = Object.keys(roomStatus).some(floor =>
@@ -60,7 +71,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
       <div className="room-matrix-dialog">
         <div className="dialog-header">
           <div className="dialog-title">Room Matrix</div>
-          <button className="close-button" onClick={onClose}>×</button>
+          <button className="close-button1" onClick={onClose}>×</button>
         </div>
         <div className="legend">
           <div className="legend-item">
@@ -73,6 +84,12 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
           </div>
         </div>
         <div className="dialog-content">
+          <div className="totals">
+            <div>Total Available Beds</div>
+            <div>Single Beds: {totalAvailableSingle}</div>
+            <div>Double Beds: {totalAvailableDouble}</div>
+            <div>Triple Beds: {totalAvailableTriple}</div>
+          </div>
           <div className="room-matrix">
             {[...Array(pgDetails.totalFloors)].map((_, floorIndex) => {
               const floor = floorIndex + 1;

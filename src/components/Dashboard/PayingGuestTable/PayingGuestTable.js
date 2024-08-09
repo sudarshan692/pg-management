@@ -281,7 +281,10 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       name: 'Payment Amount',
       cell: (row) => {
         const highestPayment = getHighestPayment(row.paymentDetails);
-        return highestPayment ?`₹${highestPayment.paymentAmount.toFixed(2)}` : '-';
+        if (highestPayment && highestPayment.paymentAmount && highestPayment.paymentAmount !== '-') {
+          return `₹${highestPayment.paymentAmount}`;
+        }
+        return '-';
       },
       sortable: true,
       sortFunction: sortPaymentAmount
