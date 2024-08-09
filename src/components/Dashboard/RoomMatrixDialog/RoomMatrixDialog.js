@@ -103,6 +103,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
             <div className="info">
               <span>F - Floor</span>
               <span>R - Room</span>
+              <span>G - GuestID</span>
               <span>(S) - Single</span>
               <span>(D) - Double</span>
               <span>(T) - Triple</span>

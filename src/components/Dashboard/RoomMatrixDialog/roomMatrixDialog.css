@@ -287,16 +287,19 @@
 .info span:nth-child(2) {
   grid-column: 2; /* Place in the second column */
 }
-
 .info span:nth-child(3) {
+  grid-column: 3; /* Place in the second column */
+  grid-row: 1;
+}
+.info span:nth-child(4) {
   grid-column: 1; /* Place in the first column */
 }
 
-.info span:nth-child(4) {
+.info span:nth-child(5) {
   grid-column: 2; /* Place in the second column */
 }
 
-.info span:nth-child(5) {
+.info span:nth-child(6) {
   grid-column: 3; /* Place in the third column */
   grid-row: 2; /* Place in the second row */
 }
