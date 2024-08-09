@@ -96,22 +96,33 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
             <div className="color-box available"></div>
             <span>Available Beds</span>
           </div>
+
           <div className="legend-item">
             <div className="color-box filled"></div>
             <span>Full Beds</span>
+            <div className="info">
+              <span>F - Floor</span>
+              <span>R - Room</span>
+              <span>(S) - Single</span>
+              <span>(D) - Double</span>
+              <span>(T) - Triple</span>
+            </div>
           </div>
         </div>
         <div className="dialog-content">
           <div className="totals">
             <div className="total-beds-heading">Total Available Beds</div>
             <div>
-              <span className="total-beds">Single Beds</span> <span className="value">{totalAvailableSingle}</span>
+              <span className="total-beds">Single Beds</span>{" "}
+              <span className="value">{totalAvailableSingle}</span>
             </div>
             <div>
-              <span className="total-beds">Double Beds</span> <span className="value">{totalAvailableDouble}</span>
+              <span className="total-beds">Double Beds</span>{" "}
+              <span className="value">{totalAvailableDouble}</span>
             </div>
             <div>
-              <span className="total-beds">Triple Beds</span> <span className="value">{totalAvailableTriple}</span>
+              <span className="total-beds">Triple Beds</span>{" "}
+              <span className="value">{totalAvailableTriple}</span>
             </div>
           </div>
 
@@ -143,7 +154,9 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
                           )}
                           <div className="guest-ids">
                             {room.single.guests.map((id) => (
-                              <div key={`S-${id}`} className="guest-id">G{id}</div>
+                              <div key={`S-${id}`} className="guest-id">
+                                G{id}
+                              </div>
                             ))}
                           </div>
                           {room.double.count !== -1 && (
@@ -157,7 +170,9 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
                           )}
                           <div className="guest-ids">
                             {room.double.guests.map((id) => (
-                              <div key={`D-${id}`} className="guest-id">G{id}</div>
+                              <div key={`D-${id}`} className="guest-id">
+                                G{id}
+                              </div>
                             ))}
                           </div>
                           {room.triple.count !== -1 && (
@@ -171,7 +186,9 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
                           )}
                           <div className="guest-ids">
                             {room.triple.guests.map((id) => (
-                              <div key={`T-${id}`} className="guest-id">G{id}</div>
+                              <div key={`T-${id}`} className="guest-id">
+                                G{id}
+                              </div>
                             ))}
                           </div>
                         </div>

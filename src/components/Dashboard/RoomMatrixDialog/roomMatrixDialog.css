@@ -84,7 +84,7 @@
 }
 
 .legend-item {
-  margin-top: -30px;
+  margin-top: -27px;
   color: #d3e0e9;
   display: flex;
   align-items: center;
@@ -107,6 +107,7 @@
 }
 
 .totals {
+  margin-top: 10px;
   font-size: 16px;
   color: #d3e0e9;
   background-color: #2c3e50;
@@ -124,6 +125,7 @@
 }
 
 .totals div {
+  font-size: 13.5px;
   display: flex;
   justify-content: space-between; /* Align text to the left and values to the right */
   padding: 0 10px;
@@ -237,4 +239,68 @@
   font-weight: bold;
   color: #27ae60;
 }
+.info {
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  background-color: #2c3e50; /* Darker background color for contrast */
+  border: 2px solid #34495e; /* Border around the box */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Padding inside the box */
+  color: #d3e0e9; /* Light text color */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create three equal-width columns */
+  grid-template-rows: repeat(2, auto); /* Create two rows */
+  gap: 8px; /* Space between items */
+  font-size: 11px; /* Font size for readability */
+  max-width: 200px; /* Limit width of the info box */
+  opacity: 0; /* Initial opacity */
+  animation: bounceIn 0.6s ease-out forwards; /* Apply the bounce animation */
+}
+
+
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-30px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+
+
+
+.info span:nth-child(1) {
+  grid-column: 1; /* Place in the first column */
+}
+
+.info span:nth-child(2) {
+  grid-column: 2; /* Place in the second column */
+}
+
+.info span:nth-child(3) {
+  grid-column: 1; /* Place in the first column */
+}
+
+.info span:nth-child(4) {
+  grid-column: 2; /* Place in the second column */
+}
+
+.info span:nth-child(5) {
+  grid-column: 3; /* Place in the third column */
+  grid-row: 2; /* Place in the second row */
+}
+
+
+
 
