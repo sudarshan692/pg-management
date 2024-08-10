@@ -107,7 +107,12 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
       };
 
       // Add the new guest to Firestore
-      const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
+      const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add(payingGuestMap);
+      // Add the document ID to the map
+      const updatedPayingGuestMap = { ...payingGuestMap, id: docRef.id };
+      // Update the document with the id field
+      await docRef.update(updatedPayingGuestMap);
+      // Create the newGuest object with the document ID
       const newGuest = { id: docRef.id, ...payingGuestMap };
 
       // Update guest count
