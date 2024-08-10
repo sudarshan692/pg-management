@@ -20,6 +20,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     maintenanceCharges: "",
     fullDeposit: false,
     aadharNumber: "",
+    currentStatus: "Active",
   });
   const [loading, setLoading] = useState(false);
 
@@ -102,6 +103,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         maintenanceCharges: Number(guestData.maintenanceCharges),
         fullDeposit: guestData.fullDeposit,
         aadharNumber: Number(guestData.aadharNumber),
+        currentStatus: guestData.currentStatus,
       };
 
       // Add the new guest to Firestore

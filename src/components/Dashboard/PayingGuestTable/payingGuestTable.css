@@ -196,3 +196,21 @@
 .view-status-button:hover {
   background-color: #2980b9;
 }
+.guest-id-circle {
+  display: inline-block;
+  width: 28px; /* Adjust size as needed */
+  height: 28px; /* Adjust size as needed */
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  line-height: 28px; /* Align text vertically */
+  font-weight: bold;
+}
+
+.guest-id-circle.active {
+  background-color: #059212;;
+}
+
+.guest-id-circle.inactive {
+  background-color: orange;
+}

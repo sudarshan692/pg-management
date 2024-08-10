@@ -225,7 +225,15 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   };
 
   const columns = [
-    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true },
+    { 
+      name: 'Guest ID', 
+      cell: (row) => (
+        <div className={`guest-id-circle ${row.currentStatus === 'Active' ? 'active' : 'inactive'}`}>
+          {row.guestID}
+        </div>
+      ), 
+      sortable: true 
+    },
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
