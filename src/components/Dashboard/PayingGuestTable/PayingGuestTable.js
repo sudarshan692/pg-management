@@ -225,7 +225,15 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   };
 
   const columns = [
-    { name: 'Guest ID', selector: (row) => row.guestID, sortable: true },
+    { 
+      name: 'Guest ID', 
+      cell: (row) => (
+        <div className={`guest-id-circle ${row.currentStatus === 'Active' ? 'active' : 'inactive'}`}>
+          {row.guestID}
+        </div>
+      ), 
+      sortable: true 
+    },
     { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
     { 
       name: 'Floor/Room/Type', 
@@ -281,7 +289,10 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
       name: 'Payment Amount',
       cell: (row) => {
         const highestPayment = getHighestPayment(row.paymentDetails);
-        return highestPayment ? highestPayment.paymentAmount : '-';
+        if (highestPayment && highestPayment.paymentAmount && highestPayment.paymentAmount !== '-') {
+          return `₹${highestPayment.paymentAmount}`;
+        }
+        return '-';
       },
       sortable: true,
       sortFunction: sortPaymentAmount

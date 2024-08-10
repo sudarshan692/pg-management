@@ -48,7 +48,7 @@
 }
 
 .box.deposit.yellow {
-  background-color: #FBC02D; /* Yellow color */
+  background-color: #f39c12; /* Yellow color */
 }
 
 .no-data {
@@ -152,7 +152,7 @@
 }
 
 .status-box.yellow {
-  background-color: #FBC02D;
+  background-color: #f39c12;
   color: white; /* Ensure text is readable on yellow background */
 }
 
@@ -178,7 +178,7 @@
 
 .alert-icon {
   margin-left: 100px;
-  color: orange;
+  color: #f39c12;
   font-size: 1.2rem; /* Adjust size as needed */
 }
 
@@ -195,4 +195,22 @@
 
 .view-status-button:hover {
   background-color: #2980b9;
+}
+.guest-id-circle {
+  display: inline-block;
+  width: 28px; /* Adjust size as needed */
+  height: 28px; /* Adjust size as needed */
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  line-height: 28px; /* Align text vertically */
+  font-weight: bold;
+}
+
+.guest-id-circle.active {
+  background-color: #059212;;
+}
+
+.guest-id-circle.inactive {
+  background-color: orange;
 }
