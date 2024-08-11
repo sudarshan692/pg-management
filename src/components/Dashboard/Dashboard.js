@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [isPgDetailsDialogOpen, setIsPgDetailsDialogOpen] = useState(false);
   const [isRoomMatrixDialogOpen, setIsRoomMatrixDialogOpen] = useState(false);
   const [guestStatuses, setGuestStatuses] = useState({});
+  const [isPaymentStatusDialogOpen, setIsPaymentStatusDialogOpen] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
@@ -165,8 +166,8 @@ const Dashboard = () => {
   };
 
   const handleCloseDialog = () => {
-    // Define the function
-    setSelectedGuest(null); // Clear selectedGuest
+    setSelectedGuest(null); 
+    setIsPaymentStatusDialogOpen(false);
   };
 
   const handleLogout = async () => {
@@ -295,7 +296,7 @@ const Dashboard = () => {
         onToggleStatus={handleToggleStatus} 
       />
 
-      {selectedGuest && (
+{isPaymentStatusDialogOpen && selectedGuest && (
         <PaymentStatusDialog
           guest={selectedGuest}
           onClose={handleCloseDialog}
