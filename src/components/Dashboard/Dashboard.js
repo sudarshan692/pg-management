@@ -102,35 +102,34 @@ const Dashboard = () => {
       (guest) => guest.guestID === guestID
     );
     if (guestIndex !== -1) {
-      db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`)
-        .doc(payingGuests[guestIndex].id)
-        .update({
-          "payingGuestMap.currentStatus": newStatus,
-        })
-        .then(() => {
-          console.log("Status updated successfully");
-          setPayingGuests((prevGuests) => {
-            return prevGuests.map((guest, index) => {
-              if (index === guestIndex) {
-                return {
-                  ...guest,
-                  payingGuestMap: {
-                    ...guest.payingGuestMap,
-                    currentStatus: newStatus,
-                  },
-                };
-              }
-              return guest;
-            });
+      const guestDocId = payingGuests[guestIndex].id;
+      const guestDocRef = db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`).doc(guestDocId);
+  
+      guestDocRef.update({
+        "payingGuestMap.currentStatus": newStatus,
+      })
+      .then(() => {
+        console.log("Status updated successfully");
+        setPayingGuests((prevGuests) => {
+          return prevGuests.map((guest, index) => {
+            if (index === guestIndex) {
+              return {
+                ...guest,
+                payingGuestMap: {
+                  ...guest.payingGuestMap,
+                  currentStatus: newStatus,
+                },
+              };
+            }
+            return guest;
           });
-        })
-        .catch((error) => {
-          console.error("Error updating status:", error);
         });
+      })
+      .catch((error) => {
+        console.error("Error updating status:", error);
+      });
     } else {
-      console.error(
-        `Guest with ID ${guestID} not found in payingGuests array.`
-      );
+      console.error(`Guest with ID ${guestID} not found in payingGuests array.`);
     }
   };
 

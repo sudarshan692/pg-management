@@ -25,8 +25,8 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
     const { floorNo, roomNo, roomType, guestID } = guest;
     const roomTypeMapping = { S: "single", D: "double", T: "triple" };
     const type = roomTypeMapping[roomType];
-
-    if (guest.currentStatus === "Active") {
+    const currentStatus = guest.payingGuestMap?.currentStatus || guest.currentStatus || "Active";
+    if (currentStatus === "Active") {
       if (
         roomStatus[floorNo] &&
         roomStatus[floorNo][roomNo] &&
@@ -71,7 +71,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
         <div className="room-matrix-dialog">
           <div className="dialog-header">
             <div className="dialog-title">Room Matrix</div>
-            <button className="close-button" onClick={onClose}>
+            <button className="close-button1" onClick={onClose}>
               ×
             </button>
           </div>
