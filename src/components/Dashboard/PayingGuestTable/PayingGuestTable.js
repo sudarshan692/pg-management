@@ -182,7 +182,7 @@ const getCurrentMonthYear = () => {
   return { currentMonth, currentYear };
 };
 
-const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
+const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleStatus }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedGuest, setSelectedGuest] = useState(null);
@@ -227,14 +227,24 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
   const columns = [
     { 
       name: 'Guest ID', 
-      cell: (row) => (
-        <div className={`guest-id-circle ${row.currentStatus === 'Active' ? 'active' : 'inactive'}`}>
-          {row.guestID}
+      selector: (row) => (
+        <div className="guest-id-container">
+          <span>{row.guestID}</span>
+          {row.paymentDetails && Object.keys(row.paymentDetails).length > 1 && 
+            (getPreviousMonthPaymentStatus(row.paymentDetails) === 'Partial' || 
+             getPreviousMonthPaymentStatus(row.paymentDetails) === 'Not Paid') && (
+              <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />
+            )
+          }
         </div>
       ), 
       sortable: true 
     },
-    { name: 'Guest Name', selector: (row) => row.guestName || '-', sortable: true },
+    { 
+      name: 'Guest Name', 
+      selector: (row) => row.guestName || '-', 
+      sortable: true 
+    },
     { 
       name: 'Floor/Room/Type', 
       cell: (row) => <BoxContainer floorNo={row.floorNo} roomNo={row.roomNo} roomType={row.roomType} />, 
@@ -312,20 +322,24 @@ const PayingGuestTable = ({ payingGuests, onAddPayment }) => {
     {
       name: 'Actions',
       cell: (row) => {
-        const paymentEntries = row.paymentDetails ? Object.keys(row.paymentDetails) : [];
-        const showAlert = paymentEntries.length > 1 && (getPreviousMonthPaymentStatus(row.paymentDetails) === 'Partial' || getPreviousMonthPaymentStatus(row.paymentDetails) === 'Not Paid');
+        const isActive = guestStatuses[row.guestID] === 'Active';
         return (
           <div className="actions-container">
             <button onClick={() => onAddPayment(row)} className="add-payment-button">
               <FaPlus className="add-icon" />
             </button>
-            {showAlert && (
-              <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />
-            )}
+            <label className={`toggle-switch ${isActive ? '' : 'inactive-toggle'}`}>
+              <input 
+                type="checkbox" 
+                checked={isActive} 
+                onChange={() => onToggleStatus(row.guestID, isActive ? 'InActive' : 'Active')} 
+              />
+              <span className="slider"></span>
+            </label>
           </div>
         );
-      },
-    },
+      }
+    }
   ];
 
   const customStyles = {

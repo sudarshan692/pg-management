@@ -25,14 +25,16 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
     const { floorNo, roomNo, roomType, guestID } = guest;
     const roomTypeMapping = { S: "single", D: "double", T: "triple" };
     const type = roomTypeMapping[roomType];
-
-    if (
-      roomStatus[floorNo] &&
-      roomStatus[floorNo][roomNo] &&
-      roomStatus[floorNo][roomNo][type] !== undefined
-    ) {
-      roomStatus[floorNo][roomNo][type].count -= 1;
-      roomStatus[floorNo][roomNo][type].guests.push(guestID);
+    const currentStatus = guest.payingGuestMap?.currentStatus || guest.currentStatus || "Active";
+    if (currentStatus === "Active") {
+      if (
+        roomStatus[floorNo] &&
+        roomStatus[floorNo][roomNo] &&
+        roomStatus[floorNo][roomNo][type] !== undefined
+      ) {
+        roomStatus[floorNo][roomNo][type].count -= 1;
+        roomStatus[floorNo][roomNo][type].guests.push(guestID);
+      }
     }
   });
 
@@ -69,7 +71,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
         <div className="room-matrix-dialog">
           <div className="dialog-header">
             <div className="dialog-title">Room Matrix</div>
-            <button className="close-button" onClick={onClose}>
+            <button className="close-button1" onClick={onClose}>
               ×
             </button>
           </div>

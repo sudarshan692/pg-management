@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import './paymentStatusDialog.css'; // Ensure this CSS file is imported
+import React from 'react';
+import './paymentStatusDialog.css';
 
-const PaymentStatusDialog = ({ guest, onClose, onToggleStatus }) => {
-  const [isActive, setIsActive] = useState(guest.currentStatus === 'Active');
+const PaymentStatusDialog = ({ guest, onClose}) => {
 
   const getPaymentDetails = (month, year) => {
     const paymentDetails = guest.paymentDetails || {};
@@ -33,13 +32,6 @@ const PaymentStatusDialog = ({ guest, onClose, onToggleStatus }) => {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const years = [...new Set(Object.values(guest.paymentDetails || {}).map(payment => payment.paymentForYear))].sort();
 
-  const handleToggleStatus = () => {
-    const newStatus = isActive ? 'Inactive' : 'Active';
-    setIsActive(!isActive);
-    if (onToggleStatus) {
-      onToggleStatus(guest.guestID, newStatus);
-    }
-  };
 
   return (
     <div className="dialog-overlay" style={{ display: 'flex' }}>
@@ -65,15 +57,6 @@ const PaymentStatusDialog = ({ guest, onClose, onToggleStatus }) => {
               { label: 'Deposit Amount', value: `₹${guest.depositAmount}` },
               { label: 'Maintenance Charges', value: `₹${guest.maintenanceCharges}` },
               { label: 'Full Deposit', value: guest.fullDeposit ? 'Yes' : 'No' },
-              { label: 'Current Status', value: (
-                <div className="status-container">
-                  <span>{guest.currentStatus}</span>
-                  <label className="toggle-switch">
-                    <input type="checkbox" checked={isActive} onChange={handleToggleStatus} />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-              )},
             ].map(({ label, value }) => (
               <div key={label} className="detail-item">
                 <strong>{label}:</strong>
