@@ -26,13 +26,15 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
     const roomTypeMapping = { S: "single", D: "double", T: "triple" };
     const type = roomTypeMapping[roomType];
 
-    if (
-      roomStatus[floorNo] &&
-      roomStatus[floorNo][roomNo] &&
-      roomStatus[floorNo][roomNo][type] !== undefined
-    ) {
-      roomStatus[floorNo][roomNo][type].count -= 1;
-      roomStatus[floorNo][roomNo][type].guests.push(guestID);
+    if (guest.currentStatus === "Active") {
+      if (
+        roomStatus[floorNo] &&
+        roomStatus[floorNo][roomNo] &&
+        roomStatus[floorNo][roomNo][type] !== undefined
+      ) {
+        roomStatus[floorNo][roomNo][type].count -= 1;
+        roomStatus[floorNo][roomNo][type].guests.push(guestID);
+      }
     }
   });
 
