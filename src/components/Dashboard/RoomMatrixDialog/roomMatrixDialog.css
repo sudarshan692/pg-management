@@ -19,7 +19,7 @@
   padding: 24px;
   box-sizing: border-box;
   position: relative;
-  min-width: 40vw;
+  min-width: 28vw;
   min-height: 10vw;
   max-width: 80vw; /* Ensure it doesn't exceed viewport width */
   max-height: 80vh; /* Ensure it doesn't exceed viewport height */

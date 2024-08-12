@@ -182,7 +182,7 @@ const getCurrentMonthYear = () => {
   return { currentMonth, currentYear };
 };
 
-const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleStatus,}) => {
+const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleStatus }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedGuest, setSelectedGuest] = useState(null);
@@ -322,25 +322,12 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
     {
       name: 'Actions',
       cell: (row) => {
+        const isActive = guestStatuses[row.guestID] === 'Active';
         return (
           <div className="actions-container">
             <button onClick={() => onAddPayment(row)} className="add-payment-button">
               <FaPlus className="add-icon" />
             </button>
-          </div>
-        );
-      },
-    },
-    {
-      name: 'Current Status', 
-      cell: (row) => {
-        // Access the currentStatus from the guestStatuses state
-        const isActive = guestStatuses[row.guestID] === 'Active';
-        return (
-          <div className="status-container">
-            <span className={isActive ? 'active-status' : 'inactive-status'}>
-              {isActive ? 'Active' : 'InActive'}
-            </span>
             <label className={`toggle-switch ${isActive ? '' : 'inactive-toggle'}`}>
               <input 
                 type="checkbox" 
@@ -351,12 +338,9 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
             </label>
           </div>
         );
-      },
-      sortable: true
-    },
+      }
+    }
   ];
-
-  
 
   const customStyles = {
     headRow: {
