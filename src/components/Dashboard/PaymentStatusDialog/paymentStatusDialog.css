@@ -249,6 +249,26 @@ td {
 td:hover {
   animation: pulse 1s ease-in-out infinite;
 }
+.edit-button{
+  margin-top: 5vw;
+}
+.clear-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+}
 
+.clear-button:hover {
+  text-decoration: underline;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 
