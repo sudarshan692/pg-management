@@ -69,10 +69,6 @@ input[type="date"] {
   align-items: center;
   gap: 10px; /* Space between checkbox and label */
 }
-.checkbox{
-  width: 20px;
-  height: 20px;
-}
 .button-container {
   position: absolute;
   bottom: 20px; /* Adjust this value as needed */
