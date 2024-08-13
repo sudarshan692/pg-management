@@ -381,7 +381,7 @@ const PayingGuestTable = ({
               />
               <span className="slider"></span>
             </label>
-            <divcl>
+            <div className="alert">
               {row.paymentDetails &&
                 Object.keys(row.paymentDetails).length > 1 &&
                 (getPreviousMonthPaymentStatus(row.paymentDetails) ===
@@ -393,7 +393,7 @@ const PayingGuestTable = ({
                     title="Previous month payment status is Partial or Not Paid"
                   />
                 )}
-            </divcl>
+            </div>
           </div>
         );
       },

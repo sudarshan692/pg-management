@@ -180,7 +180,8 @@
   margin-left: 0.5vw;
   color: #f39c12;
   font-size: 1.2rem; /* Adjust size as needed */
-}.alert{
+}
+.alert{
   margin-left: 1.2vw;
 }
 /* src/components/payingGuestTable.css */
