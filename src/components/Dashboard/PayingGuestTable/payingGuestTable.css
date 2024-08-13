@@ -106,7 +106,7 @@
 .actions-container {
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between button and alert icon */
+  gap: 15px; /* Space between button and alert icon */
 }
 
 .add-payment-button {
@@ -180,8 +180,9 @@
   margin-left: 0.5vw;
   color: #f39c12;
   font-size: 1.2rem; /* Adjust size as needed */
+}.alert{
+  margin-left: 1.2vw;
 }
-
 /* src/components/payingGuestTable.css */
 .view-status-button {
   background-color: #3498db;
