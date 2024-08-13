@@ -292,6 +292,8 @@ const Dashboard = () => {
         onAddPayment={openAddPaymentDialog}
         onPaymentUpdate={handlePaymentUpdate}
         guestStatuses={guestStatuses} 
+        selectedPGId={pgId}
+        onSnackbarOpen={handleSnackbarOpen}
         onToggleStatus={handleToggleStatus} 
       />
 

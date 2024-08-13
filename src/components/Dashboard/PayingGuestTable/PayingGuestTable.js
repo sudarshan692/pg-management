@@ -182,7 +182,7 @@ const getCurrentMonthYear = () => {
   return { currentMonth, currentYear };
 };
 
-const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleStatus }) => {
+const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleStatus, selectedPGId, onPaymentUpdate, onSnackbarOpen }) => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedGuest, setSelectedGuest] = useState(null);
@@ -416,7 +416,7 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
             />
           </div>
           {selectedGuest && (
-            <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} />
+            <PaymentStatusDialog guest={selectedGuest} isOpen={!!selectedGuest} selectedPGId ={selectedPGId} onPaymentUpdate={onPaymentUpdate} onSnackbarOpen={onSnackbarOpen} onClose={handleCloseDialog} />
           )}
         </>
       )}
