@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(138, 134, 134, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@
 
 /* Card styling for the dialog */
 .dialog-card {
-  background: #2e3b4e; /* Match background color from RoomMatrixDialog */
+  background: #0d1117; /* Match background color from RoomMatrixDialog */
   color: #f5f5f5; /* Light color for text */
   padding: 20px;
   border-radius: 12px;
