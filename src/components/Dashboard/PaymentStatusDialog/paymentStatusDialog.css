@@ -196,7 +196,7 @@ input:checked + .slider:before {
 input:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
-.delete-button{
+.delete-button {
   position: absolute;
   right: 0;
   background: none;
@@ -206,7 +206,23 @@ input:focus + .slider {
   cursor: pointer;
   font-size: 20px;
   color: #E72929;
+  border-radius: 50%;
+  transition: color 0.3s ease, transform 0.3s ease, background 0.3s ease;
 }
+/* Hover effect */
+.delete-button:hover {
+  color: #c41c1c; /* Darker red color */
+  transform: scale(1.1); /* Slightly enlarge the button */
+  background-color: rgba(255, 255, 255, 0.1); /* Light background */
+  border-radius: 50%; /* Rounded background */
+}
+
+/* Active effect (when the button is pressed) */
+.delete-button:active {
+  transform: scale(0.95); /* Slightly shrink the button */
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly darker background */
+}
+
 /* Keyframes for pulse effect */
 @keyframes pulse {
   0% {
