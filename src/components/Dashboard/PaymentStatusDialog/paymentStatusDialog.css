@@ -34,8 +34,8 @@
   top: 0.75vw;
   right: 0.75vw;
   background: none;
-  color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  color: #3498db;
+  border: 1px solid #3498db;
   border-radius: 50%;
   width: 1.5vw;
   height: 1.5vw;
@@ -48,7 +48,7 @@
 }
 
 .close-button:hover {
-  background: #f5f5f5;
+  background: #3498db;
   color: #1e2a38; /* Match the card background */
   border-color: #1e2a38; /* Match the card background */
 }

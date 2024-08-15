@@ -196,7 +196,7 @@ const PaymentStatusDialog = ({
       <div className="dialog-card">
         <div className="card-header">
           <h3>Guest Details: <span className="guest-id1">{guest.guestID}</span> </h3>
-          <button className="close-button" onClick={onClose}>×</button>
+          <button className="close-button" onClick={onClose}>x</button>
           {isEditing && (<button className="clear-button" onClick={handleClear}>Clear</button>)}
           <button className="edit-button1" onClick={handleEditToggle}>
             <FaEdit />
