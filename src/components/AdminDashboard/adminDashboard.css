@@ -1,39 +1,39 @@
 .admin-nav-heading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(211, 227, 253);
-    font-size: 1.8em;
-    margin-top: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    background-color: #3f51b5;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-    font-family: "Poppins", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(211, 227, 253);
+  font-size: 1.5vw;
+  margin-top: 0;
+  padding-bottom: 0.4vw;
+  padding-top: 0.4vw;
+  background-color: #3f51b5;
+  box-shadow: 0vw 2px 5px rgba(0, 0, 0, 0.5);
+  font-weight: 300;
+  font-style: normal;
   }
   .inputbox5 {
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-    font-size: 15px;
-    height: 30px;
-    padding: 10px;
-    border-radius: 6px;
-    width: 400px;
+    margin-left: 0.5vw;
+    margin-top: 0.3vw;
+    margin-bottom: 0.3vw;
+    margin-right: 0.5vw;
+    font-size: 0.8vw;
+    height: 1.5vw;
+    padding: 0.5vw;
+    border-radius: 0.3vw;
+    width: 31vw;
     background-color: #162c46;
-    border-width: 0px;
+    border-width: 0vw;
     color: rgb(211, 227, 253);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .add-pg {
-    width: 140px;
-    font-size: 15px;
-    padding: 15px;
-    border-width: 0px;
-    border-radius: 6px;
+    margin-left: 0.5vw;
+    width: 14vw;
+    font-size: 0.8vw;
+    padding: 0.8vw;
+    border-width: 0vw;
+    border-radius: 0.3vw;
     color: rgb(211, 227, 253);
     background-color: #3f51b5;
     cursor: pointer;
@@ -41,8 +41,9 @@
     transition: background-color 0.3s ease;
   }
   .heading{
-    margin-top: 0px;
+    font-size: 1vw;
+    margin-top: 0vw;
     color: rgb(211, 227, 253);
-    margin-left: 10px;
-    margin-bottom: 0px;
+    margin-left: 0.5vw;
+    margin-bottom: 0vw;
   }

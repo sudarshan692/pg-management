@@ -101,6 +101,13 @@
 }
 .search-input{
   margin-top: 60px;
+  background-color: #162c46;
+  color: white;
+  padding: 0.6vw;
+  border: 0;
+  border-radius: 0.3vw;
+  width: 20vw;
+  margin-bottom: 0.5vw;
 }
 
 .actions-container {

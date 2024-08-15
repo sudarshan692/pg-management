@@ -9,7 +9,7 @@ import DeleteDialog from '../DeleteDialog/DeleteDialog';
 import { db } from '../../shared/firebase'; // Import Firestore database
 
 const CustomNoDataComponent = () => (
-  <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
+  <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
     There are no records to display.
   </div>
 );
@@ -119,7 +119,7 @@ const PgTable = ({ pgData, updatePgData }) => {
         <div>
           {row.userId}
           <FaCopy
-            style={{ cursor: 'pointer', marginLeft: '10px' }}
+            style={{ cursor: 'pointer', marginLeft: '0.5vw' }}
             onClick={() => handleCopy(row.userId)}
           />
         </div>
@@ -137,11 +137,11 @@ const PgTable = ({ pgData, updatePgData }) => {
       cell: (row) => (
         <div>
           <FaEdit
-            style={{ cursor: 'pointer', marginRight: '15px', width: '15px', height: '15px' }}
+            style={{ cursor: 'pointer', marginRight: '0.75vw', width: '0.75vw', height: '0.75vw' }}
             onClick={() => handleEdit(row)}
           />
           <FaTrash
-            style={{ cursor: 'pointer', color: 'red', width: '15px', height: '15px' }}
+            style={{ cursor: 'pointer', color: 'red', width: '0.75vw', height: '0.75vw' }}
             onClick={() => handleDelete(row)}
           />
         </div>
@@ -154,8 +154,8 @@ const PgTable = ({ pgData, updatePgData }) => {
       style: {
         backgroundColor: '#3f51b5',
         color: 'white',
-        minHeight: window.innerWidth < 768 ? '35px' : '50px',
-        fontSize: window.innerWidth < 768 ? '0.5rem' : '0.94rem',
+        minHeight: '2.5vw',
+        fontSize: '0.9vw',
         fontWeight: 'bold',
       },
     },
@@ -164,28 +164,32 @@ const PgTable = ({ pgData, updatePgData }) => {
         '&:nth-child(odd)': {
           backgroundColor: '#0d2136',
           color: 'white',
-          fontSize: window.innerWidth < 768 ? '0.5rem' : '',
+          fontSize: '0.7vw',
+          minHeight: '2.5vw',
         },
         '&:nth-child(even)': {
           backgroundColor: '#162c46',
           color: 'white',
-          fontSize: window.innerWidth < 768 ? '0.5rem' : '',
+          fontSize: '0.7vw',
+          minHeight: '2.5vw',
         },
       },
     },
     pagination: {
       style: {
-        minHeight: window.innerWidth < 768 ? '' : '50px',
         backgroundColor: '#3f51b5',
         color: 'white',
         display: 'flex',
         justifyContent: 'center',
+        fontSize: '0.7vw',
+        minHeight: "2.5vw"
       },
     },
     button: {
       style: {
         backgroundColor: '#3498db',
         color: 'white',
+        fontSize: '0.8vw',
       },
     },
   };
@@ -194,7 +198,7 @@ const PgTable = ({ pgData, updatePgData }) => {
     <div>
       <div className="search-container">
         <input
-          className="search-input"
+          className="search-input1"
           type="text"
           value={searchText}
           onChange={handleSearch}
