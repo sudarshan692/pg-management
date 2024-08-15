@@ -94,6 +94,7 @@
   gap: 0.2vw;
   padding: 0.2vw;
   margin-bottom: 0vm;
+  font-size: 0.8vw;
 }
 
 .guest-details .detail-item strong {
@@ -132,10 +133,13 @@ tr:hover td {
   background-color: rgba(255, 255, 255, 0.25); /* Hover effect for rows */
 }
 .payment-details{
+  font-size: 1.2vw;
   padding-bottom: 0.25vw;
   border-bottom: 1px solid #34495e;
 }
-
+.payment-table{
+  font-size: 0.8vw;
+}
 /* Container for Current Status and Toggle Switch */
 .status-container {
   display: flex;
@@ -287,6 +291,7 @@ td:hover {
   
 }
 .cancel-button1{
+  font-size: 0.8vw;
   cursor: pointer;
   color: white;
   border-radius: 0.3vw;
@@ -300,6 +305,7 @@ td:hover {
   margin-right: 5vw;
 }
 .save-button1{
+  font-size: 0.8vw;
   cursor: pointer;
   color: white;
   border-radius: 0.3vw;

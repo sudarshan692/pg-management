@@ -282,7 +282,7 @@ const PaymentStatusDialog = ({
             <button onClick={() => setShowConfirmDelete(true)} className="delete-button" disabled={loading}>
               <FaTrashAlt />
             </button>
-            <table>
+            <table className="payment-table">
               <thead>
                 <tr>
                   <th>Year/Month</th>

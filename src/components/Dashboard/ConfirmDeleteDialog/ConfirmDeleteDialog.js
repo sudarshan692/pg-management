@@ -14,7 +14,7 @@ const ConfirmDeleteDialog = ({ open, onClose, onConfirm, loading }) => {
       {open && <div className="confirm-delete-overlay"></div>}
       
       {/* Dialog */}
-      <Dialog open={open} onClose={onClose} classes={{ paper: 'dialog-paper' }}>
+      <Dialog className='delete-dialog' open={open} onClose={onClose} classes={{ paper: 'dialog-paper' }}>
         <DialogTitle className="dialog-title">Confirm Delete</DialogTitle>
         <DialogContent className="dialog-content">
           <p>Are you sure you want to delete the payment details?</p>
