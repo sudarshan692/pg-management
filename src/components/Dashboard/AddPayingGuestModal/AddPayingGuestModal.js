@@ -144,13 +144,13 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
         style={{
           content: {
             border: 'none',
-            maxWidth: '900px',
+            maxWidth: '45vw',
             width: '90%',
-            maxHeight: '70vh',
+            maxHeight: '35vw',
             height: 'auto',
             margin: 'auto',
-            padding: '40px',
-            borderRadius: '8px',
+            padding: '2vw',
+            borderRadius: '0.3vw',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
             backgroundColor: '#0d2136',
           },
@@ -191,7 +191,7 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
               <input type="number" name="depositAmount" placeholder="Deposit Amount" value={guestData.depositAmount} onChange={handleChange} required />
               <input type="number" name="maintenanceCharges" placeholder="Maintenance Charges" value={guestData.maintenanceCharges} onChange={handleChange} required />
               <div className="checkbox-container">
-                <label><input type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} /> Full Deposit Paid </label>
+                <label><input className="chk" type="checkbox" name="fullDeposit" checked={guestData.fullDeposit} onChange={handleChange} /> Full Deposit Paid </label>
               </div>
             </div>
             <div className="button-container">

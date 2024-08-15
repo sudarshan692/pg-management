@@ -6,7 +6,7 @@ import PaymentStatusDialog from "../PaymentStatusDialog/PaymentStatusDialog";
 import "./payingGuestTable.css";
 
 const CustomNoDataComponent = () => (
-  <div className="no-data">There are no records to display.</div>
+  <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>There are no records to display.</div>
 );
 
 const StatusBoxedCell = ({ status }) => {
@@ -405,8 +405,8 @@ const PayingGuestTable = ({
       style: {
         backgroundColor: "#3f51b5",
         color: "white",
-        minHeight: window.innerWidth < 768 ? "35px" : "50px",
-        fontSize: window.innerWidth < 768 ? "0.5rem" : "0.94rem",
+        minHeight: window.innerWidth < 768 ? "1.75vw" : "2.8vw",
+        fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         fontWeight: "bold",
       },
     },
@@ -414,29 +414,33 @@ const PayingGuestTable = ({
       style: {
         "&:nth-child(odd)": {
           backgroundColor: "#0d2136",
+          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
           color: "white",
-          fontSize: window.innerWidth < 768 ? "0.5rem" : "",
+          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         },
         "&:nth-child(even)": {
           backgroundColor: "#162c46",
+          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
           color: "white",
-          fontSize: window.innerWidth < 768 ? "0.5rem" : "",
+          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         },
       },
     },
     pagination: {
       style: {
-        minHeight: window.innerWidth < 768 ? "" : "50px",
         backgroundColor: "#3f51b5",
+        minHeight: "2.7vw",
         color: "white",
         display: "flex",
         justifyContent: "center",
+        fontSize: '0.7vw',
       },
     },
     button: {
       style: {
         backgroundColor: "#3498db",
         color: "white",
+        fontSize: '0.8vw',
       },
     },
   };
