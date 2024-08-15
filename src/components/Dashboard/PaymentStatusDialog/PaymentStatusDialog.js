@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { db, auth } from "../../shared/firebase";
 import "./paymentStatusDialog.css";
 import ConfirmDeleteDialog from "../../Dashboard/ConfirmDeleteDialog/ConfirmDeleteDialog";
@@ -13,22 +13,31 @@ const PaymentStatusDialog = ({
   onPaymentUpdate,
   selectedPGId,
 }) => {
-  const roomTypeMap = {
+  const roomTypeMap = useMemo(() => ({
     Single: 'S',
     Double: 'D',
     Triple: 'T'
-  };
+  }), []);
 
-  const roomTypeMapReverse = {
+  const roomTypeMapReverse = useMemo(() => ({
     S: 'Single',
     D: 'Double',
     T: 'Triple'
-  };
+  }), []);
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedGuest, setEditedGuest] = useState({ ...guest, roomType: roomTypeMapReverse[guest.roomType] || '' });
+  const [initialGuest, setInitialGuest] = useState(null);
+  const [editedGuest, setEditedGuest] = useState({});
+
+  useEffect(() => {
+    if (isOpen) {
+      const guestData = { ...guest, roomType: roomTypeMapReverse[guest.roomType] || '' };
+      setInitialGuest(guestData);
+      setEditedGuest(guestData);
+    }
+  }, [isOpen, guest, roomTypeMapReverse]);
 
   const getPaymentDetails = (month, year) => {
     const paymentDetails = guest.paymentDetails || {};
@@ -97,8 +106,8 @@ const PaymentStatusDialog = ({
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
-    if (!isEditing) {
-      setEditedGuest({ ...guest, roomType: roomTypeMapReverse[guest.roomType] || '' });
+    if (isEditing) {
+      setEditedGuest(initialGuest);
     }
   };
 
@@ -131,7 +140,7 @@ const PaymentStatusDialog = ({
     try {
       const guestRef = doc(db, `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`, guest.id);
       const updatedPayingGuestMap = {
-        guestID: guest.guestID, // Include the guestID
+        guestID: guest.guestID,
         guestName: editedGuest.guestName,
         guestMobileNo: Number(editedGuest.guestMobileNo),
         fatherName: editedGuest.fatherName,
@@ -148,11 +157,10 @@ const PaymentStatusDialog = ({
         aadharNumber: Number(editedGuest.aadharNumber),
         currentStatus: guest.currentStatus
       };
-      // Update the document with the entire payingGuestMap
       await updateDoc(guestRef, {
         payingGuestMap: updatedPayingGuestMap
       });
-      // Update the local state with the new data
+      setInitialGuest(updatedPayingGuestMap);
       onPaymentUpdate({ ...guest, ...updatedPayingGuestMap });
       onSnackbarOpen("Guest details updated successfully!", "success");
       setIsEditing(false);
@@ -163,7 +171,6 @@ const PaymentStatusDialog = ({
       setLoading(false);
     }
   };
-  
 
   const handleClear = () => {
     setEditedGuest({
@@ -188,9 +195,10 @@ const PaymentStatusDialog = ({
     <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
       <div className="dialog-card">
         <div className="card-header">
-          <h3>Guest Details</h3>
+          <h3>Guest Details: <span className="guest-id1">{guest.guestID}</span> </h3>
           <button className="close-button" onClick={onClose}>×</button>
-          <button className="edit-button" onClick={handleEditToggle}>
+          {isEditing && (<button className="clear-button" onClick={handleClear}>Clear</button>)}
+          <button className="edit-button1" onClick={handleEditToggle}>
             <FaEdit />
           </button>
         </div>
@@ -198,7 +206,6 @@ const PaymentStatusDialog = ({
           {/* Display Guest Details */}
           <div className="guest-details">
             {[
-              { label: "Guest ID", value: guest.guestID, editable: false, key: "guestID" },
               { label: "Name", value: editedGuest.guestName, editable: true, key: "guestName" },
               { label: "Mobile Number", value: editedGuest.guestMobileNo, editable: true, key: "guestMobileNo" },
               { label: "Father's Name", value: editedGuest.fatherName, editable: true, key: "fatherName" },
@@ -218,12 +225,18 @@ const PaymentStatusDialog = ({
                 <strong>{label}:</strong>
                 {editable && isEditing ? (
                   key === "fullDeposit" ? (
-                    <input
-                      type="checkbox"
-                      name={key}
-                      checked={value}
-                      onChange={handleCheckboxChange}
-                    />
+                    <div>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name={key}
+                          checked={value}
+                          onChange={handleCheckboxChange}
+                          className={isEditing ? 'input-half-width' : ''}
+                        />
+                        {value ? "Yes" : "No"}
+                      </label>
+                    </div>
                   ) : key === "roomType" ? (
                     <select
                       name={key}
@@ -251,26 +264,24 @@ const PaymentStatusDialog = ({
                     />
                   )
                 ) : (
-                  <span>{key === "depositAmount" || key === "maintenanceCharges" ? `₹${value}` : value}</span>
+                  <span>{key === "depositAmount" || key === "maintenanceCharges" ? `₹${value}` : key === "fullDeposit" ? (value ? "Yes" : "No") : value}</span>
                 )}
               </div>
             ))}
             {isEditing && (
               <div className="edit-buttons">
-                <button className="clear-button" onClick={handleClear}>Clear</button>
-                <button className="cancel-button" onClick={handleEditToggle}>Cancel</button>
-                <button className="save-button" onClick={handleSave}>Save</button>
+                <button className="cancel-button1" onClick={handleEditToggle}>Cancel</button>
+                <button className="save-button1" onClick={handleSave}>Save</button>
               </div>
             )}
           </div>
 
-          <button onClick={() => setShowConfirmDelete(true)} className="delete-button" disabled={loading}>
-            <FaTrashAlt />
-          </button>
-
           {/* Display Payment Status Table */}
           <div className="table-container">
             <h3 className="payment-details">Payment Status</h3>
+            <button onClick={() => setShowConfirmDelete(true)} className="delete-button" disabled={loading}>
+              <FaTrashAlt />
+            </button>
             <table>
               <thead>
                 <tr>

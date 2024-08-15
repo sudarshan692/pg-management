@@ -16,11 +16,11 @@
 .dialog-card {
   background: #0d1117; /* Match background color from RoomMatrixDialog */
   color: #f5f5f5; /* Light color for text */
-  padding: 20px;
-  border-radius: 12px;
+  padding: 1vw;
+  border-radius: 0.6vw;
   width: 90vw; /* Adjust width as needed */
-  max-width: 1100px; /* Max width to prevent too wide cards */
-  height: 650px; /* Adjust height as needed */
+  max-width: 56vw; /* Max width to prevent too wide cards */
+  height: 35vw; /* Adjust height as needed */
   overflow: auto; /* Enables scrolling for content */
   position: relative; /* Required for positioning the close button */
   border: 1px solid #333; /* Border to match RoomMatrixDialog */
@@ -31,19 +31,19 @@
 /* Close button styling */
 .close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 0.75vw;
+  right: 0.75vw;
   background: none;
   color: #f5f5f5;
   border: 1px solid #f5f5f5;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 1.5vw;
+  height: 1.5vw;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 1vw;
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
@@ -55,43 +55,45 @@
 
 /* Card header styling */
 .card-header {
+  margin-top: -2vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1vw;
 }
 
 .card-header h3 {
-  padding-left: 10px;
+  padding-left: 0.5vw;
   margin: 0;
-  font-size: 24px;
+  font-size: 1.2vw;
   border-bottom: 1px solid #34495e; /* Header color to match RoomMatrixDialog */
-  padding-bottom: 10px;
+  padding-bottom: 0.5vw;
   width: 100%;
 }
 
 /* Guest details and payment status container */
 .card-content {
-  padding: 10px;
+  margin-top: -1vw;
+  padding: 0.5vw;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1vw;
 }
 
 /* Guest details styling */
 .guest-details {
-  margin-top: -20px;
-  padding: 10px;
-  padding-left: 15px;
-  border-radius: 8px;
+  margin-top: -1vw;
+  padding: 0.5vw;
+  padding-left: 0.75vw;
+  border-radius: 0.4vw;
 }
 
 .guest-details .detail-item {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 4px;
-  padding: 4px;
-  margin-bottom: 0px;
+  gap: 0.2vw;
+  padding: 0.2vw;
+  margin-bottom: 0vm;
 }
 
 .guest-details .detail-item strong {
@@ -109,7 +111,7 @@ table {
 
 th, td {
   border: 1px solid #555;
-  padding: 8px; /* Increased padding for readability */
+  padding: 0.4vw; /* Increased padding for readability */
   text-align: center;
 }
 
@@ -130,7 +132,7 @@ tr:hover td {
   background-color: rgba(255, 255, 255, 0.25); /* Hover effect for rows */
 }
 .payment-details{
-  padding-bottom: 5px;
+  padding-bottom: 0.25vw;
   border-bottom: 1px solid #34495e;
 }
 
@@ -138,15 +140,15 @@ tr:hover td {
 .status-container {
   display: flex;
   align-items: center;
-  gap: 8px; /* Adjust spacing between text and toggle */
+  gap: 0.4vw; /* Adjust spacing between text and toggle */
 }
 
 /* Adjust toggle switch size */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 40px; /* Reduced width of the switch */
-  height: 24px; /* Reduced height of the switch */
+  width: 2vw; /* Reduced width of the switch */
+  height: 1.2vw; /* Reduced height of the switch */
 }
 
 /* Hide default checkbox */
@@ -166,18 +168,18 @@ tr:hover td {
   bottom: 0;
   background-color: #ccc; /* Background color for inactive state */
   transition: .4s;
-  border-radius: 12px; /* Rounded corners */
+  border-radius: 0.6vw; /* Rounded corners */
 }
 
 /* Slider before element */
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px; /* Smaller height */
-  width: 18px; /* Smaller width */
+  height: 0.9vw; /* Smaller height */
+  width: 0.9vw; /* Smaller width */
   border-radius: 50%; /* Rounded circle */
-  left: 3px; /* Adjusted for alignment */
-  bottom: 3px; /* Adjusted for alignment */
+  left: 0.2vw; /* Adjusted for alignment */
+  bottom: 0.2vw; /* Adjusted for alignment */
   background-color: white;
   transition: .4s;
 }
@@ -189,7 +191,7 @@ input:checked + .slider {
 
 /* Move slider to the right when checked */
 input:checked + .slider:before {
-  transform: translateX(16px); /* Adjusted for the smaller size */
+  transform: translateX(0.8vw); /* Adjusted for the smaller size */
 }
 
 /* Optional: Add focus styles */
@@ -201,10 +203,10 @@ input:focus + .slider {
   right: 0;
   background: none;
   border: none;
-  margin-top: 19.5vw;
-  margin-right: 1.5vw;
+  margin-top: -2.5vw;
+  margin-right: 1vw;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1vw;
   color: #E72929;
   border-radius: 50%;
   transition: color 0.3s ease, transform 0.3s ease, background 0.3s ease;
@@ -249,16 +251,22 @@ td {
 td:hover {
   animation: pulse 1s ease-in-out infinite;
 }
-.edit-button{
+.edit-button1{
+  cursor: pointer;
   margin-top: 5vw;
+  background: none;
+  border: none;
+  font-size: 1vw;
+  color: white;
 }
 .clear-button {
+  margin-top: 5vw;
   background: none;
   border: none;
   color: #007bff;
-  font-size: 14px;
+  font-size: 0.7vw;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 0.5vw;
 }
 
 .clear-button:hover {
@@ -270,5 +278,40 @@ td:hover {
   align-items: center;
   justify-content: space-between;
 }
-
-
+.input-half-width {
+  width: 3%;
+  background: none;
+  border: none;
+  margin: 0;
+  border-color: none;
+  
+}
+.cancel-button1{
+  cursor: pointer;
+  color: white;
+  border-radius: 0.3vw;
+  padding: 0.3vw;
+  border: 1px;
+  border-color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  background-color: #f44336;
+  right: 0;
+  margin-right: 5vw;
+}
+.save-button1{
+  cursor: pointer;
+  color: white;
+  border-radius: 0.3vw;
+  padding: 0.3vw;
+  border: 1px;
+  border-color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  right: 0;
+  background-color: #3f51b5;
+  margin-right: 2.2vw;
+}
+.guest-id1{
+  font-size: 1.2vw;
+}
