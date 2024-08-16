@@ -406,7 +406,7 @@ const PayingGuestTable = ({
       style: {
         backgroundColor: "#3f51b5",
         color: "white",
-        minHeight: window.innerWidth < 768 ? "1.75vw" : "2.8vw",
+        minHeight: window.innerWidth < 768 ? "1.75vw" : "2.6vw",
         fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         fontWeight: "bold",
       },
@@ -415,13 +415,13 @@ const PayingGuestTable = ({
       style: {
         "&:nth-child(odd)": {
           backgroundColor: "#0d2136",
-          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
+          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.5vw",
           color: "white",
           fontSize: window.innerWidth < 768 ? "0.8vw" : "0.7vw",
         },
         "&:nth-child(even)": {
           backgroundColor: "#162c46",
-          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
+          minHeight: window.innerWidth < 768 ? "1.75vw" : "2.5vw",
           color: "white",
           fontSize: window.innerWidth < 768 ? "0.8vw" : "0.7vw",
         },
@@ -430,11 +430,11 @@ const PayingGuestTable = ({
     pagination: {
       style: {
         backgroundColor: "#3f51b5",
-        minHeight: "2.7vw",
         color: "white",
         display: "flex",
         justifyContent: "center",
-        fontSize: '0.7vw',
+        minHeight: "0",
+        height:"2.6vw",
       },
     },
     button: {

@@ -250,16 +250,12 @@
 .feLBvi span.__rdt_custom_sort_icon__ i, .feLBvi span.__rdt_custom_sort_icon__ svg {
  height: 0.9vw;
 }
-.iGNSWB {
- min-height: 2.7vw;
-}
 .status-box {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.4vw;
 }
-
 .status-image {
   width: 1vw; /* Adjust the size as needed */
   height: 1vw; /* Adjust the size as needed */
