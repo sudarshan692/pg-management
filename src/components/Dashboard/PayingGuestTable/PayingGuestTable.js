@@ -4,36 +4,37 @@ import { FaPlus, FaArrowUp, FaExclamationTriangle } from "react-icons/fa";
 import LoadingSpinner from "../../shared/LoadingSpinner"; // Adjust the path as needed
 import PaymentStatusDialog from "../PaymentStatusDialog/PaymentStatusDialog";
 import "./payingGuestTable.css";
+import completedImage from "../../../assets/completed.png";
+import inProgressImage from '../../../assets/inProgress.png';
+import notPaidImage from '../../../assets/NotPaid.png';
 
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>There are no records to display.</div>
 );
 
 const StatusBoxedCell = ({ status }) => {
-  let boxColor = "red";
-  let displayText = "NP";
+  let imageSrc = notPaidImage; // Default image
+  let displayText = "Not Paid";
+  let imageClass = "status-image"; // Default class
 
   if (status === "Done") {
-    boxColor = "green";
-    displayText = "D";
+    imageSrc = completedImage;
+    displayText = "Done";
   } else if (status === "Partial") {
-    boxColor = "yellow";
-    displayText = "P";
+    imageSrc = inProgressImage;
+    displayText = "Partial";
+  } else if (status === "Not Paid") {
+    imageClass = "status-image-not-paid"; // Specific class for "Not Paid"
   }
 
   return (
-    <div className={`box status-box ${boxColor}`}>
-      <div className="status-label">{displayText}</div>
-      <div className="status-text">
-        {displayText === "D"
-          ? "Done"
-          : displayText === "P"
-          ? "Partial"
-          : "Not Paid"}
-      </div>
+    <div className="status-box">
+      <img src={imageSrc} alt={displayText} className={imageClass} />
+      <div className="status-text">{displayText}</div>
     </div>
   );
 };
+
 
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   const isZeroDeposit = value === 0;
@@ -416,13 +417,13 @@ const PayingGuestTable = ({
           backgroundColor: "#0d2136",
           minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
           color: "white",
-          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
+          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.7vw",
         },
         "&:nth-child(even)": {
           backgroundColor: "#162c46",
           minHeight: window.innerWidth < 768 ? "1.75vw" : "2.7vw",
           color: "white",
-          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
+          fontSize: window.innerWidth < 768 ? "0.8vw" : "0.7vw",
         },
       },
     },

@@ -253,3 +253,26 @@
 .iGNSWB {
  min-height: 2.7vw;
 }
+.status-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4vw;
+}
+
+.status-image {
+  width: 1vw; /* Adjust the size as needed */
+  height: 1vw; /* Adjust the size as needed */
+  margin-right: 0.4vw;
+}
+.status-image-not-paid {
+  margin-right: 0.18vw;
+  margin-left: -0.2vw;
+  width: 1.4vw; /* Increased width for "Not Paid" */
+  height: 1.4vw; /* Increased height for "Not Paid" */
+}
+
+.status-text {
+  font-family: Roboto, Helvetica Neue, sans-serif;
+  color: #fff; /* Adjust text color if needed */
+}
