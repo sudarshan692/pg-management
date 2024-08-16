@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { db, auth } from "../../shared/firebase";
 import Modal from "react-modal";
 import "./addPayingGuestModal.css";
-import LoadingSpinner from '../../shared/LoadingSpinner';
+import LoadingSpinner from "../../shared/LoadingSpinner";
 
-const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onSnackbarOpen, onDataSaved }) => {
+const AddPayingGuestModal = ({
+  isOpen,
+  onRequestClose,
+  selectedPGId,
+  pgData,
+  onSnackbarOpen,
+  onDataSaved,
+  payingGuests,
+}) => {
   const [guestData, setGuestData] = useState({
     guestName: "",
     guestMobileNo: "",
@@ -24,35 +32,9 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
   });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      // Any initialization when modal opens
-    }
-  }, [isOpen]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setGuestData({ ...guestData, [name]: type === 'checkbox' ? checked : value });
-  };
-
-  const generateGuestID = async () => {
-    const counterDocRef = db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/Counters`).doc('guestIDCounter');
-    try {
-      const newID = await db.runTransaction(async (transaction) => {
-        const counterDoc = await transaction.get(counterDocRef);
-        let currentID = 1;
-        if (counterDoc.exists) {
-          currentID = counterDoc.data().currentID || 1;
-        }
-        const nextID = currentID + 1;
-        transaction.set(counterDocRef, { currentID: nextID });
-        return currentID;
-      });
-      return newID;
-    } catch (error) {
-      console.error("Error generating guest ID:", error);
-      throw error;
-    }
+    setGuestData({ ...guestData, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleSubmit = async (e) => {
@@ -60,33 +42,25 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
     setLoading(true);
 
     try {
-      // Fetch and log current guest count
-      const guestCountSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/Counters`).doc('guestIDCounter').get();
-      const currentGuestCount = guestCountSnapshot.exists ? guestCountSnapshot.data().currentID : 0;
+      const maxCustomers = pgData.maxCustomers || 0;
+      const currentGuestCount = payingGuests.length; // Get the number of existing guests
 
-      // Fetch and log max customers
-      const pgSnapshot = await db.collection(`users/${auth.currentUser.uid}/PGs`).doc(selectedPGId).get();
-      const pgDetails = pgSnapshot.exists ? pgSnapshot.data().PGDetails : {};
-      const maxCustomers = pgDetails.maxCustomers || 0;
+      // Initialize guestID based on the current count
+      const guestID = currentGuestCount + 1;
 
-      console.log(`Current Guest Count: ${currentGuestCount}`);
-      console.log(`Max Customers: ${maxCustomers}`);
-
-      // Check if the currentGuestCount exceeds maxCustomers before adding the new guest
-      if (currentGuestCount >= maxCustomers) {
+      // Check if the guestID exceeds maxCustomers before adding the new guest
+      if (guestID >= maxCustomers) {
         onSnackbarOpen("Cannot add more guests. Max customer limit reached.", "error");
         setLoading(false);
         return;
       }
+
       const roomTypeMap = {
-        "Single": "S",
-        "Double": "D",
-        "Triple": "T"
+        Single: "S",
+        Double: "D",
+        Triple: "T",
       };
-      const guestID = await generateGuestID();
-      if (guestID === undefined || guestID === null) {
-        throw new Error("Failed to generate a valid guestID.");
-      }
+
       const payingGuestMap = {
         guestID,
         guestName: guestData.guestName,
@@ -107,21 +81,11 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
       };
 
       // Add the new guest to Firestore
-      const docRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
-      const newGuest = { id: docRef.id, ...payingGuestMap };
+      const newGuestRef = await db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).add({ payingGuestMap });
 
-      // Update guest count
-      const newGuestCount = currentGuestCount + 1;
-
-      console.log(`New Guest Count: ${newGuestCount}`);
-
-      // Check if the newGuestCount exceeds maxCustomers after adding the guest
-      if (newGuestCount > maxCustomers) {
-        onSnackbarOpen("Guest added, but max customer limit exceeded!", "warning");
-      } else {
-        onSnackbarOpen("Paying guest added successfully!", "success");
-      }
-      onDataSaved(newGuest); // Pass the new guest to the Dashboard component
+      // Optimistically update UI
+      onSnackbarOpen("Paying guest added successfully!", "success");
+      onDataSaved({ id: newGuestRef.id, ...payingGuestMap });
       onRequestClose();
     } catch (error) {
       console.error("Error saving paying guest data:", error.message);
@@ -134,7 +98,6 @@ const AddPayingGuestModal = ({ isOpen, onRequestClose, selectedPGId, pgData, onS
   const handleClose = () => {
     onRequestClose();
   };
-
   return (
     <>
       <Modal

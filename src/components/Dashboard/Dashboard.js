@@ -277,7 +277,7 @@ const Dashboard = () => {
         <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
       </div>
       <Modal isOpen={payingGuestModalIsOpen} onRequestClose={closeAddPayingGuestModal} contentLabel="Add Paying Guest Modal">
-        <AddPayingGuestModal isOpen={payingGuestModalIsOpen} onRequestClose={closeAddPayingGuestModal} selectedPGId={pgId} pgData={pgData} onSnackbarOpen={handleSnackbarOpen} onDataSaved={handleDataUpdate}/>
+        <AddPayingGuestModal isOpen={payingGuestModalIsOpen} onRequestClose={closeAddPayingGuestModal} selectedPGId={pgId} pgData={pgData} onSnackbarOpen={handleSnackbarOpen} onDataSaved={handleDataUpdate} payingGuests={payingGuests}/>
       </Modal>
       <Modal isOpen={paymentDialogOpen} onRequestClose={closeAddPaymentDialog} contentLabel="Add Payment Modal">
         <AddPaymentDialog isOpen={paymentDialogOpen} onRequestClose={closeAddPaymentDialog} selectedGuest={selectedGuest} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onPaymentUpdate={handlePaymentUpdate}/>
