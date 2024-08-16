@@ -162,7 +162,7 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              height: "calc(100% - 64px)",
+              height: "calc(100% - 3.2vw)",
               overflow: "hidden",
               backgroundColor: "#0d1117",
             }}
@@ -183,9 +183,9 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
               >
                 <BarChart
                   width={1200}
-                  height={400}
+                  height={450}
                   data={paymentData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                  margin={{ top: 40, right: 30, left: 20, bottom: 10 }}
                 >
                   <CartesianGrid stroke="#ccc" strokeDasharray="1 1" />
                   <XAxis
