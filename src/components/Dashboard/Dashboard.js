@@ -208,9 +208,9 @@ const Dashboard = () => {
     });
   };
 
-  const handleAddPgDetailsClick = () => {
-    setIsPgDetailsDialogOpen(true);
-  };
+  // const handleAddPgDetailsClick = () => {
+  //   setIsPgDetailsDialogOpen(true);
+  // };
 
   const handlePgDetailsDialogClose = () => {
     setIsPgDetailsDialogOpen(false);
@@ -259,9 +259,12 @@ const Dashboard = () => {
         <span className="pg-number-dashboard">{pgData.number}</span>
         <span className="heading-text">{pgData.name} Management Center</span>
       </div>
-      <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button>
+      {/* <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button> */}
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
-      <button className="matrix" onClick={toggleRoomMatrixDialog}>Available Beds</button>
+      <div>
+        <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={handleOpenDialog}>Payment Bar Chart</button>
+        <button className="matrix" onClick={toggleRoomMatrixDialog}>Available Beds</button>
+      </div>
       <RoomMatrixDialog open={isRoomMatrixDialogOpen} onClose={toggleRoomMatrixDialog} pgDetails={pgDetails} payingGuests={payingGuests}/>
       <ChangePasswordDialog handleLogout={handleLogout} open={changePasswordDialogOpen} onClose={closeChangePasswordDialog}/>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
@@ -299,12 +302,12 @@ const Dashboard = () => {
           onSave={handleSavePgDetails}
         />
       )}
-     <button variant="contained" color="primary" onClick={handleOpenDialog}>
-        Show Payment Bar Chart
-      </button>
+
       <PaymentBarChartDialog
         isOpen={isDialogOpen}
         onClose={handleCloseDialog1}
+        onPaymentUpdate={handlePaymentUpdate}
+        payingGuests={payingGuests}
       />
     </div>
   );
