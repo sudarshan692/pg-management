@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Overlay color */
+  background: rgba(138, 134, 134, 0.7); /* Overlay color */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,17 +12,17 @@
 }
 
 .room-matrix-dialog {
-  background-color: #1e2a38; /* Darker background color for modern look */
-  border-radius: 12px; /* Rounded corners */
+  background-color: #0d1117; /* Darker background color for modern look */
+  border-radius: 0.6vw; /* Rounded corners */
   border: none;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Larger shadow for better depth */
-  padding: 24px;
+  box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3); /* Larger shadow for better depth */
+  padding: 1.2vw;
   box-sizing: border-box;
   position: relative;
   min-width: 28vw;
   min-height: 10vw;
   max-width: 80vw; /* Ensure it doesn't exceed viewport width */
-  max-height: 80vh; /* Ensure it doesn't exceed viewport height */
+  max-height: 40vw; /* Ensure it doesn't exceed viewport height */
   overflow: hidden; /* Hide overflow on outer container */
   display: flex;
   flex-direction: column;
@@ -33,71 +33,73 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 1vw;
   position: sticky;
   top: 0;
-  background-color: #1e2a38; /* Match background color */
-  padding-right: 40px; /* Space for close button */
+  background-color: #0d1117; /* Match background color */
+  padding-right: 2vw; /* Space for close button */
   z-index: 1001;
-  border-bottom: 2px solid #2c3e50; /* Border for separation */
+  border-bottom: 1px solid #2c3e50; /* Border for separation */
 }
 
 .dialog-title {
-  font-size: 28px;
+  font-size: 1.4vw;
   font-weight: 600;
+  background-color: #0d1117;;
 }
 
 .close-button1 {
-  margin-right: -20px;
-  margin-top: -25px;
+  margin-right: -1vw;
+  margin-top: -1.25vw;
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 0.75vw;
+  right: 0.75vw;
   background: none;
-  color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  color: #3f51b5;
+  border: 1px solid #3f51b5;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 1.5vw;
+  height: 1.5vw;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 1vw;
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .close-button1:hover {
-  background: #f5f5f5;
-  color: #1e2a38; /* Match the card background */
-  border-color: #1e2a38; /* Match the card background */
+  background: #3f51b5;
+  color: #0d1117; /* Match the card background */
+  border-color: #0d1117; /* Match the card background */
 }
 
 .legend {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-  font-size: 14px;
+  margin-bottom: 1vw;
+  font-size: 0.7vw;
   position: sticky; /* Make legend sticky */
-  top: 70px; /* Adjust to position below header */
-  background-color: #1e2a38; /* Match dialog background color */
-  padding: 10px 0;
+  top: 3.5vw; /* Adjust to position below header */
+  background-color: #0d1117; /* Match dialog background color */
+  padding: 0.5vw 0;
   z-index: 1000; /* Ensure it sits above other content */
 }
 
 .legend-item {
-  margin-top: -27px;
+  font-size: 0.8vw;
+  margin-top: -1.4vw;
   color: #d3e0e9;
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 1vw;
 }
 
 .color-box {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px; /* Slightly rounded corners */
-  margin-right: 8px;
+  width: 1vw;
+  height: 1vw;
+  border-radius: 0.2vw; /* Slightly rounded corners */
+  margin-right: 0.4vw;
 }
 
 .color-box.available {
@@ -109,33 +111,33 @@
 }
 
 .totals {
-  margin-top: 10px;
-  font-size: 16px;
+  margin-top: 0.5vw;
+  font-size: 0.8vw;
   color: #d3e0e9;
   background-color: #2c3e50;
-  padding: 10px;
-  border-radius: 8px; /* Rounded corners */
-  border: 2px solid #2c3e50; /* Add border */
+  padding: 0.5vw;
+  border-radius: 0.4vw; /* Rounded corners */
+  border: 1px solid #2c3e50; /* Add border */
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Space between items */
+  gap: 0.5vw; /* Space between items */
   position: sticky; /* Make totals sticky */
   top: 0; /* Stick to the top of the dialog */
-  background-color: #1e2a38; /* Match dialog background color */
+  background-color: #010409; /* Match dialog background color */
   z-index: 1001; /* Ensure it sits above other content */
-  margin-bottom: 20px; /* Space for room matrix below */
+  margin-bottom: 1vw; /* Space for room matrix below */
 }
 
 .totals div {
-  font-size: 13.5px;
+  font-size: 0.8vw;
   display: flex;
   justify-content: space-between; /* Align text to the left and values to the right */
-  padding: 0 10px;
+  padding: 0 0.5vw;
 }
 
 .totals div:first-child {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 0.9vw;
 }
 
 .totals .value {
@@ -157,37 +159,38 @@
 .room-matrix {
   display: flex;
   flex-direction: column; /* Stack floors vertically */
-  gap: 10px; /* Space between floors */
+  gap: 0.5vw; /* Space between floors */
   overflow-x: auto; /* Horizontal scrolling for floors */
   overflow-y: auto; /* Vertical scrolling for content */
-  padding-right: 20px; /* Add padding to avoid content touching the scrollbar */
+  padding-right: 1vw; /* Add padding to avoid content touching the scrollbar */
 }
 
 .floor1 {
   display: flex;
   flex-direction: row; /* Arrange rooms in a row */
-  gap: 10px; /* Space between rooms */
+  gap: 0.5vw; /* Space between rooms */
 }
 
 .room-container {
-  background-color: #34495e; /* Darker blue for rooms */
+  background-color: rgb(33, 38, 45); /* Darker blue for rooms */
   display: flex;
   flex-direction: column;
-  border-radius: 8px; /* Rounded corners */
-  border: 1px solid #2c3e50;
+  border-radius: 0.4vw; /* Rounded corners */
+  border: 1px solid rgb(48, 54, 61);
   text-align: center;
-  min-width: 150px; /* Adjust width as needed */
-  height: 130px; /* Adjust height as needed */
+  min-width: 7.5vw; /* Adjust width as needed */
+  height: 6.5vw; /* Adjust height as needed */
   box-sizing: border-box;
-  margin: 5px; /* Space between rooms */
+  margin: 0.25vw; /* Space between rooms */
   overflow: hidden; /* Prevent overflow of contents */
 }
 
 .room-header {
+  font-size: 0.9vw;
   font-weight: 700;
   background-color: #caa3a3; /* White background for header */
   color: rgb(39, 14, 14); /* Dark text color */
-  padding: 8px;
+  padding: 0.4vw;
   border-bottom: 1px solid #2c3e50; /* Border for separation */
 }
 
@@ -197,20 +200,20 @@
   flex-wrap: wrap; /* Allow compartments to wrap if needed */
   justify-content: center; /* Center compartments horizontally */
   align-items: center; /* Center compartments vertically */
-  height: calc(100% - 40px); /* Adjust height to fit in room-container */
-  margin: 5px 0;
+  height: calc(100% - 2vw); /* Adjust height to fit in room-container */
+  margin: 0.25vw 0;
   font-weight: 600;
   overflow: hidden; /* Prevent overflow of contents */
 }
 
 .room-compartment {
-  margin: 4px;
-  padding: 4px;
-  border-radius: 8px;
+  margin: 0.2vw;
+  padding: 0.2vw;
+  border-radius: 0.4vw;
   text-align: center; /* Center text within compartments */
   box-sizing: border-box; /* Ensure padding and border are included in width and height */
-  min-width: 30px; /* Minimum width for compartments */
-  height: 30px; /* Height for compartments */
+  min-width: 1.5vw; /* Minimum width for compartments */
+  height: 1.5vw; /* Height for compartments */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,45 +221,52 @@
 
 /* Styles for available and filled compartments */
 .room-compartment.available {
-  margin-top: -40px;
-  background-color: #f39c12; /* Modern orange color */
+  font-size: 0.65vw;
+  font-weight: 10;
+  margin-top: -2vw;
+  background-color: #f39c12;
+  border: 1px solid #ffffff;/* Modern orange color */
 }
 
 .room-compartment.filled {
+  font-size: 0.65vw;
+  font-weight: 10;
   background-color: #27ae60;
-  margin-top: -40px;
+  border: 1px solid #ffffff;
+  margin-top: -2vw;
   color: #ffffff;
 }
 .guest-ids {
-  margin-top: 40px; /* Adjust spacing as needed */
+  margin-top: 2vw; /* Adjust spacing as needed */
 }
 
 .guest-id {
-  margin-left: -50px;
-  font-size: 12px; /* Small font size */
+  font-weight: 10;
+  margin-left: -2.5vw;
+  font-size: 0.6vw; /* Small font size */
   color: #fff; /* White text for contrast */
 
 }
 .total-beds{
   font-weight: bold;
-  color: #27ae60;
+  color: #238636; 
 }
 .info {
   position: absolute;
   right: 0;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  background-color: #2c3e50; /* Darker background color for contrast */
-  border: 2px solid #34495e; /* Border around the box */
-  border-radius: 8px; /* Rounded corners */
-  padding: 10px; /* Padding inside the box */
+  margin-top: 0.5vw;
+  margin-bottom: 0.25vw;
+  background-color: rgba(187, 128, 9, 0.15); /* Darker background color for contrast */
+  border: 1px solid rgba(187, 128, 9, 0.4); /* Border around the box */
+  border-radius: 0.4vw; /* Rounded corners */
+  padding: 0.5vw; /* Padding inside the box */
   color: #d3e0e9; /* Light text color */
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Create three equal-width columns */
   grid-template-rows: repeat(2, auto); /* Create two rows */
-  gap: 8px; /* Space between items */
-  font-size: 11px; /* Font size for readability */
-  max-width: 200px; /* Limit width of the info box */
+  gap: 0.4vw; /* Space between items */
+  font-size: 0.5vw; /* Font size for readability */
+  max-width: 10vw; /* Limit width of the info box */
   opacity: 0; /* Initial opacity */
   animation: bounceIn 0.6s ease-out forwards; /* Apply the bounce animation */
 }
@@ -266,11 +276,11 @@
 @keyframes bounceIn {
   0% {
     opacity: 0;
-    transform: scale(0.9) translateY(-30px);
+    transform: scale(0.9) translateY(-1.5vw);
   }
   50% {
     opacity: 1;
-    transform: scale(1.05) translateY(15px);
+    transform: scale(1.05) translateY(0.75vw);
   }
   100% {
     opacity: 1;

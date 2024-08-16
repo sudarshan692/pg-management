@@ -1,5 +1,6 @@
+// ChangePasswordDialog.js
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar, Alert} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar, Alert } from '@mui/material';
 import { auth } from '../../shared/firebase';
 import firebase from 'firebase/compat/app';
 import LoadingSpinner from '../../shared/LoadingSpinner';
@@ -61,43 +62,49 @@ const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="change-password-dialog">
-      <DialogTitle className='dialog-title'>Change Password</DialogTitle>
-      <DialogContent>
-        {loading && <div className="loading-overlay"><LoadingSpinner /></div>}
-        <TextField
-          margin="normal"
-          fullWidth
-          label="Current Password"
-          type="password"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          label="New Password"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">Cancel</Button>
-        <Button onClick={handleChangePassword} color="primary">Change Password</Button>
-      </DialogActions>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        className="snackbar"
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Dialog>
+    <>
+      {/* Overlay */}
+      {open && <div className="change-password-overlay"></div>}
+
+      {/* Dialog */}
+      <Dialog open={open} onClose={onClose} className="change-password-dialog">
+        <DialogTitle className='dialog-title'>Change Password</DialogTitle>
+        <DialogContent>
+          {loading && <div className="loading-overlay"><LoadingSpinner /></div>}
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Current Password"
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="New Password"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">Cancel</Button>
+          <Button onClick={handleChangePassword} color="primary">Change Password</Button>
+        </DialogActions>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          className="snackbar"
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Dialog>
+    </>
   );
 };
 

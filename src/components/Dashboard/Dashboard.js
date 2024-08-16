@@ -13,6 +13,7 @@ import LoadingSpinner from "../shared/LoadingSpinner"; // Ensure you have a load
 import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
 import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
+import PaymentBarChartDialog from "./PaymentBarChartDialog/PaymentBarChartDialog";
 
 Modal.setAppElement("#root");
 
@@ -32,16 +33,14 @@ const Dashboard = () => {
   const [isRoomMatrixDialogOpen, setIsRoomMatrixDialogOpen] = useState(false);
   const [guestStatuses, setGuestStatuses] = useState({});
   const [isPaymentStatusDialogOpen, setIsPaymentStatusDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
   const previousPgIdRef = useRef(null);
-
-  // Use pgDetails from location state
   const pgDetails = location.state?.pgDetails || {};
-  // const pgData1 = location.state?.pgData || {};
 
   const toggleRoomMatrixDialog = () => {
     setIsRoomMatrixDialogOpen((prevState) => !prevState);
@@ -209,9 +208,9 @@ const Dashboard = () => {
     });
   };
 
-  const handleAddPgDetailsClick = () => {
-    setIsPgDetailsDialogOpen(true);
-  };
+  // const handleAddPgDetailsClick = () => {
+  //   setIsPgDetailsDialogOpen(true);
+  // };
 
   const handlePgDetailsDialogClose = () => {
     setIsPgDetailsDialogOpen(false);
@@ -246,107 +245,43 @@ const Dashboard = () => {
     handlePgDetailsDialogClose();
   };
 
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog1 = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
         <span className="pg-number-dashboard">{pgData.number}</span>
         <span className="heading-text">{pgData.name} Management Center</span>
       </div>
-      <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>
-        Add PG Details
-      </button>
-      <button
-        className="change-password-link"
-        onClick={openChangePasswordDialog}
-      >
-        Change Password
-      </button>
-      <button className="matrix" onClick={toggleRoomMatrixDialog}>
-        Available Beds
-      </button>
-
-      <RoomMatrixDialog
-        open={isRoomMatrixDialogOpen}
-        onClose={toggleRoomMatrixDialog}
-        pgDetails={pgDetails}
-        payingGuests={payingGuests}
-      />
-
-      <ChangePasswordDialog
-        handleLogout={handleLogout}
-        open={changePasswordDialogOpen}
-        onClose={closeChangePasswordDialog}
-      />
-      <button className="logout-btn" onClick={handleLogout}>
-        Logout
-      </button>
-
-      {loading && (
-        <div className="overlay">
-          <LoadingSpinner />
-        </div>
-      )}
-
-      <PayingGuestTable
-        payingGuests={payingGuests}
-        onAddPayment={openAddPaymentDialog}
-        onPaymentUpdate={handlePaymentUpdate}
-        guestStatuses={guestStatuses} 
-        selectedPGId={pgId}
-        onSnackbarOpen={handleSnackbarOpen}
-        onToggleStatus={handleToggleStatus} 
-      />
-
-{isPaymentStatusDialogOpen && selectedGuest && (
-        <PaymentStatusDialog
-          guest={selectedGuest}
-          onClose={handleCloseDialog}
-          onToggleStatus={handleToggleStatus}
-          guestStatuses={guestStatuses}
-          setGuestData={setPayingGuests} 
-          selectedPGId={pgId}
-        />
-      )}
-
-      <div className="add-paying-guest-container">
-        <button
-          className="add-paying-guest-btn"
-          onClick={openAddPayingGuestModal}
-        >
-          Add Paying Guest
-        </button>
+      {/* <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button> */}
+      <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
+      <div>
+        <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={handleOpenDialog}>Payment Bar Chart</button>
+        <button className="matrix" onClick={toggleRoomMatrixDialog}>Available Beds</button>
       </div>
-
-      <Modal
-        isOpen={payingGuestModalIsOpen}
-        onRequestClose={closeAddPayingGuestModal}
-        contentLabel="Add Paying Guest Modal"
-      >
-        <AddPayingGuestModal
-          isOpen={payingGuestModalIsOpen}
-          onRequestClose={closeAddPayingGuestModal}
-          selectedPGId={pgId}
-          pgData={pgData}
-          onSnackbarOpen={handleSnackbarOpen}
-          onDataSaved={handleDataUpdate}
-        />
+      <RoomMatrixDialog open={isRoomMatrixDialogOpen} onClose={toggleRoomMatrixDialog} pgDetails={pgDetails} payingGuests={payingGuests}/>
+      <ChangePasswordDialog handleLogout={handleLogout} open={changePasswordDialogOpen} onClose={closeChangePasswordDialog}/>
+      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
+      <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog} onPaymentUpdate={handlePaymentUpdate} guestStatuses={guestStatuses} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onToggleStatus={handleToggleStatus}/>
+      {isPaymentStatusDialogOpen && selectedGuest && (
+        <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} onToggleStatus={handleToggleStatus} guestStatuses={guestStatuses} setGuestData={setPayingGuests} selectedPGId={pgId}/>
+      )}
+      <div className="add-paying-guest-container">
+        <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
+      </div>
+      <Modal isOpen={payingGuestModalIsOpen} onRequestClose={closeAddPayingGuestModal} contentLabel="Add Paying Guest Modal">
+        <AddPayingGuestModal isOpen={payingGuestModalIsOpen} onRequestClose={closeAddPayingGuestModal} selectedPGId={pgId} pgData={pgData} onSnackbarOpen={handleSnackbarOpen} onDataSaved={handleDataUpdate}/>
       </Modal>
-
-      <Modal
-        isOpen={paymentDialogOpen}
-        onRequestClose={closeAddPaymentDialog}
-        contentLabel="Add Payment Modal"
-      >
-        <AddPaymentDialog
-          isOpen={paymentDialogOpen}
-          onRequestClose={closeAddPaymentDialog}
-          selectedGuest={selectedGuest}
-          selectedPGId={pgId}
-          onSnackbarOpen={handleSnackbarOpen}
-          onPaymentUpdate={handlePaymentUpdate}
-        />
+      <Modal isOpen={paymentDialogOpen} onRequestClose={closeAddPaymentDialog} contentLabel="Add Payment Modal">
+        <AddPaymentDialog isOpen={paymentDialogOpen} onRequestClose={closeAddPaymentDialog} selectedGuest={selectedGuest} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onPaymentUpdate={handlePaymentUpdate}/>
       </Modal>
-
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
@@ -367,6 +302,13 @@ const Dashboard = () => {
           onSave={handleSavePgDetails}
         />
       )}
+
+      <PaymentBarChartDialog
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog1}
+        onPaymentUpdate={handlePaymentUpdate}
+        payingGuests={payingGuests}
+      />
     </div>
   );
 };

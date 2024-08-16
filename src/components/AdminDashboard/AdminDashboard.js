@@ -18,6 +18,11 @@ const AdminDashboard = () => {
   const [pgName, setPgName] = useState("");
   const [pgAddress, setPgAddress] = useState("");
   const [pgMobile, setPgMobile] = useState("");
+  const [pgTotalFloors, setPgTotalFloors] = useState("");
+  const [pgTotalRoomsPerFloor, setPgTotalRoomsPerFloor] = useState("");
+  const [pgSingleBedsPerRoom, setPgSingleBedsPerRoom] = useState("");
+  const [pgDoubleSharingBedsPerRoom, setPgDoubleSharingBedsPerRoom] = useState("");
+  const [pgTripleSharingBedsPerRoom, setPgTripleSharingBedsPerRoom] = useState("");
   const [pgMobileError, setPgMobileError] = useState("");
   const [loading, setLoading] = useState(false);
   const [pgData, setPgData] = useState([]);
@@ -97,6 +102,7 @@ const AdminDashboard = () => {
     }
   };
 
+
   const addPG = async () => {
     try {
       setLoading(true);
@@ -109,6 +115,11 @@ const AdminDashboard = () => {
           name: pgName,
           address: pgAddress,
           mobile: pgMobile,
+          totalFloors: Number(pgTotalFloors),
+          totalRoomsPerFloor: Number(pgTotalRoomsPerFloor),
+          singleBedsPerRoom: Number(pgSingleBedsPerRoom),
+          doubleSharingBedsPerRoom: Number(pgDoubleSharingBedsPerRoom),
+          tripleSharingBedsPerRoom: Number(pgTripleSharingBedsPerRoom),
         }
       });
 
@@ -124,6 +135,11 @@ const AdminDashboard = () => {
           name: pgName,
           address: pgAddress,
           mobile: pgMobile,
+          totalFloors: Number(pgTotalFloors),
+          totalRoomsPerFloor: Number(pgTotalRoomsPerFloor),
+          singleBedsPerRoom: Number(pgSingleBedsPerRoom),
+          doubleSharingBedsPerRoom: Number(pgDoubleSharingBedsPerRoom),
+          tripleSharingBedsPerRoom: Number(pgTripleSharingBedsPerRoom),
         }
       });
 
@@ -135,6 +151,11 @@ const AdminDashboard = () => {
       setPgName("");
       setPgAddress("");
       setPgMobile("");
+      setPgTotalFloors("");
+      setPgTotalRoomsPerFloor("");
+      setPgSingleBedsPerRoom("");
+      setPgDoubleSharingBedsPerRoom("");
+      setPgTripleSharingBedsPerRoom("");
       setSnackbarMessage("PG added successfully");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -287,6 +308,46 @@ const AdminDashboard = () => {
           placeholder="PG Address"
           value={pgAddress}
           onChange={(e) => setPgAddress(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="number"
+          placeholder="Total Floors"
+          value={pgTotalFloors}
+          onChange={(e) => setPgTotalFloors(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="number"
+          placeholder="Total Rooms Per Floor"
+          value={pgTotalRoomsPerFloor}
+          onChange={(e) => setPgTotalRoomsPerFloor(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="number"
+          placeholder="Single Beds Per Room"
+          value={pgSingleBedsPerRoom}
+          onChange={(e) => setPgSingleBedsPerRoom(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="number"
+          placeholder="Double Sharing Beds Per Room"
+          value={pgDoubleSharingBedsPerRoom}
+          onChange={(e) => setPgDoubleSharingBedsPerRoom(e.target.value)}
+          required
+        />
+        <input
+          className='inputbox5'
+          type="number"
+          placeholder="Triple Sharing Beds Per Room"
+          value={pgTripleSharingBedsPerRoom}
+          onChange={(e) => setPgTripleSharingBedsPerRoom(e.target.value)}
           required
         />
         <button className='add-pg' type="submit" disabled={loading}>Add PG</button>
