@@ -55,7 +55,7 @@
 .change-password-link {
   font-size: 0.8vw;
   position: absolute;
-  left: 0;
+  right: 0;
   color: #007bff;
   text-decoration: none;
   font-weight: bold;
@@ -120,16 +120,7 @@
   background-color: #f44336;
   color: white;
 }
-.matrix{
-  width: 8vw;
-  padding: 0.55vw;
-  background-color: #3f51b5;
-  color: white;
-  border: none;
-  border-radius: 0.2vw;
-  font-size: 0.8vw;
-  cursor: pointer;
-}
+
 .room-matrix-dialog {
   position: relative;
   padding: 1vw;
@@ -144,10 +135,35 @@
   margin-top: -5vw;
   margin-right: 5vw;
 }
-.payment-bar-chart-btn{
-  margin-top: 2vw;
-  margin-right: 0.5vw;
-  margin-left: 61.4vw;
+
+.bottom-aligned-container {
+  margin-top: 0.5vw;
+  display: flex;
+  justify-content: flex-start; /* Align items to the start */
+  align-items: last baseline; /* Center items vertically */
+
+}
+
+.status-card {
+  order: 1; /* Position this on the leftmost side */
+  margin: 0 0.5vw; /* Space around each item */
+}
+
+.payment-bar-chart-btn {
+  margin-right: 0.45vw;
+  margin-left: 51vw;
+  order: 2; /* Position this to the right of the status card */
+  padding: 0.55vw;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 0.2vw;
+  font-size: 0.8vw;
+  cursor: pointer;
+}
+
+.matrix {
+  order: 3; /* Position this next to the payment bar chart button */
   padding: 0.55vw;
   background-color: #3f51b5;
   color: white;

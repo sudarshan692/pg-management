@@ -1,0 +1,60 @@
+.status-card {
+    border: 1px solid rgba(187, 128, 9, 0.4);
+    margin-left: 0.5vw;
+    margin-bottom: 0;
+    background-color: rgba(187, 128, 9, 0.15);
+    padding: 0.1vw;
+    border-radius: 0.4vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    padding-bottom: 0.5vw;
+    color: #d3e3fd;
+    width: 10.1vw;
+    font-family: Arial, sans-serif;
+  }
+  
+  .status-card-header {
+    font-size: 0.7vw;
+    margin-top: -0.6vw;
+    text-align: center;
+    color: #d3e3fd;
+  }
+  
+  .status-card-body {
+    font-size: 0.6vw;
+    margin-top: -0.5vw;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .status-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .status-card-heading {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .status-card-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  .done{
+    font-weight: bold;
+    color: rgb(22, 255, 0);;
+  }
+  .partial{
+    color: orange;
+    font-weight: bold;
+  }
+  .not-paid{
+    color: #E72929;
+    font-weight: bold;
+  }
+  .current-month{
+    color: #2fa4ff;
+  }

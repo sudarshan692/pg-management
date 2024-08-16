@@ -14,6 +14,7 @@ import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
 import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
 import PaymentBarChartDialog from "./PaymentBarChartDialog/PaymentBarChartDialog";
+import StatusCard from "./StatusCard/StatusCard";
 
 Modal.setAppElement("#root");
 
@@ -255,13 +256,15 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-page">
+      
       <div className="dashboard-nav-heading">
         <span className="pg-number-dashboard">{pgData.number}</span>
         <span className="heading-text">{pgData.name} Management Center</span>
       </div>
       {/* <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button> */}
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
-      <div>
+      <div className="bottom-aligned-container">
+        <StatusCard  payingGuests={payingGuests} />
         <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={handleOpenDialog}>Payment Bar Chart</button>
         <button className="matrix" onClick={toggleRoomMatrixDialog}>Available Beds</button>
       </div>
