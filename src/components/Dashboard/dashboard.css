@@ -142,3 +142,7 @@
 .room-matrix-overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
+.chart-btn{
+  margin-top: -5vw;
+  margin-right: 5vw;
+}

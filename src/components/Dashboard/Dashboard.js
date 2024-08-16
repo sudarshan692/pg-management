@@ -13,6 +13,7 @@ import LoadingSpinner from "../shared/LoadingSpinner"; // Ensure you have a load
 import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
 import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
+import PaymentBarChartDialog from "./PaymentBarChartDialog/PaymentBarChartDialog";
 
 Modal.setAppElement("#root");
 
@@ -32,16 +33,14 @@ const Dashboard = () => {
   const [isRoomMatrixDialogOpen, setIsRoomMatrixDialogOpen] = useState(false);
   const [guestStatuses, setGuestStatuses] = useState({});
   const [isPaymentStatusDialogOpen, setIsPaymentStatusDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
   const [pgData] = useState(location.state?.pgDetails || {});
   const previousPgIdRef = useRef(null);
-
-  // Use pgDetails from location state
   const pgDetails = location.state?.pgDetails || {};
-  // const pgData1 = location.state?.pgData || {};
 
   const toggleRoomMatrixDialog = () => {
     setIsRoomMatrixDialogOpen((prevState) => !prevState);
@@ -246,6 +245,14 @@ const Dashboard = () => {
     handlePgDetailsDialogClose();
   };
 
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog1 = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-nav-heading">
@@ -292,6 +299,13 @@ const Dashboard = () => {
           onSave={handleSavePgDetails}
         />
       )}
+     <button variant="contained" color="primary" onClick={handleOpenDialog}>
+        Show Payment Bar Chart
+      </button>
+      <PaymentBarChartDialog
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog1}
+      />
     </div>
   );
 };
