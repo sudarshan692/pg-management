@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { db, auth } from "../../shared/firebase";
 import "./paymentStatusDialog.css";
 import ConfirmDeleteDialog from "../../Dashboard/ConfirmDeleteDialog/ConfirmDeleteDialog";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt} from "react-icons/fa";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 
 const PaymentStatusDialog = ({
@@ -199,7 +199,7 @@ const PaymentStatusDialog = ({
           <button className="close-button" onClick={onClose}>x</button>
           {isEditing && (<button className="clear-button" onClick={handleClear}>Clear</button>)}
           <button className="edit-button1" onClick={handleEditToggle}>
-            <FaEdit />
+            Edit
           </button>
         </div>
         <div className="card-content">

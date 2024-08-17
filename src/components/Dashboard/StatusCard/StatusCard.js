@@ -67,9 +67,9 @@ const StatusCard = ({ payingGuests }) => {
             </div>
           </div>
           <div className="status-card-values">
-            <span className='done'>{Done}</span>
-            <span className='partial'>{Partial}</span>
-            <span className='not-paid'>{NotPaid}</span>
+            <span className='done1'>{Done}</span>
+            <span className='partial1'>{Partial}</span>
+            <span className='not-paid1'>{NotPaid}</span>
           </div>
         </div>
       </div>

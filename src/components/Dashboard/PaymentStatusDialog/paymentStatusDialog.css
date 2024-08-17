@@ -203,6 +203,7 @@ input:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
 .delete-button {
+  padding-top: 0.2vw;
   position: absolute;
   right: 0;
   background: none;
@@ -256,12 +257,21 @@ td:hover {
   animation: pulse 1s ease-in-out infinite;
 }
 .edit-button1{
+  padding-top: 0.1vw;
+  padding-bottom: 0.1vw;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
   cursor: pointer;
   margin-top: 5vw;
   background: none;
-  border: none;
-  font-size: 1vw;
-  color: white;
+  border-width: 0.1vw;
+  border-color: #007bff;
+  font-size: 0.7vw;
+  color: #007bff;
+}
+.edit-button1:hover{
+  transform: scale(1.1); /* Slightly enlarge the button */
+  background-color: white; /* Light background */
 }
 .clear-button {
   margin-top: 5vw;
