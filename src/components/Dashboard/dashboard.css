@@ -151,7 +151,7 @@
 
 .payment-bar-chart-btn {
   margin-right: 0.45vw;
-  margin-left: 51vw;
+  margin-left: 50vw;
   order: 2; /* Position this to the right of the status card */
   padding: 0.55vw;
   background-color: #3f51b5;

@@ -1,5 +1,15 @@
 import React from 'react';
 import './statusCard.css'; // Import the CSS file for styling
+import completedImage from "../../../assets/completed.png";
+import inProgressImage from '../../../assets/inProgress.png';
+import notPaidImage from '../../../assets/NotPaid.png';
+
+// Utility function to get current month
+const getCurrentMonth = () => {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const now = new Date();
+  return months[now.getMonth()];
+};
 
 const StatusCard = ({ payingGuests }) => {
   // Function to calculate the status counts
@@ -38,14 +48,23 @@ const StatusCard = ({ payingGuests }) => {
   return (
     <div className="status-card">
       <div className="status-card-header">
-        <h3>Status Overview <span className='current-month'>[ {currentMonth} ]</span></h3>
+        <h3>Status Overview [ {currentMonth} ]</h3>
       </div>
       <div className="status-card-body">
         <div className="status-card-content">
           <div className="status-card-heading">
-            <span className='done'>Done</span>
-            <span className='partial'>Partial</span>
-            <span className='not-paid'>Not Paid</span>
+            <div className='status-item'>
+              <img src={completedImage} alt="Completed" className='status-image1' />
+              <span className='status-text-done'>Done</span>
+            </div>
+            <div className='status-item'>
+              <img src={inProgressImage} alt="In Progress" className='status-image2' />
+              <span className='status-text-partial'>Partial</span>
+            </div>
+            <div className='status-item'>
+              <img src={notPaidImage} alt="Not Paid" className='status-image3' />
+              <span className='status-text-not-paid'>Not Paid</span>
+            </div>
           </div>
           <div className="status-card-values">
             <span className='done'>{Done}</span>
@@ -56,13 +75,6 @@ const StatusCard = ({ payingGuests }) => {
       </div>
     </div>
   );
-};
-
-// Utility function to get current month
-const getCurrentMonth = () => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const now = new Date();
-  return months[now.getMonth()];
 };
 
 export default StatusCard;

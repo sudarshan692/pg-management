@@ -9,7 +9,7 @@
     padding-right: 0.5vw;
     padding-bottom: 0.5vw;
     color: #d3e3fd;
-    width: 10.1vw;
+    width: 10.9vw;
     font-family: Arial, sans-serif;
   }
   
@@ -33,6 +33,7 @@
   }
   
   .status-card-heading {
+    margin-top: 0.1vw;
     display: flex;
     justify-content: space-between;
     font-weight: bold;
@@ -41,11 +42,11 @@
   .status-card-values {
     display: flex;
     justify-content: space-between;
-    margin-top: 4px;
+    margin-top: 0.25vw;
   }
   .done{
     font-weight: bold;
-    color: rgb(22, 255, 0);;
+    color: rgb(22, 255, 0);
   }
   .partial{
     color: orange;
@@ -55,6 +56,35 @@
     color: #E72929;
     font-weight: bold;
   }
-  .current-month{
-    color: #2fa4ff;
+
+  .status-image1 {
+    margin-top: -0.1vw;
+    height: 0.7vw;
+    width: 0.7vw; /* Adjust size as needed */
+    margin-right: 0.3vw; /* Space between image and text */
+  }
+  .status-image2 {
+    margin-top: -0.1vw;
+    height: 0.7vw;
+    width: 0.7vw; /* Adjust size as needed */
+    margin-right: 0.3vw; /* Space between image and text */
+  }
+  .status-image3 {
+    margin-top: -0.1vw;
+    height: 0.9vw;
+    width: 0.9vw; /* Adjust size as needed */
+    margin-right: 0.25vw; /* Space between image and text */
+  }
+  .status-item{
+    display: flex;
+    justify-content: center;
+  }
+  .status-text-done{
+    color: rgb(22, 255, 0);
+  }
+  .status-text-partial{
+    color: orange;
+  }
+  .status-text-not-paid{
+    color: #E72929;
   }
