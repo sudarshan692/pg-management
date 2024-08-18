@@ -16,10 +16,11 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1vw;
+    margin-left: 1vw;
     padding: 1vw;
   }
   .pg-card {
-    background-color: #0d2136;
+    background-color: black;
     border-radius: 0.4vw;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(25% - 1rem);
@@ -32,60 +33,56 @@
     flex-direction: column;
     justify-content: space-between;
   }
-  .pg-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #162c46;
-  }
   .pg-header {
+    margin-left: 0.8vw;
     height: 4vw;
     border-top-left-radius: 0.4vw;
     border-top-right-radius: 0.4vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.6vw;
     padding: 0 0.3vw;
     color: rgb(211, 227, 253);
-    background-color: #3f51b5;
   }
   .pg-name {
     font-size: 1vw;
     font-weight: bold;
   }
   .pg-number {
-    font-size: 1vw;
+    font-size: 0.7vw;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: rgb(211, 227, 253);
-    border-radius: 0.5vw;
+    outline: 0.1vw solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.1vw;
+    background-color: rgb(166, 255, 248);
+    color: black;
+    margin-top: -1vw;
+    margin-right: 0.2vw;
+    border-radius: 0.2vw;
     padding-left: 0.4vw;
     padding-right: 0.4vw;
     padding-top: 0.2vw;
     padding-bottom: 0.2vw;
   }
   .pg-details {
-    margin-left: 0.6vw;
+    margin-left: 1vw;
     margin-right: 0.6vw;
-    margin-bottom: -0.6vw;
+    margin-bottom: 0.6vw;
     flex: 1;
   }
   .owner-name{
     font-size: 0.8vw;
-    margin-top: -0.3vw;
     font-weight: bold;
     color: rgb(211, 227, 253);
   }
   .pg-address{
-    margin-top: -0.6vw;
-    font-size: 0.7vw;
+    font-size: 0.6vw;
     color: rgb(211, 227, 253);
     opacity: 0.6;
   }
   .max-customers{
     font-size: 0.8vw;
     margin-top: 0vw;
-    color: #3f51b5;
+    color: rgb(211, 227, 253);
     font-weight: bold;
   }
   .pg-footer {
@@ -96,13 +93,170 @@
   }
   .pg-mobile,
   .pg-email {
-    margin-left: 0.5vw;
+    outline: 0.1vw solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.1vw;
+    margin-bottom: 1vw;
+    margin-left: 1vw;
     margin-right: 0.5vw;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(211, 227, 253);
     padding: 0.3vw 0.6vw;
     border-radius: 0.7vw;
   }
+  .pg-footer a {
+    color: black;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .pg-footer .material-icons {
+    font-size: 0.6vw;
+    margin-right: 0.5vw;
+  }
+  .pg-details p {
+    display: flex;
+    align-items: center;
+  }
+  
+  .pg-details .material-icons {
+    font-size: 1.2vw; /* Adjust size as needed */
+    margin-right: 0.5vw; /* Space between icon and text */
+    color: rgb(211, 227, 253); /* Match the text color */
+  }
   
   
+  @media (max-width: 768px) {
+    .pg-selection-heading {
+      font-size: 4.5vw;
+      padding-top: 4vw;
+      padding-bottom: 4vw;
+      background-color: #3A1078;
+      position: fixed; /* Fixes the heading to the top */
+      top: 0; /* Aligns it to the top */
+      left: 0; /* Aligns it to the left */
+      width: 100%; /* Makes it span the full width */
+      z-index: 1000; /* Ensures it stays above other content */
+    }
+    .pg-container {
+      flex-direction: column;
+      gap: 4vw;
+      padding-top: 10vw;
+      padding-right: 2vw;
+      margin-top: 8vw; /* Adds margin to avoid overlap with the fixed heading */
+    }
+    .pg-card {
+      background-color: #4E31AA;
+      box-shadow: 0 2px 4px rgba(65, 40, 174, 0.1);
+      width: 100%;
+      border-radius: 4vw;
+    }
+    .pg-header {
+      margin-left: 1.5vw;
+      border-top-left-radius: 4vw;
+      border-top-right-radius: 4vw;
+      height: auto;
+      padding: 2vw;
+      font-size: 4vw;
+      margin-bottom: 2vw;
+      background-color: #4E31AA;
+    }
+    .pg-name {
+      font-size: 4.5vw;
+      font-weight: bold;
+    }
+    .pg-number {
+      margin-left: 1vw;
+      margin-top: -4vw;
+      outline: 1px solid white;
+      outline-offset: 0.5vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      background-color: rgb(166, 255, 248);
+      color: black;
+      border-radius: 1vw;
+      padding: 1vw;
+    }
+    .pg-details {
+      margin-left: 3vw;
+      margin-right: 3vw;
+      margin-bottom: -0.6vw;
+      flex: 1;
+    }
+    .owner-name {
+      font-size: 3vw;
+      margin-top: -0.3vw;
+      font-weight: bold;
+      color: rgb(211, 227, 253);
+    }
+    .pg-address {
+      margin-top: -0.6vw;
+      font-size: 2.6vw;
+      color: rgb(211, 227, 253);
+      opacity: 0.6;
+    }
+    .max-customers {
+      color: green;
+      font-size: 3vw;
+      margin-top: 0vw;
+      color: rgb(211, 227, 253);
+      font-weight: bold;
+    }
+    .pg-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 3vw;
+      color: rgb(211, 227, 253);
+    }
+    .pg-mobile,
+    .pg-email {
+      outline: 1px solid white;
+      outline-offset: 0.5vw;
+      margin-left: 3vw;
+      margin-right: 3vw;
+      margin-bottom: 4vw;
+      color: black;
+      background-color: rgb(211, 227, 253);
+      padding: 1vw 2vw;
+      border-radius: 3vw;
+      display: inline-flex;
+      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 0.2vw solid rgb(139, 151, 161);
+    }
+    .pg-footer a {
+      color: black;
+    }
+    .logout-btn {
+      font-size: 3vw;
+      outline: 1px solid white;
+      outline-offset: 0.5vw;
+      position: fixed;
+      top: 4vw; /* Position below the fixed heading */
+      right: 1vw;
+      padding: 1.5vw 3vw;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 1vw;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .pg-footer .material-icons {
+      font-size: 3.5vw;
+      margin-right: 1.5vw;
+    }
+    .pg-details p {
+      display: flex;
+      align-items: center;
+      margin-bottom: 3vw;
+    }
+    .pg-details .material-icons {
+      font-size: 5vw;
+      margin-right: 3vw;
+      color: rgb(211, 227, 253);
+    }
+}
+
   
   

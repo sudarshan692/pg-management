@@ -8,6 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { usePgContext } from "../../context/PgContext";
 import { v4 as uuidv4 } from "uuid";
+
 const monthNames = [
   "Jan",
   "Feb",
@@ -233,13 +234,26 @@ const PgSelection = () => {
               <p className="pg-number">{pg.number}</p>
             </div>
             <div className="pg-details">
-              <p className="max-customers">{pg.maxCustomers - 1}</p>
-              <p className="owner-name">{pg.ownerName}</p>
-              <p className="pg-address">{pg.address}</p>
+              <p className="max-customers">
+                <i className="material-icons">hotel</i> {pg.maxCustomers - 1}{" "}
+                Available Beds
+              </p>
+
+              <p className="owner-name">
+                <i className="material-icons">person</i> {pg.ownerName}
+              </p>
+              <p className="pg-address">
+                <i className="material-icons">location_on</i> {pg.address}
+              </p>
             </div>
+
             <div className="pg-footer">
-              <p className="pg-mobile">{pg.mobile}</p>
-              <p className="pg-email">{pg.ownerEmail}</p>
+              <a href={`tel:${pg.mobile}`} className="pg-mobile">
+                <span className="material-icons">phone</span> {pg.mobile}
+              </a>
+              <a href={`mailto:${pg.ownerEmail}`} className="pg-email">
+                <span className="material-icons">email</span> {pg.ownerEmail}
+              </a>
             </div>
           </div>
         ))}
