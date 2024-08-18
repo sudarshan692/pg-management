@@ -156,7 +156,7 @@ const Login = () => {
             e.target.style.backgroundColor = "#3f51b5";
           }}
         >
-          LOG IN
+          Log in
         </button>
       </div>
       <Snackbar

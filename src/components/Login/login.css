@@ -51,6 +51,8 @@
     font-weight: bold;
   }
   .login-inputboxes {
+    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.15vw;
     padding: 0.8vw;
     margin-bottom: 0.6vw;
     margin-top: 0.6vw;
@@ -66,6 +68,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .login-button {
+    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.15vw;
     margin-top: 1.5vw;
     margin-bottom: 2.5vw;
     font-size: 0.8vw;
@@ -130,5 +134,75 @@
   margin-top: 0%;
   width: 15vw; 
   background-color: transparent; 
+}
+
+/* Styles specifically for screens with a max width of 600px (mobile devices) */
+@media (max-width: 768px) {
+  .login-card {
+    border-radius: 4vw;
+    margin: 10% 5%;
+    padding: 1vw;
+  }
+  .card-heading {
+    margin-bottom: 6vw;
+    font-size: 5vw;
+  }
+  .login-labels {
+    font-size: 3.5vw;
+  }
+  .login-inputboxes {
+    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.5vw;
+    border-radius: 1vw;
+    padding-top: 6vw;
+    padding-bottom: 6vw;
+    padding-left: 2vw;
+    margin-bottom: 4vw;
+    margin-top: 2vw;
+    font-size: 3.5vw;
+    width: 80vw;
+  }
+  .login-button {
+    margin-top: 5vw;
+    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline-offset: 0.5vw;
+    padding-top: 3.5vw;
+    padding-bottom: 3.5vw;
+    padding-left: 2vw;
+    margin-bottom: 8vw;
+    font-size: 3.5vw;
+    width: 80vw;
+    border-radius: 6vw;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .login-button:hover {
+    background: linear-gradient(45deg, #ff007f, #3f51b5); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+  }
+  .login-button:active {
+    background: linear-gradient(45deg, #c51162, #303f9f); 
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  .img1 {
+    margin-top: 15vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30vw;
+  }
+  .login-validation-message {
+    margin-bottom: 2vw;
+    margin-top: -2vw;
+    color: red;
+    font-size: 3vw;
+  }
+  .custom-spinner {
+    border: 0.8vw solid #f3f3f3;
+    border-top: 0.8vw solid #3498db;
+    border-radius: 50%;
+    width: 8vw;
+    height: 8vw;
+    animation: spin 1s linear infinite;
+  }
 }
 
