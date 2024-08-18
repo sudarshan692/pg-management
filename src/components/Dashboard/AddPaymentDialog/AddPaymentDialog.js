@@ -18,6 +18,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
     const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
     const [paymentAmount, setPaymentAmount] = useState('');
+    const [remainingAmount, setRemainingAmount] = useState(''); // New state for remaining amount
     const [paymentStatus, setPaymentStatus] = useState('Complete');
     const [month, setMonth] = useState(currentMonth); // Set default to current month
     const [year, setYear] = useState(currentYear); // Set default to current year
@@ -64,7 +65,8 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                 paymentAmount: paymentStatus === 'Not Paid' ? '-' : parseFloat(paymentAmount), // Set to '-' if status is Not Paid
                 paymentStatus: paymentStatus === 'Complete' ? 'Done' : paymentStatus === 'Partial' ? 'Partial' : 'Not Paid',
                 paymentForMonth: months[month], // Store selected month
-                paymentForYear: year // Store selected year
+                paymentForYear: year, // Store selected year
+                remainingAmount: paymentStatus !== 'Complete' ? parseFloat(remainingAmount) || 0 : 0 // Add remaining amount if not complete
             };
     
             // Check if a payment already exists for the selected month and year
@@ -131,7 +133,13 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     select
                     label="Payment Status"
                     value={paymentStatus}
-                    onChange={(e) => setPaymentStatus(e.target.value)}
+                    onChange={(e) => {
+                        const status = e.target.value;
+                        setPaymentStatus(status);
+                        if (status !== 'Complete') {
+                            setRemainingAmount(''); // Clear remaining amount when status is not complete
+                        }
+                    }}
                     fullWidth
                     className="textfield-spacing"
                 >
@@ -139,6 +147,16 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     <MenuItem value="Partial">Partial</MenuItem>
                     <MenuItem value="Not Paid">Not Paid</MenuItem>
                 </TextField>
+                {paymentStatus !== 'Complete' && (
+                    <TextField
+                        label="Remaining Amount"
+                        type="number"
+                        value={remainingAmount}
+                        onChange={(e) => setRemainingAmount(e.target.value)}
+                        fullWidth
+                        className="textfield-spacing"
+                    />
+                )}
                 <TextField
                     select
                     label="Month"
