@@ -272,9 +272,9 @@ const Dashboard = () => {
       <ChangePasswordDialog handleLogout={handleLogout} open={changePasswordDialogOpen} onClose={closeChangePasswordDialog}/>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
       {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
-      <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog} onPaymentUpdate={handlePaymentUpdate} guestStatuses={guestStatuses} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onToggleStatus={handleToggleStatus}/>
+      <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog} onPaymentUpdate={handlePaymentUpdate} guestStatuses={guestStatuses} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onToggleStatus={handleToggleStatus} pgDetails={pgDetails} />
       {isPaymentStatusDialogOpen && selectedGuest && (
-        <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} onToggleStatus={handleToggleStatus} guestStatuses={guestStatuses} setGuestData={setPayingGuests} selectedPGId={pgId}/>
+        <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} onToggleStatus={handleToggleStatus} guestStatuses={guestStatuses} setGuestData={setPayingGuests} selectedPGId={pgId} pgDetails={pgDetails}/>
       )}
       <div className="add-paying-guest-container">
         <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>

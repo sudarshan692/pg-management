@@ -215,6 +215,7 @@ const PayingGuestTable = ({
   selectedPGId,
   onPaymentUpdate,
   onSnackbarOpen,
+  pgDetails,
 }) => {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
@@ -486,6 +487,7 @@ const PayingGuestTable = ({
               onPaymentUpdate={onPaymentUpdate}
               onSnackbarOpen={onSnackbarOpen}
               onClose={handleCloseDialog}
+              pgDetails={pgDetails}
             />
           )}
         </>
