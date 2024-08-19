@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FaPlus, FaArrowUp, FaExclamationTriangle } from "react-icons/fa";
+import { FaArrowUp, FaExclamationTriangle } from "react-icons/fa";
 import LoadingSpinner from "../../shared/LoadingSpinner"; // Adjust the path as needed
 import PaymentStatusDialog from "../PaymentStatusDialog/PaymentStatusDialog";
 import "./payingGuestTable.css";
-import completedImage from "../../../assets/completed.png";
 import inProgressImage from '../../../assets/inProgress.png';
-import notPaidImage from '../../../assets/NotPaid.png';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>There are no records to display.</div>
 );
 
 const StatusBoxedCell = ({ status }) => {
-  let imageSrc = notPaidImage; // Default image
+  let content = null;
   let displayText = "Not Paid";
-  let imageClass = "status-image"; // Default class
+  let iconClass = "status-icon"; // Default class for icons
 
   if (status === "Done") {
-    imageSrc = completedImage;
+    content = <CheckCircleIcon className={`done-icon ${iconClass}`} />;
     displayText = "Done";
   } else if (status === "Partial") {
-    imageSrc = inProgressImage;
+    content = <img src={inProgressImage} alt="Partial" className="status-image" />;
     displayText = "Partial";
   } else if (status === "Not Paid") {
-    imageClass = "status-image-not-paid"; // Specific class for "Not Paid"
+    content = <CancelIcon className={`cancel-icon ${iconClass}`} />;
   }
 
   return (
     <div className="status-box">
-      <img src={imageSrc} alt={displayText} className={imageClass} />
+      {content}
       <div className="status-text">{displayText}</div>
     </div>
   );
@@ -369,7 +370,7 @@ const PayingGuestTable = ({
               onClick={() => onAddPayment(row)}
               className="add-payment-button"
             >
-              <FaPlus className="add-icon" />
+              <AddCircleOutlineIcon className="add-icon" />
             </button>
             <label
               className={`toggle-switch ${isActive ? "" : "inactive-toggle"}`}

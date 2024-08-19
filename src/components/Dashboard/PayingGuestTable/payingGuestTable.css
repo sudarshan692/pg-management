@@ -115,36 +115,32 @@
   align-items: center;
   gap: 0.75vw; /* Space between button and alert icon */
 }
-
-.add-payment-button {
-  background-color: #3f51b5; /* Base color */
-  color: white;
+.add-payment-button{
+  background: none;
   border: none;
-  color: white;
-  border-radius: 1.25vw;
-  padding: 0.25vw;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.cancel-icon.status-icon.css-i4bv87-MuiSvgIcon-root{
+  color: #E72929; /* Customize the color */
+  margin-right: 0.3vw;
+  width: 1.2vw;
+  height: 1.2vw;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.done-icon.status-icon.css-i4bv87-MuiSvgIcon-root{
+  width: 1.2vw;
+  height: 1.2vw;
+  color: #059212; /* Green color for 'Done' */
+  margin-right: 0.3vw;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.add-icon.css-i4bv87-MuiSvgIcon-root{
+  background: none;
+  border: none;
+  color: orange;
+  margin-top: 0.2vw;
+  width: 1.2vw;
+  height: 1.2vw;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  margin-right: -0.5vw;
 }
-
-.add-payment-button:hover {
-  background-color: #C80036; /* Darker color on hover */
-  color: #e0f7fa; /* Light cyan text color on hover */
-  transform: scale(1.05); /* Slightly larger on hover */
-}
-
-.add-payment-button:active {
-  background-color: #005b69; /* Even darker color on active */
-  transform: scale(0.98); /* Slightly smaller on active */
-}
-
-.add-icon {
-  font-size: 0.6vw; /* Adjust size as needed */
-}
-
-/* Add this to your CSS file */
 .status-box {
   display: flex;
   align-items: center;
@@ -155,7 +151,7 @@
 }
 
 .status-box.green {
-  background-color: #059212;;
+  background-color: #059212;
 }
 
 .status-box.yellow {
@@ -257,9 +253,10 @@
   padding: 0.4vw;
 }
 .status-image {
+  margin-left: 0.1vw;
   width: 1vw; /* Adjust the size as needed */
   height: 1vw; /* Adjust the size as needed */
-  margin-right: 0.4vw;
+  margin-right: 0.5vw;
 }
 .status-image-not-paid {
   margin-right: 0.18vw;
