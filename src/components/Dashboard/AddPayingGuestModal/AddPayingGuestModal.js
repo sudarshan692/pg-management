@@ -79,7 +79,7 @@ const AddPayingGuestModal = ({
         fullDeposit: guestData.fullDeposit,
         aadharNumber: Number(guestData.aadharNumber),
         currentStatus: guestData.currentStatus,
-        rentAmount: guestData.rentAmount,
+        rentAmount: Number(guestData.rentAmount),
       };
 
       // Add the new guest to Firestore
