@@ -90,7 +90,24 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 0.3vw;
-    color: #A8A8A7;
+    background: linear-gradient(45deg, #A8A8A7, #666666, #303030);
+    background-size: 300% 300%;
+    animation: slideGradient 6s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  @keyframes slideGradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
   }
   .pg-name {
     font-size: 1vw;
@@ -123,7 +140,7 @@
     color: rgb(211, 227, 253);
   }
   .pg-address{
-    font-size: 0.6vw;
+    font-size: 0.65vw;
     color: #A8A8A7;
     opacity: 0.6;
   }
