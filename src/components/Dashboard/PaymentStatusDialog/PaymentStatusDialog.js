@@ -163,7 +163,7 @@ const PaymentStatusDialog = ({
         fullDeposit: editedGuest.fullDeposit,
         aadharNumber: Number(editedGuest.aadharNumber),
         currentStatus: guest.currentStatus,
-        rentAmount: Number(guest.rentAmount),
+        rentAmount: Number(editedGuest.rentAmount),
       };
       await updateDoc(guestRef, {
         payingGuestMap: updatedPayingGuestMap
@@ -172,6 +172,7 @@ const PaymentStatusDialog = ({
       onPaymentUpdate({ ...guest, ...updatedPayingGuestMap });
       onSnackbarOpen("Guest details updated successfully!", "success");
       setIsEditing(false);
+      onClose();
     } catch (error) {
       console.error("Error updating guest details: ", error);
       onSnackbarOpen("Error updating guest details. Please try again.", "error");

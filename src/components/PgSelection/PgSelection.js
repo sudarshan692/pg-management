@@ -147,6 +147,7 @@ const PgSelection = () => {
             paymentForYear: currentYear,
             paymentStatus: "Not Paid",
             createdAt: new Date(),
+            remainingAmount: 0,
           };
           const updatedPaymentDetails = [...paymentDetails, newPaymentDetail];
           console.log("Updated payment details:");
