@@ -20,7 +20,7 @@
   border-radius: 0.6vw;
   width: 90vw; /* Adjust width as needed */
   max-width: 56vw; /* Max width to prevent too wide cards */
-  height: 35vw; /* Adjust height as needed */
+  height: 40vw; /* Adjust height as needed */
   overflow: auto; /* Enables scrolling for content */
   position: relative; /* Required for positioning the close button */
   border: 1px solid #333; /* Border to match RoomMatrixDialog */
@@ -330,4 +330,44 @@ td:hover {
 }
 .guest-id1{
   font-size: 1.2vw;
+}
+.receipt-download-section{
+  display: flex;
+  justify-content: baseline;
+}
+.download-receipt-button {
+  padding-left: 0.5vw;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.download-receipt-button:hover .MuiSvgIcon-root {
+  color: #007bff; /* Change icon color on hover if desired */
+}
+
+.receipt-download-section{
+  margin-bottom: -1vw;
+}
+.payment-type{
+  font-size: 0.7vw;
+  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline-offset: 0.15vw;
+  width: 10vw;
+  margin-right: 0.5vw;
+}
+.select-year{
+  font-size: 0.7vw;
+  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline-offset: 0.15vw;
+  width: 10vw;
+  margin-right: 0.5vw;
+}
+.select-month{
+  font-size: 0.7vw;
+  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline-offset: 0.15vw;
+  width: 10vw;
+  margin-right: 0.5vw;
 }

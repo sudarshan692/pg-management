@@ -5,6 +5,7 @@ import ConfirmDeleteDialog from "../../Dashboard/ConfirmDeleteDialog/ConfirmDele
 import { FaTrashAlt} from "react-icons/fa";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import jsPDF from "jspdf";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const PaymentStatusDialog = ({
   guest,
@@ -428,6 +429,43 @@ const PaymentStatusDialog = ({
             )}
           </div>
 
+          <div className="receipt-download-section">
+            <select
+            className="payment-type"
+                name="paymentType"
+                value={selectedPaymentType}
+                onChange={handlePaymentTypeChange}
+              >
+                <option value="">Select Payment Type</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI Scan">UPI Scan</option>
+                <option value="Check">Check</option>
+              </select>
+
+              <select className="select-year" onChange={handleYearChange} value={selectedYear}>
+                <option value="">Select Year</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <select className="select-month" onChange={handleMonthChange} value={selectedMonth}>
+                <option value="">Select Month</option>
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+              {showDownloadLink && (
+                <button onClick={handleDownloadReceipt} className="download-receipt-button">
+                  <DownloadIcon style={{ marginTop: '8px' }} />
+                </button>
+               )}
+            </div>
+
           {/* Display Payment Status Table */}
           <div className="table-container">
             <h3 className="payment-details">Payment Status</h3>
@@ -466,41 +504,7 @@ const PaymentStatusDialog = ({
               </tbody>
             </table>
 
-            <div className="receipt-download-section">
-            <select
-                name="paymentType"
-                value={selectedPaymentType}
-                onChange={handlePaymentTypeChange}
-              >
-                <option value="">Select Payment Type</option>
-                <option value="Cash">Cash</option>
-                <option value="Card">Card</option>
-                <option value="UPI Scan">UPI Scan</option>
-                <option value="Check">Check</option>
-              </select>
 
-              <select onChange={handleYearChange} value={selectedYear}>
-                <option value="">Select Year</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              <select onChange={handleMonthChange} value={selectedMonth}>
-                <option value="">Select Month</option>
-                {months.map((month) => (
-                  <option key={month} value={month}>
-                    {month}
-                  </option>
-                ))}
-              </select>
-              {showDownloadLink && (
-                <button onClick={handleDownloadReceipt} className="download-receipt-button">
-                  Download Receipt
-                </button>
-              )}
-            </div>
             
           </div>
         </div>

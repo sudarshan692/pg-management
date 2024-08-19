@@ -234,11 +234,13 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.add-icon.css-i4bv87-MuiSvgIcon-roo
   color: #E72929; /* Red color for InActive status */
 }
 .slider {
+  padding-top: 0.1vw;
   height: 1.25vw;
   width: 2vw;
   background-color: #E72929;  /* Red background for inactive toggle */
 }
 .slider:before {
+  
  height: 1vw;
  width: 1vw;
  margin-left: -0.1vw;
