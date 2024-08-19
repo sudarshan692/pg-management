@@ -1,17 +1,42 @@
 .pg-selection-heading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(211, 227, 253);
-    font-size: 1.5vw;
-    margin-top: 0;
-    padding-bottom: 0.4vw;
-    padding-top: 0.4vw;
-    background-color: #3f51b5;
-    box-shadow: 0vw 2px 5px rgba(0, 0, 0, 0.5);
-    font-weight: 300;
-    font-style: normal;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  color: #A8A8A7;
+  font-size: 1.3vw;
+  margin-top: 0vw;
+  padding-left: 1vw;
+  padding-bottom: 0.2vw;
+  padding-top: 0.4vw;
+  font-weight: bold;
+  font-style: normal;
+  position: relative;
+}
+
+.pg-selection-heading::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.2vw;
+  background: linear-gradient(90deg, #1a1a1a, #bfbfbf, #4b4b4b, #bfbfbf, #1a1a1a);
+  background-size: 200% 100%;
+  animation: gradientBorder 3s linear infinite;
+}
+
+@keyframes gradientBorder {
+  0% {
+      background-position: 0% 100%;
   }
+  100% {
+      background-position: 200% 100%;
+  }
+}
+
+
+
+
   .pg-container {
     display: flex;
     flex-wrap: wrap;
@@ -20,14 +45,14 @@
     padding: 1vw;
   }
   .pg-card {
-    background-color: black;
+    background-color: #0d2136;
     border-radius: 0.4vw;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(25% - 1rem);
     box-sizing: border-box;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
-    color: rgb(211, 227, 253);
+    color: #A8A8A7;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -42,7 +67,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 0.3vw;
-    color: rgb(211, 227, 253);
+    color: #A8A8A7;
   }
   .pg-name {
     font-size: 1vw;
@@ -53,7 +78,7 @@
     font-weight: bold;
     outline: 0.1vw solid white; /* Change the color and thickness as needed */
     outline-offset: 0.1vw;
-    background-color: rgb(166, 255, 248);
+    background-color: #A8A8A7;
     color: black;
     margin-top: -1vw;
     margin-right: 0.2vw;
@@ -76,7 +101,7 @@
   }
   .pg-address{
     font-size: 0.6vw;
-    color: rgb(211, 227, 253);
+    color: #A8A8A7;
     opacity: 0.6;
   }
   .max-customers{
@@ -98,7 +123,7 @@
     margin-bottom: 1vw;
     margin-left: 1vw;
     margin-right: 0.5vw;
-    background-color: rgb(211, 227, 253);
+    background-color: #A8A8A7;
     padding: 0.3vw 0.6vw;
     border-radius: 0.7vw;
   }
@@ -127,15 +152,38 @@
   
   @media (max-width: 768px) {
     .pg-selection-heading {
+      font-weight: bolder;
+      color: #A8A8A7;
       font-size: 4.5vw;
       padding-top: 4vw;
       padding-bottom: 4vw;
-      background-color: #3A1078;
-      position: fixed; /* Fixes the heading to the top */
+      background-color: #1E201E;
+      position: fixed;
       top: 0; /* Aligns it to the top */
       left: 0; /* Aligns it to the left */
       width: 100%; /* Makes it span the full width */
       z-index: 1000; /* Ensures it stays above other content */
+    }
+    
+    .pg-selection-heading::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0.8vw;
+      background: linear-gradient(90deg, #1a1a1a, #bfbfbf, #4b4b4b, #bfbfbf, #1a1a1a);
+      background-size: 200% 100%;
+      animation: gradientBorder 3s linear infinite;
+    }
+    
+    @keyframes gradientBorder {
+      0% {
+          background-position: 0% 100%;
+      }
+      100% {
+          background-position: 200% 100%;
+      }
     }
     .pg-container {
       flex-direction: column;
@@ -145,7 +193,7 @@
       margin-top: 8vw; /* Adds margin to avoid overlap with the fixed heading */
     }
     .pg-card {
-      background-color: #4E31AA;
+      background-color: #0d2136;
       box-shadow: 0 2px 4px rgba(65, 40, 174, 0.1);
       width: 100%;
       border-radius: 4vw;
@@ -158,8 +206,26 @@
       padding: 2vw;
       font-size: 4vw;
       margin-bottom: 2vw;
-      background-color: #4E31AA;
+      background: linear-gradient(45deg, #A8A8A7, #666666, #303030);
+      background-size: 300% 300%;
+      animation: slideGradient 6s linear infinite;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
     }
+    
+    @keyframes slideGradient {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 100% 100%;
+      }
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+    
     .pg-name {
       font-size: 4.5vw;
       font-weight: bold;
@@ -171,7 +237,7 @@
       outline-offset: 0.5vw;
       font-size: 2.5vw;
       font-weight: bold;
-      background-color: rgb(166, 255, 248);
+      background-color: #A8A8A7;
       color: black;
       border-radius: 1vw;
       padding: 1vw;
@@ -215,7 +281,7 @@
       margin-right: 3vw;
       margin-bottom: 4vw;
       color: black;
-      background-color: rgb(211, 227, 253);
+      background-color: #A8A8A7;
       padding: 1vw 2vw;
       border-radius: 3vw;
       display: inline-flex;
@@ -232,7 +298,7 @@
       outline: 1px solid white;
       outline-offset: 0.5vw;
       position: fixed;
-      top: 4vw; /* Position below the fixed heading */
+      top: 3vw; /* Position below the fixed heading */
       right: 1vw;
       padding: 1.5vw 3vw;
       background-color: rgba(0, 0, 0, 0.5);
@@ -254,7 +320,7 @@
     .pg-details .material-icons {
       font-size: 5vw;
       margin-right: 3vw;
-      color: rgb(211, 227, 253);
+      color: #A8A8A7;
     }
 }
 
