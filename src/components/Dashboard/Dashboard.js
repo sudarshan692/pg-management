@@ -15,6 +15,7 @@ import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
 import PaymentBarChartDialog from "./PaymentBarChartDialog/PaymentBarChartDialog";
 import StatusCard from "./StatusCard/StatusCard";
+import ExcelJS from 'exceljs';
 
 Modal.setAppElement("#root");
 
@@ -254,6 +255,86 @@ const Dashboard = () => {
     setIsDialogOpen(false);
   };
 
+  const exportToExcel = async () => {
+    if (payingGuests.length === 0) {
+      handleSnackbarOpen("No data available to export", "warning");
+      return;
+    }
+  
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Paying Guests');
+  
+    // Add header row
+    worksheet.addRow([
+      'Guest_ID',
+      'Guest_Name',
+      'Guest_Mobile_No',
+      'Father_Name',
+      'Father_Mobile_No',
+      'Permanent_Address',
+      'Present_Status',
+      'Aadhar_Number',
+      'Date_Of_Admission',
+      'Floor_No',
+      'Room_No',
+      'Room_Type',
+      'Deposit_Amount',
+      'Full_Deposit',
+      'Maintenance_Charges',
+      'Rent_Amount',
+      'Current_Status'
+    ]);
+  
+    // Apply header style
+    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '3F51B5' }
+    };
+    worksheet.getRow(1).alignment = { horizontal: 'center', vertical: 'middle' };
+  
+    // Add data rows
+    payingGuests.forEach(guest => {
+      worksheet.addRow([
+        guest.guestID,
+        guest.guestName,
+        guest.guestMobileNo,
+        guest.fatherName,
+        guest.fatherMobileNo,
+        guest.permanentAddress,
+        guest.presentStatus,
+        guest.aadharNumber,
+        guest.dateOfAdmission,
+        guest.floorNo,
+        guest.roomNo,
+        guest.roomType,
+        guest.depositAmount,
+        guest.fullDeposit,
+        guest.maintenanceCharges,
+        guest.rentAmount,
+        guest.currentStatus
+      ]);
+    });
+  
+    // Auto-adjust column widths
+    worksheet.columns.forEach(column => {
+      const maxLength = column.values.reduce((max, value) => Math.max(max, String(value).length), 0);
+      column.width = maxLength + 2; // Adjust width
+    });
+  
+    // Export the workbook to a file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'PayingGuests.xlsx';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+
   return (
     <div className="dashboard-page">
       
@@ -263,6 +344,7 @@ const Dashboard = () => {
       </div>
       {/* <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button> */}
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
+      <button className="export-to-excel-btn" onClick={exportToExcel}>Export to Excel</button>
       <div className="bottom-aligned-container">
         <StatusCard  payingGuests={payingGuests} />
         <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={handleOpenDialog}>Payment Bar Chart</button>
