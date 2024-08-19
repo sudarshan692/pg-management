@@ -1,12 +1,23 @@
+.img2{
+  padding-top: 0.3vw;
+  padding-left: 0.5vw;
+  background: none;
+  width: 4vw;
+  height: 3vw;
+  position: fixed;
+  top: 0; /* Aligns it to the top */
+  left: 0; /* Aligns it to the left */
+  z-index: 1000; /* Ensures it stays above other content */
+}
 .pg-selection-heading {
   display: flex;
   align-items: center;
   justify-content: left;
   color: #A8A8A7;
   font-size: 1.3vw;
-  margin-top: 0vw;
-  padding-left: 1vw;
-  padding-bottom: 0.2vw;
+  margin-top: 0.8w;
+  padding-left: 8vw;
+  padding-bottom: 0.8vw;
   padding-top: 0.4vw;
   font-weight: bold;
   font-style: normal;
@@ -34,7 +45,19 @@
   }
 }
 
-
+.logout-btn1 {
+  font-size: 0.8vw;
+  position: fixed;
+  font-weight: 800;
+  top: 1.5vw;
+  right: -0.5vw;
+  padding: 0.5vw 1.5vw;
+  background: none;
+  color: #A8A8A7;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
 
 
   .pg-container {
@@ -151,39 +174,30 @@
   
   
   @media (max-width: 768px) {
+    .img2{
+      padding: 1vw;
+      background: none;
+      width: 15vw;
+      height: 12vw;
+      position: fixed;
+      top: 0; /* Aligns it to the top */
+      left: 0; /* Aligns it to the left */
+      z-index: 1000; /* Ensures it stays above other content */
+    }
     .pg-selection-heading {
+      padding-left: 25vw;
       font-weight: bolder;
       color: #A8A8A7;
       font-size: 4.5vw;
-      padding-top: 4vw;
-      padding-bottom: 4vw;
-      background-color: #1E201E;
+      padding-top: 5vw;
+      margin-top: 0vw;
+      padding-bottom: 3vw;
+      background-color: rgb(3, 21, 37);
       position: fixed;
       top: 0; /* Aligns it to the top */
       left: 0; /* Aligns it to the left */
       width: 100%; /* Makes it span the full width */
       z-index: 1000; /* Ensures it stays above other content */
-    }
-    
-    .pg-selection-heading::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 0.8vw;
-      background: linear-gradient(90deg, #1a1a1a, #bfbfbf, #4b4b4b, #bfbfbf, #1a1a1a);
-      background-size: 200% 100%;
-      animation: gradientBorder 3s linear infinite;
-    }
-    
-    @keyframes gradientBorder {
-      0% {
-          background-position: 0% 100%;
-      }
-      100% {
-          background-position: 200% 100%;
-      }
     }
     .pg-container {
       flex-direction: column;
@@ -293,12 +307,12 @@
     .pg-footer a {
       color: black;
     }
-    .logout-btn {
+    .logout-btn1 {
       font-size: 3vw;
       outline: 1px solid white;
       outline-offset: 0.5vw;
       position: fixed;
-      top: 3vw; /* Position below the fixed heading */
+      top: 4vw; /* Position below the fixed heading */
       right: 1vw;
       padding: 1.5vw 3vw;
       background-color: rgba(0, 0, 0, 0.5);

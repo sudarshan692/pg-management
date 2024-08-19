@@ -8,6 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { usePgContext } from "../../context/PgContext";
 import { v4 as uuidv4 } from "uuid";
+import logo from "../../assets/logo2.png"
 
 const monthNames = [
   "Jan",
@@ -218,8 +219,9 @@ const PgSelection = () => {
           <LoadingSpinner />
         </div>
       )}
-      <h1 className="pg-selection-heading">PG Selection Dashboard</h1>
-      <button className="logout-btn" onClick={handleLogout}>
+  
+      <h1 className="pg-selection-heading"> <img className="img2" src={logo} alt="logo" />Select Residence</h1>
+      <button className="logout-btn1" onClick={handleLogout}>
         Logout
       </button>
       <div className="pg-container">
