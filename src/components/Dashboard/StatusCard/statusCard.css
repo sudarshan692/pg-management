@@ -57,11 +57,12 @@
     font-weight: bold;
   }
 
-  .status-image1 {
+  svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.status-image1.css-i4bv87-MuiSvgIcon-root{
+    color: rgb(22, 255, 0);
     margin-top: -0.1vw;
-    height: 0.7vw;
-    width: 0.7vw; /* Adjust size as needed */
-    margin-right: 0.3vw; /* Space between image and text */
+    height: 0.8vw;
+    width: 0.8vw; /* Adjust size as needed */
+    margin-right: 0.25vw; /* Space between image and text */
   }
   .status-image2 {
     margin-top: -0.1vw;
@@ -69,10 +70,11 @@
     width: 0.7vw; /* Adjust size as needed */
     margin-right: 0.3vw; /* Space between image and text */
   }
-  .status-image3 {
+  svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.status-image3.css-i4bv87-MuiSvgIcon-root{
+    color: #E72929;
     margin-top: -0.1vw;
-    height: 0.9vw;
-    width: 0.9vw; /* Adjust size as needed */
+    height: 0.8vw;
+    width: 0.8vw; /* Adjust size as needed */
     margin-right: 0.25vw; /* Space between image and text */
   }
   .status-item{

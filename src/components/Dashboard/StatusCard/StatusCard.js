@@ -1,8 +1,8 @@
 import React from 'react';
 import './statusCard.css'; // Import the CSS file for styling
-import completedImage from "../../../assets/completed.png";
 import inProgressImage from '../../../assets/inProgress.png';
-import notPaidImage from '../../../assets/NotPaid.png';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // Utility function to get current month
 const getCurrentMonth = () => {
@@ -54,7 +54,7 @@ const StatusCard = ({ payingGuests }) => {
         <div className="status-card-content">
           <div className="status-card-heading">
             <div className='status-item'>
-              <img src={completedImage} alt="Completed" className='status-image1' />
+              <CheckCircleIcon className='status-image1' />
               <span className='status-text-done'>Done</span>
             </div>
             <div className='status-item'>
@@ -62,7 +62,7 @@ const StatusCard = ({ payingGuests }) => {
               <span className='status-text-partial'>Partial</span>
             </div>
             <div className='status-item'>
-              <img src={notPaidImage} alt="Not Paid" className='status-image3' />
+              <CancelIcon className='status-image3' />
               <span className='status-text-not-paid'>Not Paid</span>
             </div>
           </div>
