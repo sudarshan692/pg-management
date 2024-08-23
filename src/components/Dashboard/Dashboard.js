@@ -262,10 +262,10 @@ const Dashboard = () => {
     }
   
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Paying Guests');
-  
-    // Add header row
-    worksheet.addRow([
+    const guestWorksheet = workbook.addWorksheet('Paying Guests');
+    
+    // Define header row data for the Paying Guests sheet
+    const headerRow = [
       'Guest_ID',
       'Guest_Name',
       'Guest_Mobile_No',
@@ -283,20 +283,26 @@ const Dashboard = () => {
       'Maintenance_Charges',
       'Rent_Amount',
       'Current_Status'
-    ]);
+    ];
+    
+    // Add header row to the Paying Guests sheet
+    const header = guestWorksheet.addRow(headerRow);
+    header.height = 20;
   
-    // Apply header style
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
-    worksheet.getRow(1).fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: '3F51B5' }
-    };
-    worksheet.getRow(1).alignment = { horizontal: 'center', vertical: 'middle' };
+    // Apply header style to each cell individually
+    header.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '3F51B5' }
+      };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
   
-    // Add data rows
+    // Add data rows and apply center alignment to the Paying Guests sheet
     payingGuests.forEach(guest => {
-      worksheet.addRow([
+      const row = guestWorksheet.addRow([
         guest.guestID,
         guest.guestName,
         guest.guestMobileNo,
@@ -310,17 +316,77 @@ const Dashboard = () => {
         guest.roomNo,
         guest.roomType,
         guest.depositAmount,
-        guest.fullDeposit,
+        guest.fullDeposit ? 'Yes' : 'No', // Convert TRUE/FALSE to Yes/No
         guest.maintenanceCharges,
         guest.rentAmount,
         guest.currentStatus
       ]);
+      
+      // Center-align data for each cell in the row
+      row.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
+    
+    // Apply custom number format to the column containing Aadhaar numbers
+    guestWorksheet.getColumn(8).numFmt = '000000000000'; // Format for 12-digit numbers
+  
+    // Auto-adjust column widths for the Paying Guests sheet
+    guestWorksheet.columns.forEach(column => {
+      const maxLength = column.values.reduce((max, value) => Math.max(max, String(value).length), 0);
+      column.width = maxLength + 4; // Adjust width
     });
   
-    // Auto-adjust column widths
-    worksheet.columns.forEach(column => {
+    // Create a new worksheet for Payment Details
+    const paymentWorksheet = workbook.addWorksheet('PaymentDetails');
+  
+    // Define header row data for the Payment Details sheet
+    const paymentHeaderRow = [
+      'Guest_ID',
+      'Guest_Name',
+      'Month_Year',
+      'Payment_Date',
+      'Payment_Amount',
+      'Remaining_Amount',
+      'Payment_Status'
+    ];
+  
+    // Add header row to the Payment Details sheet
+    const paymentHeader = paymentWorksheet.addRow(paymentHeaderRow);
+    paymentHeader.height = 20;
+  
+    // Apply header style to each cell individually
+    paymentHeader.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '3F51B5' }
+      };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
+  
+    // Add payment details rows
+    payingGuests.forEach(guest => {
+      const paymentDetails = guest.paymentDetails || []; // Ensure paymentDetails is always an array
+      paymentDetails.forEach(payment => {
+        const monthYear = `${payment.paymentForMonth} ${payment.paymentForYear}`;
+        const row = paymentWorksheet.addRow([
+          guest.guestID,
+          guest.guestName,
+          monthYear,
+          payment.paymentDate,
+          payment.paymentAmount,
+          payment.remainingAmount,
+          payment.paymentStatus
+        ]);
+        // Center-align data for each cell in the row
+        row.alignment = { horizontal: 'center', vertical: 'middle' };
+      });
+    });
+  
+    // Auto-adjust column widths for the Payment Details sheet
+    paymentWorksheet.columns.forEach(column => {
       const maxLength = column.values.reduce((max, value) => Math.max(max, String(value).length), 0);
-      column.width = maxLength + 2; // Adjust width
+      column.width = maxLength + 4; // Adjust width
     });
   
     // Export the workbook to a file
@@ -333,6 +399,9 @@ const Dashboard = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
+  
+  
+  
 
 
   return (
@@ -352,7 +421,7 @@ const Dashboard = () => {
       </div>
       <RoomMatrixDialog open={isRoomMatrixDialogOpen} onClose={toggleRoomMatrixDialog} pgDetails={pgDetails} payingGuests={payingGuests}/>
       <ChangePasswordDialog handleLogout={handleLogout} open={changePasswordDialogOpen} onClose={closeChangePasswordDialog}/>
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <button className="logout-btn3" onClick={handleLogout}>Logout</button>
       {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
       <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog} onPaymentUpdate={handlePaymentUpdate} guestStatuses={guestStatuses} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onToggleStatus={handleToggleStatus} pgDetails={pgDetails} />
       {isPaymentStatusDialogOpen && selectedGuest && (

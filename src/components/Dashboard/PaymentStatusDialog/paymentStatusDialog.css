@@ -257,8 +257,9 @@ td:hover {
   animation: pulse 1s ease-in-out infinite;
 }
 .edit-button1{
-  padding-top: 0.1vw;
-  padding-bottom: 0.1vw;
+  width: 3vw;
+  padding-top: 0.2vw;
+  padding-bottom: 0.2vw;
   padding-left: 0.5vw;
   padding-right: 0.5vw;
   cursor: pointer;
@@ -312,7 +313,8 @@ td:hover {
   position: absolute;
   background-color: #f44336;
   right: 0;
-  margin-right: 5vw;
+  margin-right: 8vw;
+  width: 5vw;
 }
 .save-button1{
   font-size: 0.8vw;
@@ -327,6 +329,7 @@ td:hover {
   right: 0;
   background-color: #3f51b5;
   margin-right: 2.2vw;
+  width: 5vw;
 }
 .guest-id1{
   font-size: 1.2vw;

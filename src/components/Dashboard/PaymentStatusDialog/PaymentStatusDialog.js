@@ -37,6 +37,7 @@ const PaymentStatusDialog = ({
   const [selectedYear, setSelectedYear] = useState("");
   const [showDownloadLink, setShowDownloadLink] = useState(false);
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -143,6 +144,7 @@ const PaymentStatusDialog = ({
   };
 
   const handleSave = async () => {
+    setIsSaving(true);
     setLoading(true);
     try {
       const guestRef = doc(db, `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`, guest.id);
@@ -178,6 +180,7 @@ const PaymentStatusDialog = ({
       onSnackbarOpen("Error updating guest details. Please try again.", "error");
     } finally {
       setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -425,7 +428,7 @@ const PaymentStatusDialog = ({
             {isEditing && (
               <div className="edit-buttons">
                 <button className="cancel-button1" onClick={handleEditToggle}>Cancel</button>
-                <button className="save-button1" onClick={handleSave}>Save</button>
+                <button className="save-button1" onClick={handleSave}>{isSaving ? 'Saving...' : 'Save'}</button>
               </div>
             )}
           </div>
