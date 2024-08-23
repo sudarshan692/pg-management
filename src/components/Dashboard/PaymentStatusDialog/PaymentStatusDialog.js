@@ -375,7 +375,7 @@ const PaymentStatusDialog = ({
               { label: "Rent Amount", value: editedGuest.rentAmount, editable: true, key: "rentAmount" },
               { label: "Deposit Amount", value: editedGuest.depositAmount, editable: true, key: "depositAmount" },
               { label: "Maintenance Charges", value: editedGuest.maintenanceCharges, editable: true, key: "maintenanceCharges" },
-              { label: "Present Status", value: editedGuest.presentStatus, editable: true, key: "presentStatus" },
+              { label: "Present Status(Employee/Student)", value: editedGuest.presentStatus, editable: true, key: "presentStatus" },
               { label: "Full Deposit", value: editedGuest.fullDeposit, editable: true, key: "fullDeposit" },
             ].map(({ label, value, editable, key }) => (
               <div key={key} className="detail-item">
@@ -414,7 +414,7 @@ const PaymentStatusDialog = ({
                     />
                   ) : (
                     <input
-                      type={key === "depositAmount" || key === "maintenanceCharges" || key === "rentAmount" ? "number" : "text"}
+                      type={key === "depositAmount" || key === "guestMobileNo" || key === "fatherMobileNo" || key === "aadharNumber" || key === "floorNo" || key === "roomNo" || key === "maintenanceCharges" || key === "rentAmount" ? "number" : "text"}
                       name={key}
                       value={value}
                       onChange={handleInputChange}
