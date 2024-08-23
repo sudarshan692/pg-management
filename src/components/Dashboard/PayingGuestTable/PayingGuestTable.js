@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FaArrowUp, FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
 import LoadingSpinner from "../../shared/LoadingSpinner"; // Adjust the path as needed
 import PaymentStatusDialog from "../PaymentStatusDialog/PaymentStatusDialog";
 import "./payingGuestTable.css";
@@ -473,7 +473,7 @@ const PayingGuestTable = ({
               paginationRowsPerPageOptions={[10, 20, 30]}
               highlightOnHover
               pointerOnHover
-              sortIcon={<FaArrowUp />}
+              sortIcon={<i className="material-icons">arrow_upward</i>}
               defaultSortField="guestID"
               customStyles={customStyles}
               noDataComponent={<CustomNoDataComponent />}
