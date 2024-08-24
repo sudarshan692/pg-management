@@ -15,8 +15,9 @@ import {
   Tooltip,
   Legend,
   LabelList,
+  ResponsiveContainer,
 } from "recharts";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
 import "./paymentBarChartDialog.css";
 
 const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
@@ -106,15 +107,16 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
     height: "100vh",
   };
 
-  // Inline styles for dialog content to place it above the overlay
-  const dialogContentStyle = {
-    position: "relative",
-    zIndex: 2,
-    backgroundColor: "#0d1117",
-    borderRadius: "8px",
-    overflow: "hidden",
-    width: "70vw",
-    height: "60vh",
+  // Style for horizontal scrolling container
+  const scrollContainerStyle = {
+    overflowX: "auto",
+    width: "100%", // Full width of parent container
+  };
+
+  // Style for chart to extend beyond the screen width
+  const chartStyle = {
+    width: "1200px", // Set width larger than the mobile screen to enable scrolling
+    height: "450px", // Fixed height
   };
 
   return (
@@ -132,7 +134,7 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
     >
       <div style={dialogContainerStyle}>
         <div style={overlayStyle} /> {/* Overlay applied here */}
-        <div style={dialogContentStyle}>
+        <div className="dialog-content1"> {/* Use CSS class for mobile styles */}
           <DialogTitle
             className="dialog-title"
             id="payment-bar-chart-dialog"
@@ -155,7 +157,6 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
             </IconButton>
           </DialogTitle>
           <DialogContent
-            style={dialogContentStyle} // Apply styles to place content above overlay
             sx={{
               p: 2,
               display: "flex",
@@ -181,83 +182,88 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                   width: "100%",
                 }}
               >
-                <BarChart
-                  width={1200}
-                  height={450}
-                  data={paymentData}
-                  margin={{ top: 40, right: 30, left: 20, bottom: 10 }}
-                >
-                  <CartesianGrid stroke="#ccc" strokeDasharray="1 1" />
-                  <XAxis
-                    dataKey="month"
-                    tick={{ angle: 0, textAnchor: "middle", fontSize: 12 }}
-                    tickFormatter={tickFormatter}
-                  />
-                  <YAxis
-                    type="number"
-                    domain={[0, "dataMax + 10000"]}
-                    tickFormatter={yAxisTickFormatter}
-                  />
-                  <Tooltip
-                    content={({ active, payload, label }) => {
-                      if (active && payload && payload.length) {
-                        const month = monthNames[label - 1]; // Get month name from label
-                        const year = currentYear; // Current year
-                        const amount = payload[0].value; // Amount from payload
+                {/* Horizontal scrolling container */}
+                <div style={scrollContainerStyle}>
+                  {/* Set a larger width for the chart to enable scrolling */}
+                  <div style={chartStyle}>
+                    <ResponsiveContainer width="100%" height="95%">
+                      <BarChart
+                        data={paymentData}
+                        margin={{ top: 40, right: 30, left: 30, bottom: 10 }}
+                      >
+                        <CartesianGrid stroke="#ccc" strokeDasharray="1 1" />
+                        <XAxis
+                          dataKey="month"
+                          tick={{ angle: 0, textAnchor: "middle", fontSize: 12 }}
+                          tickFormatter={tickFormatter}
+                        />
+                        <YAxis
+                          type="number"
+                          domain={[0, "dataMax + 10000"]}
+                          tickFormatter={yAxisTickFormatter}
+                        />
+                        <Tooltip
+                          content={({ active, payload, label }) => {
+                            if (active && payload && payload.length) {
+                              const month = monthNames[label - 1]; // Get month name from label
+                              const year = currentYear; // Current year
+                              const amount = payload[0].value; // Amount from payload
 
-                        return (
-                          <div
-                            style={{
-                              backgroundColor: "#162c46",
-                              color: "#fff",
-                              borderRadius: "0.5vw",
-                              padding: "10px",
-                              fontSize: "14px",
-                              textAlign: "center",
-                            }}
-                          >
-                            <p
-                              style={{
-                                margin: "0 0 4px 0",
-                                fontWeight: "bold",
-                              }}
-                            >{`${month} ${year}`}</p>
-                            <p
-                              style={{
-                                margin: 0,
-                                color: "rgb(22, 255, 0)",
-                                fontWeight: "bold",
-                              }}
-                            >{`Total Earnings: ₹${amount.toLocaleString()}`}</p>
-                          </div>
-                        );
-                      }
+                              return (
+                                <div
+                                  style={{
+                                    backgroundColor: "#162c46",
+                                    color: "#fff",
+                                    borderRadius: "0.5vw",
+                                    padding: "10px",
+                                    fontSize: "14px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      margin: "0 0 4px 0",
+                                      fontWeight: "bold",
+                                    }}
+                                  >{`${month} ${year}`}</p>
+                                  <p
+                                    style={{
+                                      margin: 0,
+                                      color: "rgb(22, 255, 0)",
+                                      fontWeight: "bold",
+                                    }}
+                                  >{`Total Earnings: ₹${amount.toLocaleString()}`}</p>
+                                </div>
+                              );
+                            }
 
-                      return null;
-                    }}
-                    contentStyle={{
-                      backgroundColor: "#162c46",
-                      color: "#fff",
-                      borderRadius: "0.5vw",
-                    }}
-                  />
+                            return null;
+                          }}
+                          contentStyle={{
+                            backgroundColor: "#162c46",
+                            color: "#fff",
+                            borderRadius: "0.5vw",
+                          }}
+                        />
 
-                  <Legend />
-                  <Bar dataKey="amount" fill="orange" barSize={20}>
-                    <LabelList
-                      dataKey="amount"
-                      position="top"
-                      formatter={(value) => `₹${value.toLocaleString()}`}
-                      style={{ fontSize: 12, fill: "#16FF00" }}
-                    />
-                  </Bar>
-                </BarChart>
+                        <Legend />
+                        <Bar dataKey="amount" fill="orange" barSize={20}>
+                          <LabelList
+                            dataKey="amount"
+                            position="top"
+                            formatter={(value) => `₹${value.toLocaleString()}`}
+                            style={{ fontSize: 12, fill: "#16FF00" }}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
                     width: "100%",
-                    marginTop: 20,
                   }}
                 >
                   <Button
