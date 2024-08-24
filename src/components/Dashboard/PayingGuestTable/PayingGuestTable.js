@@ -439,6 +439,7 @@ const PayingGuestTable = ({
         minHeight: window.innerWidth < 768 ? "1.75vw" : "2.6vw",
         fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         fontWeight: "bold",
+        height:"2.6vw",
       },
     },
     rows: {
@@ -463,6 +464,7 @@ const PayingGuestTable = ({
         color: "white",
         display: "flex",
         justifyContent: "center",
+        fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
         minHeight: "0",
         height:"2.6vw",
       },
