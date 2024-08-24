@@ -437,7 +437,7 @@ const PayingGuestTable = ({
         backgroundColor: "#3f51b5",
         color: "white",
         minHeight: window.innerWidth < 768 ? "1.75vw" : "2.6vw",
-        fontSize: window.innerWidth < 768 ? "0.8vw" : "0.8vw",
+        fontSize: window.innerWidth < 768 ? "0.8vw" : "0.7vw",
         fontWeight: "bold",
         height:"2.6vw",
       },
