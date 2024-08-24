@@ -11,6 +11,22 @@ const getCurrentMonth = () => {
   return months[now.getMonth()];
 };
 
+const checkCircleIcon = {
+  color: 'rgb(22, 255, 0)',
+  marginTop: '-0.1vw',
+  height: '0.8vw',
+  width: '0.8vw',
+  marginRight: '0.25vw',
+};
+
+const cancelIcon = {
+  color: '#E72929',
+  marginTop: '-0.1vw',
+  height: '0.8vw',
+  width: '0.8vw',
+  marginRight: '0.25vw',
+};
+
 const StatusCard = ({ payingGuests }) => {
   // Function to calculate the status counts
   const getStatusCounts = () => {
@@ -54,7 +70,7 @@ const StatusCard = ({ payingGuests }) => {
         <div className="status-card-content">
           <div className="status-card-heading">
             <div className='status-item'>
-              <CheckCircleIcon className='status-image1' />
+              <CheckCircleIcon style={checkCircleIcon}/>
               <span className='status-text-done'>Done</span>
             </div>
             <div className='status-item'>
@@ -62,7 +78,7 @@ const StatusCard = ({ payingGuests }) => {
               <span className='status-text-partial'>Partial</span>
             </div>
             <div className='status-item'>
-              <CancelIcon className='status-image3' />
+              <CancelIcon style={cancelIcon}/>
               <span className='status-text-not-paid'>Not Paid</span>
             </div>
           </div>

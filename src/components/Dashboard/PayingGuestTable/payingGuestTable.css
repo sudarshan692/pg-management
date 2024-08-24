@@ -119,28 +119,6 @@
   background: none;
   border: none;
 }
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.cancel-icon.status-icon.css-i4bv87-MuiSvgIcon-root{
-  color: #E72929; /* Customize the color */
-  margin-right: 0.3vw;
-  width: 1.2vw;
-  height: 1.2vw;
-}
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.done-icon.status-icon.css-i4bv87-MuiSvgIcon-root{
-  width: 1.2vw;
-  height: 1.2vw;
-  color: #059212; /* Green color for 'Done' */
-  margin-right: 0.3vw;
-}
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.add-icon.css-i4bv87-MuiSvgIcon-root{
-  background: none;
-  border: none;
-  color: orange;
-  margin-top: 0.2vw;
-  width: 1.2vw;
-  height: 1.2vw;
-  cursor: pointer;
-  margin-right: -0.5vw;
-}
 .status-box {
   display: flex;
   align-items: center;

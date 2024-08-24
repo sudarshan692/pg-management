@@ -13,19 +13,47 @@ const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>There are no records to display.</div>
 );
 
+const checkCircleIcon = {
+  color: '#059212',
+  width: '1.2vw',
+  height: '1.2vw',
+  marginRight: '0.3vw',
+  verticalAlign: 'middle',
+  transition: 'transform 0.2s ease',
+};
+
+const cancelIcon = {
+  color: '#E72929',
+  width: '1.2vw',
+  height: '1.2vw',
+  marginRight: '0.3vw',
+  verticalAlign: 'middle',
+  transition: 'transform 0.2s ease',
+};
+
+const addCircleOutlineIcon = {
+  background: 'none',
+  border: 'none',
+  color: 'orange',
+  marginTop: '0.2vw',
+  width: '1.2vw',
+  height: '1.2vw',
+  cursor: 'pointer',
+  marginRight: '-0.5vw',
+}
+
 const StatusBoxedCell = ({ status }) => {
   let content = null;
   let displayText = "Not Paid";
-  let iconClass = "status-icon"; // Default class for icons
 
   if (status === "Done") {
-    content = <CheckCircleIcon className={`done-icon ${iconClass}`} />;
+    content = <CheckCircleIcon style={checkCircleIcon}/>;
     displayText = "Done";
   } else if (status === "Partial") {
     content = <img src={inProgressImage} alt="Partial" className="status-image" />;
     displayText = "Partial";
   } else if (status === "Not Paid") {
-    content = <CancelIcon className={`cancel-icon ${iconClass}`} />;
+    content = <CancelIcon style={cancelIcon}/>;
   }
 
   return (
@@ -370,7 +398,7 @@ const PayingGuestTable = ({
               onClick={() => onAddPayment(row)}
               className="add-payment-button"
             >
-              <AddCircleOutlineIcon className="add-icon" />
+              <AddCircleOutlineIcon style={addCircleOutlineIcon}/>
             </button>
             <label
               className={`toggle-switch ${isActive ? "" : "inactive-toggle"}`}
