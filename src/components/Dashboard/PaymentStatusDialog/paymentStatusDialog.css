@@ -355,21 +355,21 @@ td:hover {
 }
 .payment-type{
   font-size: 0.7vw;
-  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline: 1px solid #007bff; /* Change the color and thickness as needed */
   outline-offset: 0.15vw;
   width: 10vw;
   margin-right: 0.5vw;
 }
 .select-year{
   font-size: 0.7vw;
-  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline: 1px solid #007bff; /* Change the color and thickness as needed */
   outline-offset: 0.15vw;
   width: 10vw;
   margin-right: 0.5vw;
 }
 .select-month{
   font-size: 0.7vw;
-  outline: 1px solid black; /* Change the color and thickness as needed */
+  outline: 1px solid #007bff; /* Change the color and thickness as needed */
   outline-offset: 0.15vw;
   width: 10vw;
   margin-right: 0.5vw;
