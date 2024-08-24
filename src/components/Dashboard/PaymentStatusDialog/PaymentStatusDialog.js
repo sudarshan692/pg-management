@@ -465,7 +465,7 @@ const PaymentStatusDialog = ({
               </select>
               {showDownloadLink && (
                 <button onClick={handleDownloadReceipt} className="download-receipt-button">
-                  <DownloadIcon style={{ marginTop: '8px' }} />
+                  <DownloadIcon style={{ marginTop: '0.4vw', height: '1.2vw', width: '1.2vw' }} />
                 </button>
                )}
             </div>

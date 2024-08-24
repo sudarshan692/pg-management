@@ -7,11 +7,39 @@ const EditDialog = ({ data, onClose, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Check if the field is numeric and convert to number if true
+    if (['maxCustomers', 'mobile', 'totalFloors', 'totalRoomsPerFloor', 'singleBedsPerRoom', 'doubleSharingBedsPerRoom', 'tripleSharingBedsPerRoom'].includes(name)) {
+      setFormData({ ...formData, [name]: value ? parseInt(value, 10) : '' });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSave = () => {
-    onSave(formData);
+    // Convert necessary fields to numbers before saving
+    const numericFields = [
+      'maxCustomers',
+      'mobile',
+      'totalFloors',
+      'totalRoomsPerFloor',
+      'singleBedsPerRoom',
+      'doubleSharingBedsPerRoom',
+      'tripleSharingBedsPerRoom',
+    ];
+
+    // Create a copy of formData to modify
+    const updatedFormData = { ...formData };
+
+    // Convert string values to numbers for numeric fields
+    numericFields.forEach((field) => {
+      if (updatedFormData[field] !== '') {
+        updatedFormData[field] = parseInt(updatedFormData[field], 10);
+      }
+    });
+
+    // Call the onSave function with updatedFormData
+    onSave(updatedFormData);
   };
 
   return (
@@ -27,6 +55,7 @@ const EditDialog = ({ data, onClose, onSave }) => {
           fullWidth
         />
         <TextField
+          type="number"
           margin="dense"
           label="Max Customers"
           name="maxCustomers"
@@ -67,10 +96,56 @@ const EditDialog = ({ data, onClose, onSave }) => {
           fullWidth
         />
         <TextField
+          type="number"
           margin="dense"
           label="Mobile"
           name="mobile"
           value={formData.mobile}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          type="number"
+          margin="dense"
+          label="Total Floors"
+          name="totalFloors"
+          value={formData.totalFloors}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          type="number"
+          margin="dense"
+          label="Total Rooms/Floor"
+          name="totalRoomsPerFloor"
+          value={formData.totalRoomsPerFloor}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          type="number"
+          margin="dense"
+          label="Single Bed/Room"
+          name="singleBedsPerRoom"
+          value={formData.singleBedsPerRoom}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          type="number"
+          margin="dense"
+          label="Double Sharing Beds/Room"
+          name="doubleSharingBedsPerRoom"
+          value={formData.doubleSharingBedsPerRoom}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          type="number"
+          margin="dense"
+          label="Triple Sharing Beds/Room"
+          name="tripleSharingBedsPerRoom"
+          value={formData.tripleSharingBedsPerRoom}
           onChange={handleChange}
           fullWidth
         />
