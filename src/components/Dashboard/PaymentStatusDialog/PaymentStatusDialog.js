@@ -239,7 +239,7 @@ const PaymentStatusDialog = ({
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     // Set the background color
-    doc.setFillColor(221, 221, 221); // #DDDDDD
+    doc.setFillColor(225, 225, 225); // #DDDDDD
     doc.rect(0, 0, pageWidth, pageHeight, 'F'); // Fill entire page with color
     // Draw a border around the page
     const borderMargin = 5;
@@ -258,7 +258,7 @@ const PaymentStatusDialog = ({
     doc.setTextColor(255, 255, 255); 
     doc.text(headingText, xPosition, 22); // Adjusted Y position to 22
     // Set font to size 12
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     doc.setTextColor(0, 0, 0); // Set text color back to black
     // Format the payment date as DD-MM-YYYY
     const paymentDate = new Date(paymentDetail.paymentDate);
@@ -268,9 +268,9 @@ const PaymentStatusDialog = ({
         paymentDate.getFullYear(),
     ].join('-');
     // Left-aligned "Receipt No:"
-    doc.text(`Receipt No: ${guest.guestID}`, 10, 35);
+    doc.text(`Receipt no: ${guest.guestID}`, 10, 35);
     // Right-aligned "Payment Date:"
-    const paymentDateText = `Payment Date: ${formattedDate}`;
+    const paymentDateText = `Payment date: ${formattedDate}`;
     const paymentDateTextWidth = doc.getTextWidth(paymentDateText);
     doc.text(paymentDateText, pageWidth - paymentDateTextWidth - 10, 35);
     // Table:
@@ -284,13 +284,13 @@ const PaymentStatusDialog = ({
     const rows = [
         { label: "Tenant", value: `${guest.guestName}`},
         { label: "Address of rented property", value: `${pgDetails.address}`},
-        { label: "Rent for Month - Year", value: `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}` },
-        { label: "Payment Received Date", value: formattedDate },
+        { label: "Rent for month - year", value: `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}` },
+        { label: "Payment received date", value: formattedDate },
         { label: "Recipient", value: `${pgDetails.ownerName}` },
         { label: "Payment type", value: `${selectedPaymentType}`},
         { label: "Total rent payable", value: `Rs.${guest.rentAmount}`},
         { label: "Total rent paid", value: `Rs.${paymentDetail.paymentAmount}`},
-        { label: "Remaining Balanced owned", value: `Rs.${paymentDetail.remainingAmount != null ? paymentDetail.remainingAmount : 0}`}, // Handle null and undefined
+        { label: "Remaining balanced owned", value: `Rs.${paymentDetail.remainingAmount != null ? paymentDetail.remainingAmount : 0}`}, // Handle null and undefined
     ];
     rows.forEach((row, index) => {
         const rowY = tableStartY;
@@ -314,23 +314,117 @@ const PaymentStatusDialog = ({
     doc.setDrawColor(0, 0, 0); // Ensure line is black
     doc.line(borderMargin + tableMargin + column1Width, 50, borderMargin + tableMargin + column1Width, tableStartY);
     
-    // Add additional text below the table
-    const additionalText = `This rent receipt acknowledges that, the rent for Month ${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}, ${guest.guestName} has paid the rent in full.`;
+    doc.setFontSize(10);
+    // Add text below the table
+    const acknowledgmentTextStart = `This rent receipt acknowledges that, the rent for Month `;
+    const acknowledgmentTextBold = `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}, ${guest.guestName}`;
+    const acknowledgmentTextEnd = ` has paid the rent in full.`;
+    const privacyNotice = "Privacy Notice: We respect your privacy and ensure that your data is securely handled.";
+    const helpInfoStart = "Need Help?:";
+    const helpInfoBold = `  Call us at ${pgDetails.mobile} or email ${pgDetails.ownerEmail}`;
+    
+    // Calculate text positions
     const textMargin = 10;
-    const additionalTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
+    const acknowledgmentTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
+    const additionalTextLines = doc.splitTextToSize(acknowledgmentTextStart + acknowledgmentTextBold + acknowledgmentTextEnd, acknowledgmentTextWidth);
+    
+    // Position the acknowledgment text below the table with a margin
+    let additionalTextY = tableStartY + textMargin;
 
-    // Split text into lines if it exceeds the page width
-    const additionalTextLines = doc.splitTextToSize(additionalText, additionalTextWidth);
+    // Add the starting part of the text
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(acknowledgmentTextStart, textMargin, additionalTextY);
+    
+    // Get the width of the starting part to position the bold text correctly
+    const startTextWidth = doc.getTextWidth(acknowledgmentTextStart);
 
-    // Position the additional text below the table with a margin
-    const additionalTextY = tableStartY + textMargin;
-    additionalTextLines.forEach((line, lineIndex) => {
-        doc.text(line, textMargin, additionalTextY + lineIndex * 10); // Adjust line spacing as needed
-    });
+    // Add the bold part of the text
+    doc.setFont("helvetica", "bold");
+    doc.text(acknowledgmentTextBold, textMargin + startTextWidth, additionalTextY);
 
+    // Calculate the total width for positioning the ending text
+    const boldTextWidth = doc.getTextWidth(acknowledgmentTextBold);
+    doc.setFont("helvetica", "normal");
+    doc.text(acknowledgmentTextEnd, textMargin + startTextWidth + boldTextWidth, additionalTextY);
+    
+    additionalTextY += 10; // Adjust spacing
+
+    // Add Privacy Notice
+    doc.setFont("helvetica", "bold");
+    doc.text("Privacy Notice:", textMargin, additionalTextY); // Print "Privacy Notice:" in bold
+    doc.setFont("helvetica", "normal");
+    const privacyNoticeText = privacyNotice.replace("Privacy Notice:", ""); // Remove "Privacy Notice:" from the original text
+    doc.text(privacyNoticeText, textMargin + doc.getTextWidth("Privacy Notice: "), additionalTextY); // Print the rest of the privacy notice
+    additionalTextY += 10; // Adjust spacing between texts
+    
+    // Add Help Information
+    doc.setFont("helvetica", "bold");
+    doc.text(helpInfoStart, textMargin, additionalTextY); // Print "Need Help?:" in bold
+    doc.setFont("helvetica", "normal");
+    const helpInfoStartWidth = doc.getTextWidth(helpInfoStart);
+    doc.text(helpInfoBold, textMargin + helpInfoStartWidth, additionalTextY); // Print the rest of the help info
+    additionalTextY += 40; // Adjust spacing to add padding before the signature line
+
+    // Add Authorized Signature section
+    const signatureText = "Authorized Signature:";
+    doc.setFont("helvetica", "bold");
+    doc.text(signatureText, textMargin, additionalTextY); // Print "Authorized Signature:" in bold
+    // Draw a line for the signature
+    const signatureLineWidth = 40; // Width of the signature line
+    const signatureTextWidth = doc.getTextWidth(signatureText);
+    const lineStartX = textMargin + signatureTextWidth + 5; // 5 units space after the text
+    const lineEndX = lineStartX + signatureLineWidth; // Calculate end X position for the line
+    const signatureLineY = additionalTextY; // Adjust Y position to align with text
+    doc.line(lineStartX, signatureLineY, lineEndX, signatureLineY);
+
+    doc.setFont("helvetica", "normal");
+    // Add Footer
+    const thankYouTextStart = `Thank you,`;
+    const thankYouTextBold = `${guest.guestName} `;
+    const thankYouTextEnd = `  for your prompt payment! We appreciate your continued stay with us.`;
+    const savePaperMessage = "Save Paper: Opt for digital receipts and help save the environment!";
+    const footerMargin = 10; // Margin from the bottom of the page
+    
+    doc.setFontSize(10); // Set smaller font size for footer
+    doc.setTextColor(0, 0, 0); // Set text color to black
+
+    // Position footer text at the bottom of the page
+    const thankYouTextWidth = doc.getTextWidth(thankYouTextStart + thankYouTextBold + thankYouTextEnd);
+    doc.setTextColor(0, 0, 0); // Set text color to black
+    doc.setFont("helvetica", "normal");
+    doc.text(thankYouTextStart, (pageWidth - thankYouTextWidth) / 2, pageHeight - footerMargin - 18);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text(thankYouTextBold, (pageWidth - thankYouTextWidth) / 2 + doc.getTextWidth(thankYouTextStart), pageHeight - footerMargin - 18);
+
+    doc.setFont("helvetica", "normal");
+    doc.text(thankYouTextEnd, (pageWidth - thankYouTextWidth) / 2 + doc.getTextWidth(thankYouTextStart + thankYouTextBold), pageHeight - footerMargin - 18);
+
+    // Separate bold and normal text in the footer
+    const boldText = "Save Paper:";
+    const normalText = savePaperMessage.replace(boldText, "");
+    doc.setFont("helvetica", "bold");
+    doc.text(boldText, (pageWidth - doc.getTextWidth(savePaperMessage)) / 2, pageHeight - footerMargin - 10);
+    doc.setFont("helvetica", "normal");
+    doc.text(normalText, (pageWidth - doc.getTextWidth(savePaperMessage)) / 2 + doc.getTextWidth(boldText), pageHeight - footerMargin - 10);
+    
     // Save the PDF
     doc.save(`Receipt_${selectedMonth}_${selectedYear}.pdf`);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
