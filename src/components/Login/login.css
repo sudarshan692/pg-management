@@ -51,7 +51,7 @@
     font-weight: bold;
   }
   .login-inputboxes {
-    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline: 1px solid white; 
     outline-offset: 0.15vw;
     padding: 0.8vw;
     margin-bottom: 0.6vw;
@@ -68,7 +68,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .login-button {
-    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline: 1px solid white;
     outline-offset: 0.15vw;
     margin-top: 1.5vw;
     margin-bottom: 2.5vw;
@@ -135,8 +135,6 @@
   width: 15vw; 
   background-color: transparent; 
 }
-
-/* Styles specifically for screens with a max width of 600px (mobile devices) */
 @media (max-width: 768px) {
   .login-card {
     border-radius: 4vw;
@@ -151,7 +149,7 @@
     font-size: 3.5vw;
   }
   .login-inputboxes {
-    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline: 1px solid white;
     outline-offset: 0.5vw;
     border-radius: 1vw;
     padding-top: 6vw;
@@ -164,7 +162,7 @@
   }
   .login-button {
     margin-top: 5vw;
-    outline: 1px solid white; /* Change the color and thickness as needed */
+    outline: 1px solid white;
     outline-offset: 0.5vw;
     padding-top: 3.5vw;
     padding-bottom: 3.5vw;

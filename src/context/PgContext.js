@@ -1,22 +1,17 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create a context
 const PgContext = createContext();
 
-// Custom hook to use the context
 export const usePgContext = () => {
   return useContext(PgContext);
 };
 
-// Provider component
 export const PgProvider = ({ children }) => {
   const [pgData, setPgData] = useState([]);
   const [payingGuests, setPayingGuests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [previousPgId, setPreviousPgId] = useState(null); 
-
-  // Context value
   const value = {
     pgData,
     setPgData,

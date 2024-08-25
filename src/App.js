@@ -1,4 +1,3 @@
-// Import necessary dependencies from React and React Router
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { AuthProvider, useAuth } from '../src/components/shared/AuthProvider';
@@ -9,20 +8,15 @@ import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import PgSelection from './components/PgSelection/PgSelection';
 import Dashboard from './components/Dashboard/Dashboard';
 
-// Set the root element for the Modal component
 Modal.setAppElement('#root');
 
 // PrivateRoute component - restricts access to authenticated users
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const authContext = useAuth();
-
   if (authContext.loading) {
     return <LoadingSpinner />;
   }
-
   const isAdmin = authContext.currentUser?.email === 'sudarshanakpatil@gmail.com';
-
-  // Redirect logic based on role and current path
   return (
     <Route
       {...rest}

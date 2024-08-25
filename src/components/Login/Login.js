@@ -39,7 +39,6 @@ const Login = () => {
 
   const validateInputs = () => {
     let isValid = true;
-    // Email validation
     if (!email.trim()) {
       setEmailError("Email is required");
       isValid = false;
@@ -49,7 +48,6 @@ const Login = () => {
     } else {
       setEmailError("");
     }
-    // Password validation
     if (!password.trim()) {
       setPasswordError("Password is required");
       isValid = false;
@@ -69,13 +67,10 @@ const Login = () => {
       }
       setLoading(true);
       await auth.signInWithEmailAndPassword(email, password);
-      // Check if the logged-in user's email matches specific email ID
-      // Show loading overlay before reloading
       document.body.classList.add('loading-overlay-visible');
-      // Delay the reload to allow the overlay to be visible
       setTimeout(() => {
         window.location.reload();
-      }, 100); // Adjust delay if needed
+      }, 100);
       if (email === 'sudarshanakpatil@gmail.com') {
         history.push({
           pathname: "/admin-dashboard",
@@ -89,7 +84,6 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error logging in:", error.message);
-      // Check for specific error codes and show different error messages
       if (error.code === "auth/invalid-credential") {
         setSnackbarMessage("Please enter correct credentials.");
       } else if (error.code === "auth/too-many-requests") {
