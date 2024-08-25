@@ -1,11 +1,9 @@
 import React from "react";
-import "./roomMatrixDialog.css"; // Import the CSS file
+import "./roomMatrixDialog.css";
 
 const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
-  // Initialize room status with total beds and empty guests array
   const roomStatus = {};
-
-  let roomCounter = 1; // Initialize room number counter
+  let roomCounter = 1;
 
   // Set up initial status for each floor and room
   for (let floor = 1; floor <= pgDetails.totalFloors; floor++) {
@@ -16,7 +14,7 @@ const RoomMatrixDialog = ({ open, onClose, pgDetails, payingGuests }) => {
         double: { count: pgDetails.doubleSharingBedsPerRoom, guests: [] },
         triple: { count: pgDetails.tripleSharingBedsPerRoom, guests: [] },
       };
-      roomCounter++; // Increment room number for each room
+      roomCounter++;
     }
   }
 

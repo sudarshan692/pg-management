@@ -10,25 +10,12 @@ import { usePgContext } from "../../context/PgContext";
 import { v4 as uuidv4 } from "uuid";
 import logo from "../../assets/logo2.png"
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 const PgSelection = () => {
   const { pgData, setPgData, loading, setLoading, setError } = usePgContext();
   const [selectedPG, setSelectedPG] = useState(null);
-  const [paymentLoading, setPaymentLoading] = useState(false); // Separate loading state for payment details
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -165,7 +152,7 @@ const PgSelection = () => {
     } catch (error) {
       console.error("Error adding payment details:", error.message);
     } finally {
-      setPaymentLoading(false); // End payment loading
+      setPaymentLoading(false);
     }
   };
 

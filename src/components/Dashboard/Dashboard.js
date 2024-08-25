@@ -9,7 +9,7 @@ import "./dashboard.css";
 import PayingGuestTable from "./PayingGuestTable/PayingGuestTable";
 import ChangePasswordDialog from "./ChangePassword/ChangePasswordDialog";
 import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
-import LoadingSpinner from "../shared/LoadingSpinner"; // Ensure you have a loading spinner component
+import LoadingSpinner from "../shared/LoadingSpinner";
 import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
 import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
 import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
@@ -20,8 +20,7 @@ import ExcelJS from 'exceljs';
 Modal.setAppElement("#root");
 
 const Dashboard = () => {
-  const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
-    useState(false);
+  const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
   const [payingGuestModalIsOpen, setPayingGuestModalIsOpen] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -36,7 +35,6 @@ const Dashboard = () => {
   const [guestStatuses, setGuestStatuses] = useState({});
   const [isPaymentStatusDialogOpen, setIsPaymentStatusDialogOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const location = useLocation();
   const history = useHistory();
   const { pgId } = useParams();
@@ -44,9 +42,6 @@ const Dashboard = () => {
   const previousPgIdRef = useRef(null);
   const pgDetails = location.state?.pgDetails || {};
 
-  const toggleRoomMatrixDialog = () => {
-    setIsRoomMatrixDialogOpen((prevState) => !prevState);
-  };
 
   const fetchPayingGuests = useCallback(async (pgId) => {
     try {
@@ -62,7 +57,6 @@ const Dashboard = () => {
           paymentDetails: docData.paymentDetails,
         });
       });
-      // Update the guestStatuses state with the initial status of all guests
       setGuestStatuses((prevStatuses) => {
         return {
           ...prevStatuses,
@@ -89,7 +83,7 @@ const Dashboard = () => {
       console.log("Previous pgId:", previousPgIdRef.current);
       if (currentPgId !== previousPgIdRef.current) {
         fetchPayingGuests(currentPgId);
-        previousPgIdRef.current = currentPgId; // Update the ref to the new pgId
+        previousPgIdRef.current = currentPgId;
       }
     }
   }, [pgId, fetchPayingGuests]);
@@ -134,6 +128,10 @@ const Dashboard = () => {
     }
   };
 
+  const roomMatrixDialog = () => {
+    setIsRoomMatrixDialogOpen((prevState) => !prevState);
+  };
+
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
     setDataSaved(false);
@@ -165,22 +163,9 @@ const Dashboard = () => {
     setSelectedGuest(null);
   };
 
-  const handleCloseDialog = () => {
+  const closePaymentStatusDialog= () => {
     setSelectedGuest(null); 
     setIsPaymentStatusDialogOpen(false);
-  };
-
-  const handleLogout = async () => {
-    setLoading(true);
-    try {
-      await auth.signOut();
-      history.push("/login");
-      console.log("Logout successful");
-    } catch (error) {
-      console.error("Error logging out:", error.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleSnackbarOpen = (message, severity) => {
@@ -210,11 +195,11 @@ const Dashboard = () => {
     });
   };
 
-  // const handleAddPgDetailsClick = () => {
+  // const openAddPgDetailsDialog = () => {
   //   setIsPgDetailsDialogOpen(true);
   // };
 
-  const handlePgDetailsDialogClose = () => {
+  const closeAddPgDetailsDialog = () => {
     setIsPgDetailsDialogOpen(false);
   };
 
@@ -244,14 +229,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error saving PG Details:", error);
     }
-    handlePgDetailsDialogClose();
+    closeAddPgDetailsDialog();
   };
 
-  const handleOpenDialog = () => {
+  const openPaymentBarChartDialog = () => {
     setIsDialogOpen(true);
   };
 
-  const handleCloseDialog1 = () => {
+  const closePaymentBarChartDialog = () => {
     setIsDialogOpen(false);
   };
 
@@ -399,10 +384,19 @@ const Dashboard = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
-  
-  
-  
 
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await auth.signOut();
+      history.push("/login");
+      console.log("Logout successful");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="dashboard-page">
@@ -411,21 +405,21 @@ const Dashboard = () => {
         <span className="pg-number-dashboard">{pgData.number}</span>
         <span className="heading-text">{pgData.name} Management Center</span>
       </div>
-      {/* <button className="add-pg-details-link" onClick={handleAddPgDetailsClick}>Add PG Details</button> */}
+      {/* <button className="add-pg-details-link" onClick={openAddPgDetailsDialog}>Add PG Details</button> */}
       <button className="change-password-link" onClick={openChangePasswordDialog}>Change Password</button>
       <button className="export-to-excel-btn" onClick={exportToExcel}>Export to Excel</button>
       <div className="bottom-aligned-container">
         <StatusCard  payingGuests={payingGuests} />
-        <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={handleOpenDialog}>Payment Bar Chart</button>
-        <button className="matrix" onClick={toggleRoomMatrixDialog}>Available Beds</button>
+        <button className="payment-bar-chart-btn" variant="contained" color="primary" onClick={openPaymentBarChartDialog}>Payment Bar Chart</button>
+        <button className="matrix" onClick={roomMatrixDialog}>Available Beds</button>
       </div>
-      <RoomMatrixDialog open={isRoomMatrixDialogOpen} onClose={toggleRoomMatrixDialog} pgDetails={pgDetails} payingGuests={payingGuests}/>
+      <RoomMatrixDialog open={isRoomMatrixDialogOpen} onClose={roomMatrixDialog} pgDetails={pgDetails} payingGuests={payingGuests}/>
       <ChangePasswordDialog handleLogout={handleLogout} open={changePasswordDialogOpen} onClose={closeChangePasswordDialog}/>
       <button className="logout-btn3" onClick={handleLogout}>Logout</button>
       {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
       <PayingGuestTable payingGuests={payingGuests} onAddPayment={openAddPaymentDialog} onPaymentUpdate={handlePaymentUpdate} guestStatuses={guestStatuses} selectedPGId={pgId} onSnackbarOpen={handleSnackbarOpen} onToggleStatus={handleToggleStatus} pgDetails={pgDetails} />
       {isPaymentStatusDialogOpen && selectedGuest && (
-        <PaymentStatusDialog guest={selectedGuest} onClose={handleCloseDialog} onToggleStatus={handleToggleStatus} guestStatuses={guestStatuses} setGuestData={setPayingGuests} selectedPGId={pgId} pgDetails={pgDetails}/>
+        <PaymentStatusDialog guest={selectedGuest} onClose={closePaymentStatusDialog} onToggleStatus={handleToggleStatus} guestStatuses={guestStatuses} setGuestData={setPayingGuests} selectedPGId={pgId} pgDetails={pgDetails}/>
       )}
       <div className="add-paying-guest-container">
         <button className="add-paying-guest-btn" onClick={openAddPayingGuestModal}>Add Paying Guest</button>
@@ -452,14 +446,14 @@ const Dashboard = () => {
       </Snackbar>
       {isPgDetailsDialogOpen && (
         <PgDetailsDialog
-          onClose={handlePgDetailsDialogClose}
+          onClose={closeAddPgDetailsDialog}
           onSave={handleSavePgDetails}
         />
       )}
 
       <PaymentBarChartDialog
         isOpen={isDialogOpen}
-        onClose={handleCloseDialog1}
+        onClose={closePaymentBarChartDialog}
         onPaymentUpdate={handlePaymentUpdate}
         payingGuests={payingGuests}
       />

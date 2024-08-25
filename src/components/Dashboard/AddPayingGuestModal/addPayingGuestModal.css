@@ -1,68 +1,59 @@
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns with equal width */
-  gap: 1vw; /* Adjusted gap for better spacing */
-  margin-bottom: 3vw; /* Space for the buttons */
+  grid-template-columns: 1fr 1fr;
+  gap: 1vw;
+  margin-bottom: 3vw;
 }
-
 .form-column {
   display: flex;
   flex-direction: column;
-  gap: 1.5vw; /* Adjusted space between rows */
+  gap: 1.5vw;
 }
-
 input, select {
   padding: 0.8vw;
-  border: none; /* Remove border */
+  border: none;
   border-radius: 0.3vw;
   font-size: 0.8vw;
-  background-color: rgb(3, 21, 37); /* Background color for inputs */
-  color: rgb(211, 227, 253); /* Text color for inputs and select elements */
+  background-color: rgb(3, 21, 37);
+  color: rgb(211, 227, 253);
 }
-
 input:focus, select:focus {
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.3); /* Add shadow on focus */
-  outline: none; /* Remove default outline */
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.3);
+  outline: none;
 }
-
 select {
-  height: 2.5vw; /* Ensure consistent height for select elements */
-  background-color: rgb(3, 21, 37); /* Ensure consistent background color */
+  height: 2.5vw;
+  background-color: rgb(3, 21, 37);
 }
-
 select option {
-  background-color: rgb(3, 21, 37); /* Background color of dropdown options */
-  color: rgb(211, 227, 253); /* Text color of dropdown options */
+  background-color: rgb(3, 21, 37);
+  color: rgb(211, 227, 253);
 }
-
 input[type="date"] {
-  color: rgb(211, 227, 253); /* Text color for date input */
+  color: rgb(211, 227, 253);
 }
-
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.5vw; /* Space between checkbox and label */
+  gap: 0.5vw;
 }
-
 .heading-container {
   text-align: center;
 }
-
 .add-guest-heading {
   font-size: 1.2vw;
   margin-top: 0.5vw;
   padding: 0.5vw 0.5vw;
   border-radius: 0.5vw;
-  border: 1px solid #3f51b5; /* Small border around the heading */
-  color: #3f51b5; /* Text color */
+  border: 1px solid #3f51b5;
+  color: #3f51b5;
 }
 .checkbox-container {
   font-size: 0.8vw;
   color: rgb(211, 227, 253);
   display: flex;
-  flex-wrap: wrap; /* Allows wrapping if necessary */
-  gap: 1vw; /* Space between checkboxes */
+  flex-wrap: wrap;
+  gap: 1vw;
 }
 .chk{
   align-items: center;
@@ -73,16 +64,15 @@ input[type="date"] {
   color: rgb(211, 227, 253);
   display: flex;
   align-items: center;
-  gap: 0.5vw; /* Space between checkbox and label */
+  gap: 0.5vw;
 }
 .button-container {
   position: absolute;
-  bottom: 1vw; /* Adjust this value as needed */
-  right: 1vw; /* Adjust this value as needed */
+  bottom: 1vw;
+  right: 1vw;
   display: flex;
-  gap: 0.5vw; /* Space between buttons */
+  gap: 0.5vw;
 }
-
 .button-container button {
   padding: 0.5vw 1vw;
   border: none;
@@ -91,23 +81,19 @@ input[type="date"] {
   font-size: 0.8vw;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 .button-container button[type="submit"] {
   background-color: #3f51b5;
   color: rgb(211, 227, 253);
 }
-
 .button-container button[type="submit"]:hover {
-  background-color: rgb(3, 21, 37); /* Darker color on hover */
-  transform: scale(1.05); /* Slightly enlarge button on hover */
+  background-color: rgb(3, 21, 37);
+  transform: scale(1.05);
 }
-
 .button-container button[type="button"] {
   background-color: #f44336;
   color: rgb(211, 227, 253);
 }
-
 .button-container button[type="button"]:hover {
-  background-color: rgb(3, 21, 37); /* Darker color on hover */
-  transform: scale(1.05); /* Slightly enlarge button on hover */
+  background-color: rgb(3, 21, 37);
+  transform: scale(1.05);
 }

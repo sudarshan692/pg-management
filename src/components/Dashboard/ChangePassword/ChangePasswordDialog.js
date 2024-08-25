@@ -1,10 +1,9 @@
-// ChangePasswordDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar, Alert } from '@mui/material';
 import { auth } from '../../shared/firebase';
 import firebase from 'firebase/compat/app';
 import LoadingSpinner from '../../shared/LoadingSpinner';
-import './changePasswordDialog.css'; // Import the CSS for styling
+import './changePasswordDialog.css';
 
 const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -21,34 +20,27 @@ const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
       setSnackbarOpen(true);
       return;
     }
-
     try {
       setLoading(true);
       const user = auth.currentUser;
-
       if (!user) {
         throw new Error('User is not authenticated.');
       }
-
       const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
       await user.reauthenticateWithCredential(credential);
       await user.updatePassword(newPassword);
-
       setSnackbarMessage('Password updated successfully.');
       setSnackbarSeverity('success');
       handleLogout();
-      // You might want to refresh or update the UI accordingly
-      onClose(); // Close the dialog
+      onClose();
     } catch (error) {
       console.error('Error updating password:', error);
       let errorMessage = 'Error updating password: ' + error.message;
-
       if (error.code === 'auth/wrong-password') {
         errorMessage = 'The current password is incorrect.';
       } else if (error.code === 'auth/weak-password') {
         errorMessage = 'The new password is too weak.';
       }
-
       setSnackbarMessage(errorMessage);
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -63,10 +55,7 @@ const ChangePasswordDialog = ({ open, onClose, handleLogout }) => {
 
   return (
     <>
-      {/* Overlay */}
       {open && <div className="change-password-overlay"></div>}
-
-      {/* Dialog */}
       <Dialog open={open} onClose={onClose} className="change-password-dialog">
         <DialogTitle className='dialog-title'>Change Password</DialogTitle>
         <DialogContent>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FaExclamationTriangle } from "react-icons/fa";
-import LoadingSpinner from "../../shared/LoadingSpinner"; // Adjust the path as needed
+import LoadingSpinner from "../../shared/LoadingSpinner";
 import PaymentStatusDialog from "../PaymentStatusDialog/PaymentStatusDialog";
 import "./payingGuestTable.css";
 import inProgressImage from '../../../assets/inProgress.png';
@@ -12,7 +12,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>There are no records to display.</div>
 );
-
 const checkCircleIcon = {
   color: '#059212',
   width: '1.2vw',
@@ -21,7 +20,6 @@ const checkCircleIcon = {
   verticalAlign: 'middle',
   transition: 'transform 0.2s ease',
 };
-
 const cancelIcon = {
   color: '#E72929',
   width: '1.2vw',
@@ -30,7 +28,6 @@ const cancelIcon = {
   verticalAlign: 'middle',
   transition: 'transform 0.2s ease',
 };
-
 const addCircleOutlineIcon = {
   background: 'none',
   border: 'none',
@@ -45,7 +42,6 @@ const addCircleOutlineIcon = {
 const StatusBoxedCell = ({ status }) => {
   let content = null;
   let displayText = "Not Paid";
-
   if (status === "Done") {
     content = <CheckCircleIcon style={checkCircleIcon}/>;
     displayText = "Done";
@@ -55,7 +51,6 @@ const StatusBoxedCell = ({ status }) => {
   } else if (status === "Not Paid") {
     content = <CancelIcon style={cancelIcon}/>;
   }
-
   return (
     <div className="status-box">
       {content}
@@ -68,9 +63,7 @@ const StatusBoxedCell = ({ status }) => {
 const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   const isZeroDeposit = value === 0;
   const isFullDeposit = fullDeposit;
-
   let boxColor = color;
-
   if (isZeroDeposit) {
     boxColor = "red";
   } else if (isFullDeposit) {
@@ -78,7 +71,6 @@ const BoxedCell = ({ value, className, color, label, fullDeposit }) => {
   } else {
     boxColor = "yellow";
   }
-
   return (
     <div className={`box ${className} ${boxColor}`}>
       {fullDeposit !== undefined && !isZeroDeposit && (
@@ -150,28 +142,22 @@ const getHighestPayment = (paymentDetails) => {
 const sortPaymentDate = (rowA, rowB, sortDirection) => {
   const highestPaymentA = getHighestPayment(rowA.paymentDetails);
   const highestPaymentB = getHighestPayment(rowB.paymentDetails);
-
   if (!highestPaymentA || !highestPaymentB) {
     return 0;
   }
-
   const dateA = parseDate(highestPaymentA.paymentDate);
   const dateB = parseDate(highestPaymentB.paymentDate);
-
   return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
 };
 
 const sortPaymentAmount = (rowA, rowB, sortDirection) => {
   const highestPaymentA = getHighestPayment(rowA.paymentDetails);
   const highestPaymentB = getHighestPayment(rowB.paymentDetails);
-
   if (!highestPaymentA || !highestPaymentB) {
     return 0;
   }
-
   const amountA = highestPaymentA.paymentAmount || 0;
   const amountB = highestPaymentB.paymentAmount || 0;
-
   return sortDirection === "asc" ? amountA - amountB : amountB - amountA;
 };
 
@@ -179,17 +165,13 @@ const sortPaymentStatus = (rowA, rowB, sortDirection) => {
   const statusOrder = { "Not Paid": 1, "Done": 2, "Partial": 3 }; // Define status order
   const highestPaymentA = getHighestPayment(rowA.paymentDetails);
   const highestPaymentB = getHighestPayment(rowB.paymentDetails);
-
   if (!highestPaymentA || !highestPaymentB) {
     return 0;
   }
-
   const statusA = highestPaymentA.paymentStatus || "Not Paid";
   const statusB = highestPaymentB.paymentStatus || "Not Paid";
-
-  const orderA = statusOrder[statusA] || 0; // Default to 0 if status not found
-  const orderB = statusOrder[statusB] || 0; // Default to 0 if status not found
-
+  const orderA = statusOrder[statusA] || 0;
+  const orderB = statusOrder[statusB] || 0;
   return sortDirection === "asc" ? orderA - orderB : orderB - orderA;
 };
 
@@ -198,54 +180,24 @@ const getPreviousMonthPaymentStatus = (paymentDetails) => {
     ...paymentDetails[key],
     index: key,
   }));
-
-  // If there's only one entry, return 'Not Paid'
   if (paymentEntries.length <= 1) {
     return "Not Paid";
   }
-
-  // Sort by index to find the latest and previous payments
   paymentEntries.sort((a, b) => a.index.localeCompare(b.index));
-
-  // Check the previous month's entry
   const previousMonthEntry = paymentEntries[paymentEntries.length - 2];
   const status = previousMonthEntry.paymentStatus || "Not Paid";
-
-  // Return 'Partial' or 'Not Paid' if applicable
   return status === "Partial" || status === "Not Paid" ? status : "Paid";
 };
 
 const getCurrentMonthYear = () => {
   const now = new Date();
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const currentMonth = months[now.getMonth()];
   const currentYear = now.getFullYear();
   return { currentMonth, currentYear };
 };
 
-const PayingGuestTable = ({
-  payingGuests,
-  onAddPayment,
-  guestStatuses,
-  onToggleStatus,
-  selectedPGId,
-  onPaymentUpdate,
-  onSnackbarOpen,
-  pgDetails,
-}) => {
+const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleStatus, selectedPGId, onPaymentUpdate, onSnackbarOpen, pgDetails}) => {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedGuest, setSelectedGuest] = useState(null);
@@ -263,14 +215,11 @@ const PayingGuestTable = ({
   };
 
   const filteredData = payingGuests.filter((item) => {
-    // Check if any property of the item matches the search text
     const itemMatches = Object.values(item).some(
       (value) =>
         value &&
         value.toString().toLowerCase().includes(searchText.toLowerCase())
     );
-
-    // Check if any payment detail matches the search text
     const paymentDetailsMatches = Object.values(item.paymentDetails || {}).some(
       (detail) => {
         const detailValues = Object.values(detail);

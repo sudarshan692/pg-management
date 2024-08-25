@@ -159,7 +159,7 @@ const PaymentStatusDialog = ({
         dateOfAdmission: editedGuest.dateOfAdmission,
         floorNo: Number(editedGuest.floorNo),
         roomNo: Number(editedGuest.roomNo),
-        roomType: roomTypeMap[editedGuest.roomType], // Convert to short code
+        roomType: roomTypeMap[editedGuest.roomType],
         depositAmount: Number(editedGuest.depositAmount),
         maintenanceCharges: Number(editedGuest.maintenanceCharges),
         fullDeposit: editedGuest.fullDeposit,
@@ -332,21 +332,6 @@ const PaymentStatusDialog = ({
     doc.save(`Receipt_${selectedMonth}_${selectedYear}.pdf`);
 };
 
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-
-
   return (
     <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
       <div className="dialog-card">
@@ -359,7 +344,6 @@ const PaymentStatusDialog = ({
           </button>
         </div>
         <div className="card-content">
-          {/* Display Guest Details */}
           <div className="guest-details">
             {[
               { label: "Name", value: editedGuest.guestName, editable: true, key: "guestName" },
@@ -513,8 +497,6 @@ const PaymentStatusDialog = ({
           </div>
         </div>
       </div>
-
-      {/* Confirmation Dialog */}
       <ConfirmDeleteDialog
         open={showConfirmDelete}
         onClose={() => setShowConfirmDelete(false)}

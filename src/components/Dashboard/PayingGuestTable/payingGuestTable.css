@@ -2,55 +2,43 @@
   margin: 1vw;
   padding: 0.5vw;
 }
-
 .paying-guest-table table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .paying-guest-table th, .paying-guest-table td {
   border: 1px solid #ddd;
   padding: 0.4vw;
   text-align: left;
 }
-
 .paying-guest-table th {
   background-color: #f2f2f2;
 }
-
 .paying-guest-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-
 .box-container {
   display: flex;
-  gap: 0.2vw; /* Adjust gap as needed */
+  gap: 0.2vw;
 }
-
 .box.floor {
-  background-color: #4D3C77; /* Light red */
+  background-color: #4D3C77;
 }
-
 .box.room {
-  background-color: #A2678A; /* Light orange */
+  background-color: #A2678A;
 }
-
 .box.type {
-  background-color: #E19898; /* Light yellow */
+  background-color: #E19898;
 }
-
 .box.deposit.green {
   background-color: #059212;
 }
-
 .box.deposit.red {
   background-color: #E72929;
 }
-
 .box.deposit.yellow {
-  background-color: #f39c12; /* Yellow color */
+  background-color: #f39c12;
 }
-
 .no-data {
   text-align: center;
   padding: 1vw;
@@ -58,46 +46,44 @@
   color: rgb(211, 227, 253);
   width: 100%;
 }
-
 .label {
-  font-size: 0.5vw; /* Small font size for label */
+  font-size: 0.5vw;
   position: absolute;
-  top: -0.6vw; /* Position label above the box */
+  top: -0.6vw;
   left: 50%;
   transform: translateX(-50%);
-  color: inherit; /* Match label color with box */
+  color: inherit;
 }
-
 .box {
   margin-top: 0.4vw;
-  padding: 0.2vw 0.4vw; /* Adjust padding as needed */
-  border-radius: 0.2vw; /* Adjust border radius as needed */
-  font-size: 0.7vw; /* Adjust font size as needed */
+  padding: 0.2vw 0.4vw;
+  border-radius: 0.2vw;
+  font-size: 0.7vw;
   position: relative;
   text-align: center;
-  color: white; /* Adjust text color as needed */
+  color: white;
 }
 .status-label {
-  font-size: 0.5vw; /* Small font size for status label */
+  font-size: 0.5vw;
   position: absolute;
-  top: -0.6vw; /* Position label above the box */
+  top: -0.6vw;
   left: 50%;
   transform: translateX(-50%);
   color: inherit;
 }
 .no-deposit {
-  font-size: 0.7vw; /* Match font size to other text */
-  color: white; /* Ensure text color matches */
-  background: none; /* Remove background */
-  border: none; /* Remove border */
-  padding: 0; /* Remove padding */
+  font-size: 0.7vw;
+  color: white;
+  background: none;
+  border: none;
+  padding: 0;
 }
 .status-label.np {
-  top: -0.6vw; /* Position NP above the box */
+  top: -0.6vw;
 }
 .box.full-deposit {
-  background-color: #059212; /* Green color for full deposit */
-  color: white; /* Ensure text color is visible */
+  background-color: #059212;
+  color: white;
 }
 .search-input{
   margin-top: -2.1vw;
@@ -109,11 +95,10 @@
   width: 20vw;
   margin-bottom: 0.5vw;
 }
-
 .actions-container {
   display: flex;
   align-items: center;
-  gap: 0.75vw; /* Space between button and alert icon */
+  gap: 0.75vw;
 }
 .add-payment-button{
   background: none;
@@ -127,45 +112,35 @@
   border-radius: 0.2vw;
   color: white;
 }
-
 .status-box.green {
   background-color: #059212;
 }
-
 .status-box.yellow {
   background-color: #f39c12;
-  color: white; /* Ensure text is readable on yellow background */
+  color: white;
 }
-
 .status-box.red {
   background-color: #E72929;
 }
-
-
-
 .status-text {
   font-size: 0.8vw0.5vw;
 }
-
 .cYFpUK svg {
   margin-top: 0.75vw;
 }
-
 .actions-container {
   display: flex;
-  justify-content: space-between; /* Pushes items to opposite ends */
-  align-items: center; /* Aligns items vertically centered */
+  justify-content: space-between;
+  align-items: center;
 }
-
 .alert-icon {
   margin-left: 0.5vw;
   color: #f39c12;
-  font-size: 1.1vw; /* Adjust size as needed */
+  font-size: 1.1vw;
 }
 .alert{
   margin-left: 1.2vw;
 }
-/* src/components/payingGuestTable.css */
 .view-status-button {
   background-color: #3498db;
   color: white;
@@ -175,25 +150,22 @@
   cursor: pointer;
   margin-right: 0.25vw;
 }
-
 .view-status-button:hover {
   background-color: #2980b9;
 }
 .guest-id-circle {
   display: inline-block;
-  width: 1.4vw; /* Adjust size as needed */
-  height: 1.4vw; /* Adjust size as needed */
+  width: 1.4vw;
+  height: 1.4vw;
   border-radius: 50%;
   color: white;
   text-align: center;
-  line-height: 1.4vw; /* Align text vertically */
+  line-height: 1.4vw;
   font-weight: bold;
 }
-
 .guest-id-circle.active {
   background-color: #059212;
 }
-
 .guest-id-circle.inactive {
   background-color: orange;
 }
@@ -204,18 +176,18 @@
 }
 .status-container .active-status {
   font-weight: bold;
-  color: #059212; /* Green color for Active status */
+  color: #059212;
 }
 
 .status-container .inactive-status {
   font-weight: bold;
-  color: #E72929; /* Red color for InActive status */
+  color: #E72929;
 }
 .slider {
   padding-top: 0.1vw;
   height: 1.25vw;
   width: 2vw;
-  background-color: #E72929;  /* Red background for inactive toggle */
+  background-color: #E72929;
 }
 .slider:before {
   
@@ -234,28 +206,26 @@
 }
 .status-image {
   margin-left: 0.1vw;
-  width: 1vw; /* Adjust the size as needed */
-  height: 1vw; /* Adjust the size as needed */
+  width: 1vw;
+  height: 1vw;
   margin-right: 0.5vw;
 }
 .status-image-not-paid {
   margin-right: 0.18vw;
   margin-left: -0.2vw;
-  width: 1.4vw; /* Increased width for "Not Paid" */
-  height: 1.4vw; /* Increased height for "Not Paid" */
+  width: 1.4vw;
+  height: 1.4vw;
 }
-
 .status-text {
   font-family: Roboto, Helvetica Neue, sans-serif;
-  color: #fff; /* Adjust text color if needed */
+  color: #fff;
 }
 .material-icons {
   color: #3f51b5;
   border-radius: 50%;
   padding: 0.25vw;
-  transition: background-color 0.3s; /* Add transition for smooth color change */
+  transition: background-color 0.3s;
 }
-
 .material-icons:hover {
-  background: rgba(0,0,0,.54);; /* Specify the background color on hover */
+  background: rgba(0,0,0,.54);
 }

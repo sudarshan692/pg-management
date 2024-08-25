@@ -12,7 +12,7 @@
     height: 62vh;
     max-width: 70%;
     max-height: 90vh;
-    margin: auto; /* Center dialog */
+    margin: auto;
   }
 @media (max-width: 600px) {
     .dialog-title {
@@ -20,8 +20,8 @@
     }
   
     .dialog-content1 {
-        width: 90vw; /* Increase width for mobile */
-        height: 75vh; /* Increase height for mobile */
+        width: 90vw;
+        height: 75vh;
         max-width: 90%;
         max-height: 100%;
       }

@@ -1,19 +1,15 @@
-// ConfirmDeleteDialog.js
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import './confirmDeleteDialog.css'; // Ensure this imports your styles
+import './confirmDeleteDialog.css';
 
 const ConfirmDeleteDialog = ({ open, onClose, onConfirm, loading }) => {
   return (
     <>
-      {/* Overlay */}
       {open && <div className="confirm-delete-overlay"></div>}
-      
-      {/* Dialog */}
       <Dialog className='delete-dialog' open={open} onClose={onClose} classes={{ paper: 'dialog-paper' }}>
         <DialogTitle className="dialog-title">Confirm Delete</DialogTitle>
         <DialogContent className="dialog-content">

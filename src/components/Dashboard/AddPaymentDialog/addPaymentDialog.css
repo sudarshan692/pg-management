@@ -1,49 +1,37 @@
 
 .dialog-paper {
-    width: 500px; /* Adjust width as needed */
+    width: 500px;
     max-width: 100%;
-    background-color: #f5f5f5; /* Light grey background */
+    background-color: #f5f5f5;
 }
-
 .dialog-title {
-    background-color: #1e2a38; /* Dark blue background */
-    color: #ffffff; /* White text color */
+    background-color: #1e2a38;
+    color: #ffffff;
 }
-
 .dialog-actions {
-    padding: 10px 20px; /* Add padding inside the dialog actions */
+    padding: 10px 20px;
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
+    justify-content: flex-end;
 }
-
 .button-save {
-    background-color: #007bff; /* Primary button color */
-    color: #ffffff; /* White text color */
+    background-color: #007bff;
+    color: #ffffff;
 }
-
 .button-cancel {
-    color: #007bff; /* Outline button color */
+    color: #007bff;
 }
-
 .button-save:hover {
-    background-color: #0056b3; /* Darker shade for hover */
+    background-color: #0056b3;
 }
-
 .button-cancel:hover {
-    background-color: #e0e0e0; /* Light grey for hover */
+    background-color: #e0e0e0;
 }
-
-
-/* Add top margin for the first input field */
 .textfield-spacing:first-of-type {
-    margin-top: 20px; /* Top margin for the first input field */
+    margin-top: 20px;
 }
-
-/* Add additional space between fields */
 .textfield-spacing:not(:first-of-type) {
-    margin-top: 20px; /* More space between fields after the first one */
+    margin-top: 20px;
 }
-
 .MuiTextField-root .MuiInputBase-input {
-    color: black; /* Text color inside text fields */
+    color: black;
 }

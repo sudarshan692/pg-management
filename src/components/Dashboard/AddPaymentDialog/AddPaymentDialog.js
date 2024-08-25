@@ -16,36 +16,26 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
     const currentYear = currentDate.getFullYear();
     const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-
     const [paymentAmount, setPaymentAmount] = useState('');
-    const [remainingAmount, setRemainingAmount] = useState(''); // New state for remaining amount
+    const [remainingAmount, setRemainingAmount] = useState('');
     const [paymentStatus, setPaymentStatus] = useState('Complete');
-    const [month, setMonth] = useState(currentMonth); // Set default to current month
-    const [year, setYear] = useState(currentYear); // Set default to current year
-    const [loading, setLoading] = useState(false); // State to track loading
-
-    // List of months and years
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+    const [month, setMonth] = useState(currentMonth);
+    const [year, setYear] = useState(currentYear);
+    const [loading, setLoading] = useState(false);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const monthsOptions = [currentMonth, previousMonth];
     const yearsOptions = [currentYear, previousYear];
 
     const handleSave = async () => {
-        // Check if paymentAmount is required
         if (paymentStatus !== 'Not Paid' && !paymentAmount) {
             onSnackbarOpen("Please enter a payment amount.", "error");
             return;
         }
-    
         if (!selectedGuest.id || !selectedPGId) {
             onSnackbarOpen("Please ensure IDs are valid.", "error");
             return;
         }
-    
-        setLoading(true); // Set loading to true when starting to save
-    
+        setLoading(true);
         try {
             const paymentId = uuidv4(); // Generate a unique ID for the payment
             const guestRef = db.collection(`users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`).doc(selectedGuest.id);
@@ -137,7 +127,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                         const status = e.target.value;
                         setPaymentStatus(status);
                         if (status !== 'Complete') {
-                            setRemainingAmount(''); // Clear remaining amount when status is not complete
+                            setRemainingAmount('');
                         }
                     }}
                     fullWidth
@@ -192,7 +182,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     variant="contained" 
                     color="primary" 
                     className="button-save"
-                    disabled={loading} // Disable the button if loading
+                    disabled={loading}
                 >
                     {loading ? 'Saving...' : 'Save'}
                 </Button>
@@ -200,7 +190,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
                     onClick={onRequestClose} 
                     variant="outlined" 
                     className="button-cancel"
-                    disabled={loading} // Optionally disable cancel button if needed
+                    disabled={loading}
                 >
                     Cancel
                 </Button>

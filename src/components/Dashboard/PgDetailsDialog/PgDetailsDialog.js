@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
-import './pgDetailsDialog.css'; // Add styles for the dialog
+import './pgDetailsDialog.css';
 
 const PgDetailsDialog = ({ onClose, onSave }) => {
   const [details, setDetails] = useState({
@@ -10,8 +10,7 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
     doubleSharingBedsPerRoom: '',
     tripleSharingBedsPerRoom: '',
   });
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails(prevDetails => ({
@@ -21,8 +20,7 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
   };
 
   const handleSave = async () => {
-    setIsLoading(true); // Set loading to true
-    
+    setIsLoading(true);
     // Convert details to numbers before saving
     const convertedDetails = Object.keys(details).reduce((acc, key) => {
       acc[key] = details[key] === '' ? -1 : Number(details[key]);
@@ -30,12 +28,12 @@ const PgDetailsDialog = ({ onClose, onSave }) => {
     }, {});
 
     try {
-      await onSave(convertedDetails); // Call the onSave function and wait for it to complete
+      await onSave(convertedDetails);
     } catch (error) {
       console.error('Error saving details:', error);
     } finally {
-      setIsLoading(false); // Reset loading state
-      onClose(); // Close the dialog after saving
+      setIsLoading(false);
+      onClose();
     }
   };
 

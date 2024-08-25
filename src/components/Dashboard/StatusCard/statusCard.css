@@ -59,8 +59,8 @@
   .status-image2 {
     margin-top: -0.1vw;
     height: 0.7vw;
-    width: 0.7vw; /* Adjust size as needed */
-    margin-right: 0.3vw; /* Space between image and text */
+    width: 0.7vw;
+    margin-right: 0.3vw;
   }
   .status-item{
     display: flex;

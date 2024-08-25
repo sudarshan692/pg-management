@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
-} from "@mui/material";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  LabelList,
-  ResponsiveContainer,
-} from "recharts";
+import {Dialog, DialogTitle, DialogContent, IconButton, Button} from "@mui/material";
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList, ResponsiveContainer} from "recharts";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
 import "./paymentBarChartDialog.css";
 
@@ -63,20 +47,7 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
     calculatePaymentData();
   }, [payingGuests, currentYear]);
 
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   const tickFormatter = (value) => {
     const month = monthNames[value - 1];
@@ -87,18 +58,16 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
     return `₹${value.toLocaleString()}`;
   };
 
-  // Inline styles for overlay
   const overlayStyle = {
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(138, 134, 134, 0.7)", // Semi-transparent black overlay
+    backgroundColor: "rgba(138, 134, 134, 0.7)",
     zIndex: 1,
   };
 
-  // Inline styles for dialog container to ensure centering
   const dialogContainerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -107,16 +76,14 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
     height: "100vh",
   };
 
-  // Style for horizontal scrolling container
   const scrollContainerStyle = {
     overflowX: "auto",
-    width: "100%", // Full width of parent container
+    width: "100%",
   };
 
-  // Style for chart to extend beyond the screen width
   const chartStyle = {
-    width: "1200px", // Set width larger than the mobile screen to enable scrolling
-    height: "450px", // Fixed height
+    width: "1200px",
+    height: "450px",
   };
 
   return (
@@ -127,14 +94,14 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
       aria-labelledby="payment-bar-chart-dialog"
       sx={{
         "& .MuiDialog-paper": {
-          boxShadow: "none", // Remove default shadow
-          backgroundColor: "transparent", // Make the dialog background transparent to see the overlay
+          boxShadow: "none",
+          backgroundColor: "transparent",
         },
       }}
     >
       <div style={dialogContainerStyle}>
-        <div style={overlayStyle} /> {/* Overlay applied here */}
-        <div className="dialog-content1"> {/* Use CSS class for mobile styles */}
+        <div style={overlayStyle} />
+        <div className="dialog-content1">
           <DialogTitle
             className="dialog-title"
             id="payment-bar-chart-dialog"
@@ -182,9 +149,7 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                   width: "100%",
                 }}
               >
-                {/* Horizontal scrolling container */}
                 <div style={scrollContainerStyle}>
-                  {/* Set a larger width for the chart to enable scrolling */}
                   <div style={chartStyle}>
                     <ResponsiveContainer width="100%" height="95%">
                       <BarChart
@@ -205,9 +170,9 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                         <Tooltip
                           content={({ active, payload, label }) => {
                             if (active && payload && payload.length) {
-                              const month = monthNames[label - 1]; // Get month name from label
-                              const year = currentYear; // Current year
-                              const amount = payload[0].value; // Amount from payload
+                              const month = monthNames[label - 1]; 
+                              const year = currentYear; 
+                              const amount = payload[0].value;
 
                               return (
                                 <div
@@ -271,9 +236,9 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                     color="primary"
                     sx={{
                       minWidth: 40,
-                      width: 20, // Reduced width
-                      height: 20, // Reduced height
-                      backgroundColor: "#ff5722", // Customize color
+                      width: 20,
+                      height: 20, 
+                      backgroundColor: "#ff5722",
                       "&:hover": {
                         backgroundColor: "#e64a19",
                       },
@@ -281,16 +246,16 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                     }}
                     onClick={() => setCurrentYear((prevYear) => prevYear - 1)}
                   >
-                    <FaArrowLeft size={20} color="#fff" /> {/* Reduced size */}
+                    <FaArrowLeft size={20} color="#fff" /> 
                   </Button>
                   <Button
                     variant="contained"
                     color="primary"
                     sx={{
                       minWidth: 40,
-                      width: 20, // Reduced width
-                      height: 20, // Reduced height
-                      backgroundColor: "#ff5722", // Customize color
+                      width: 20, 
+                      height: 20, 
+                      backgroundColor: "#ff5722",
                       "&:hover": {
                         backgroundColor: "#e64a19",
                       },
@@ -298,7 +263,7 @@ const PaymentBarChartDialog = ({ isOpen, onClose, payingGuests }) => {
                     }}
                     onClick={() => setCurrentYear((prevYear) => prevYear + 1)}
                   >
-                    <FaArrowRight size={20} color="#fff" /> {/* Reduced size */}
+                    <FaArrowRight size={20} color="#fff" />
                   </Button>
                 </div>
               </div>

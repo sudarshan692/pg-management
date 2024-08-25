@@ -1,10 +1,9 @@
 import React from 'react';
-import './statusCard.css'; // Import the CSS file for styling
+import './statusCard.css';
 import inProgressImage from '../../../assets/inProgress.png';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-// Utility function to get current month
 const getCurrentMonth = () => {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const now = new Date();
@@ -28,7 +27,6 @@ const cancelIcon = {
 };
 
 const StatusCard = ({ payingGuests }) => {
-  // Function to calculate the status counts
   const getStatusCounts = () => {
     const statusCounts = {
       Done: 0,

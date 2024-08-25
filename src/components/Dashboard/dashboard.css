@@ -140,20 +140,20 @@
 .bottom-aligned-container {
   margin-top: 0.5vw;
   display: flex;
-  justify-content: flex-start; /* Align items to the start */
-  align-items: last baseline; /* Center items vertically */
+  justify-content: flex-start;
+  align-items: last baseline;
 
 }
 
 .status-card {
-  order: 1; /* Position this on the leftmost side */
-  margin: 0 0.5vw; /* Space around each item */
+  order: 1;
+  margin: 0 0.5vw;
 }
 
 .payment-bar-chart-btn {
   margin-right: 0.45vw;
   margin-left: 49vw;
-  order: 2; /* Position this to the right of the status card */
+  order: 2;
   padding: 0.55vw;
   background-color: #3f51b5;
   color: white;
@@ -164,7 +164,7 @@
 }
 
 .matrix {
-  order: 3; /* Position this next to the payment bar chart button */
+  order: 3;
   padding: 0.55vw;
   background-color: #3f51b5;
   color: white;
