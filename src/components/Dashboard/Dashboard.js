@@ -79,8 +79,6 @@ const Dashboard = () => {
     if (pgId) {
       const currentPgId =
         typeof pgId === "object" ? pgId.id || pgId.value : pgId;
-      console.log("Current pgId:", currentPgId);
-      console.log("Previous pgId:", previousPgIdRef.current);
       if (currentPgId !== previousPgIdRef.current) {
         fetchPayingGuests(currentPgId);
         previousPgIdRef.current = currentPgId;

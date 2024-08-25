@@ -300,9 +300,9 @@ const PaymentStatusDialog = ({
         const currentRowHeight = lineCount * 5 + rowPadding * 2; // Adjust height based on number of lines
         // Draw row border
         doc.rect(borderMargin + tableMargin, rowY, tableWidth, currentRowHeight);
-        doc.setFont("Arial", "bold");
+        doc.setFont("helvetica", "bold");
         doc.text(row.label, borderMargin + tableMargin + rowPadding, rowY + 5); // Adjust Y to align in the middle
-        doc.setFont("Arial", "normal");
+        doc.setFont("helvetica", "normal");
         textLines.forEach((line, lineIndex) => {
             doc.text(line, borderMargin + tableMargin + column1Width + rowPadding, rowY + 5 + (lineIndex * 5)); // Adjust Y to account for multiple lines
         });

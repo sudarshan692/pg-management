@@ -108,7 +108,7 @@ const AdminDashboard = () => {
       setLoading(true);
       const pgRef = await db.collection(`users/${userId}/PGs`).add({
         PGDetails: {
-          number: pgNumber,
+          number: Number(pgNumber),
           maxCustomers: Number(pgMaxCustomers),
           ownerName: pgOwnerName,
           ownerEmail: pgOwnerEmail,
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
         action: 'add',
         newData: {
           userId,
-          number: pgNumber,
+          number: Number(pgNumber),
           maxCustomers: Number(pgMaxCustomers),
           ownerName: pgOwnerName,
           ownerEmail: pgOwnerEmail,
