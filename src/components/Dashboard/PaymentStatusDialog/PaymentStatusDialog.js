@@ -325,9 +325,6 @@ const PaymentStatusDialog = ({
     
     // Calculate text positions
     const textMargin = 10;
-    const acknowledgmentTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
-    const additionalTextLines = doc.splitTextToSize(acknowledgmentTextStart + acknowledgmentTextBold + acknowledgmentTextEnd, acknowledgmentTextWidth);
-    
     // Position the acknowledgment text below the table with a margin
     let additionalTextY = tableStartY + textMargin;
 
