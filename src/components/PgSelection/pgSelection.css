@@ -22,6 +22,24 @@
   font-weight: bold;
   font-style: normal;
   position: relative;
+  color: #fff;
+  background: linear-gradient(45deg, #3f51b5, #ff007f, #3f51b5);
+  background-size: 300% 300%;
+  animation: slideGradient 6s linear infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+@keyframes slideGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 .pg-selection-heading::before {
   content: "";
@@ -32,14 +50,14 @@
   height: 0.2vw;
   background: linear-gradient(
     90deg,
-    #1a1a1a,
-    #bfbfbf,
-    #4b4b4b,
-    #bfbfbf,
-    #1a1a1a
+    #3f51b5,
+    #ff007f,
+    #3f51b5,
+    #ff007f,
+    #3f51b5
   );
   background-size: 200% 100%;
-  animation: gradientBorder 3s linear infinite;
+  animation: gradientBorder 15s linear infinite;
 }
 @keyframes gradientBorder {
   0% {
@@ -57,7 +75,7 @@
   right: -0.5vw;
   padding: 0.5vw 1.5vw;
   background: none;
-  color: #a8a8a7;
+  color: white;
   border: none;
   cursor: pointer;
   z-index: 1000;
@@ -70,8 +88,9 @@
   padding: 1vw;
 }
 .pg-card {
+  border: 0.1vw solid #a8a8a7;
   background-color: #0d2136;
-  border-radius: 0.4vw;
+  border-radius: 0.8vw;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: calc(25% - 1rem);
   box-sizing: border-box;
@@ -93,23 +112,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 0.3vw;
-  background: linear-gradient(45deg, #a8a8a7, #666666, #303030);
-  background-size: 300% 300%;
-  animation: slideGradient 6s linear infinite;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-@keyframes slideGradient {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
+  color: #fff;
 }
 .pg-name {
   font-size: 1vw;
@@ -144,7 +147,7 @@
   margin-top: -0.8vw;
   font-size: 0.65vw;
   color: #a8a8a7;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 .max-customers {
   margin-bottom: -1vw;
