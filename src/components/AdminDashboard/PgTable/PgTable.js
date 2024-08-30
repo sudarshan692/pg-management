@@ -7,6 +7,7 @@ import './pgTable.css';
 import EditDialog from '../EditDialog/EditDialog';
 import DeleteDialog from '../DeleteDialog/DeleteDialog';
 import { db } from '../../shared/firebase'; // Import Firestore database
+import LoadingSpinner from "../../shared/LoadingSpinner";
 
 const CustomNoDataComponent = () => (
   <div style={{ textAlign: 'center', padding: '1vw', fontSize: '0.8vw', backgroundColor: '#162c46', color: 'rgb(211, 227, 253)', width: '100%' }}>
@@ -21,6 +22,7 @@ const PgTable = ({ pgData, updatePgData }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [editData, setEditData] = useState(null);
   const [deleteData, setDeleteData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -48,6 +50,7 @@ const PgTable = ({ pgData, updatePgData }) => {
   };
 
   const handleEditSave = async (updatedData) => {
+    setLoading(true);
     try {
       const { userId, ...pgDetails } = updatedData;
       const pgRef = db.collection(`users/${userId}/PGs`).doc(updatedData.id);
@@ -69,6 +72,7 @@ const PgTable = ({ pgData, updatePgData }) => {
       setShowSnackbar(true);
     } finally {
       setEditData(null);
+      setLoading(false);
     }
   };
   
@@ -83,6 +87,7 @@ const PgTable = ({ pgData, updatePgData }) => {
   };
 
   const handleDeleteConfirm = async () => {
+    setLoading(true);
     try {
       const pgRef = db.collection(`users/${deleteData.userId}/PGs`).doc(deleteData.id);
       const customerDataRef = pgRef.collection('PayingGuestData');
@@ -106,6 +111,7 @@ const PgTable = ({ pgData, updatePgData }) => {
       setShowSnackbar(true);
     } finally {
       setDeleteData(null);
+      setLoading(false);
     }
   };
   
@@ -196,6 +202,7 @@ const PgTable = ({ pgData, updatePgData }) => {
 
   return (
     <div>
+    {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
       <div className="search-container">
         <input
           className="search-input1"

@@ -6,6 +6,7 @@ import { FaTrashAlt} from "react-icons/fa";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import jsPDF from "jspdf";
 import DownloadIcon from '@mui/icons-material/Download';
+import LoadingSpinner from "../../shared/LoadingSpinner";
 
 const PaymentStatusDialog = ({
   guest,
@@ -102,13 +103,13 @@ const PaymentStatusDialog = ({
         paymentDetails: null,
       });
       onSnackbarOpen("Payment details deleted successfully!", "success");
-      onClose();
     } catch (error) {
       console.error("Error deleting payment details: ", error);
       onSnackbarOpen("Error deleting payment details. Please try again.", "error");
     } finally {
-      setLoading(false);
       setShowConfirmDelete(false);
+      onClose();
+      setLoading(false);
     }
   };
 
@@ -144,8 +145,8 @@ const PaymentStatusDialog = ({
   };
 
   const handleSave = async () => {
-    setIsSaving(true);
     setLoading(true);
+    setIsSaving(true);
     try {
       const guestRef = doc(db, `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`, guest.id);
       const updatedPayingGuestMap = {
@@ -179,8 +180,9 @@ const PaymentStatusDialog = ({
       console.error("Error updating guest details: ", error);
       onSnackbarOpen("Error updating guest details. Please try again.", "error");
     } finally {
-      setLoading(false);
       setIsSaving(false);
+      setLoading(false);
+    
     }
   };
 
@@ -425,6 +427,7 @@ const PaymentStatusDialog = ({
 
   return (
     <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
+    {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
       <div className="dialog-card">
         <div className="card-header">
           <h3>Guest Details: <span className="guest-id1">{guest.guestID}</span> </h3>

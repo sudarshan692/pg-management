@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { v4 as uuidv4 } from 'uuid'; 
 import './addPaymentDialog.css'; 
+import LoadingSpinner from "../../shared/LoadingSpinner";
 
 const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId, onSnackbarOpen, onPaymentUpdate }) => {
     const currentDate = new Date();
@@ -109,6 +110,7 @@ const AddPaymentDialog = ({ isOpen, onRequestClose, selectedGuest, selectedPGId,
 
     return (
         <Dialog open={isOpen} onClose={onRequestClose} classes={{ paper: 'dialog-paper' }}>
+         {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
             <DialogTitle className="dialog-title">Add Payment</DialogTitle>
             <DialogContent className="dialog-content">
                 <TextField
