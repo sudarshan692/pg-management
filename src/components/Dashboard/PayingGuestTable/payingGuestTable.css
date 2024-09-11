@@ -177,7 +177,7 @@
 }
 
 .alert-icon {
-  margin-left: 100px;
+  margin-left: 8px;
   color: #f39c12;
   font-size: 1.2rem; /* Adjust size as needed */
 }
@@ -214,3 +214,9 @@
 .guest-id-circle.inactive {
   background-color: orange;
 }
+.guest-id-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+

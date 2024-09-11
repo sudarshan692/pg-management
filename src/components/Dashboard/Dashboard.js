@@ -12,6 +12,7 @@ import AddPaymentDialog from "./AddPaymentDialog/AddPaymentDialog";
 import LoadingSpinner from "../shared/LoadingSpinner"; // Ensure you have a loading spinner component
 import PgDetailsDialog from "../Dashboard/PgDetailsDialog/PgDetailsDialog";
 import RoomMatrixDialog from "../Dashboard/RoomMatrixDialog/RoomMatrixDialog";
+import PaymentStatusDialog from "./PaymentStatusDialog/PaymentStatusDialog";
 
 Modal.setAppElement("#root");
 
@@ -29,6 +30,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [isPgDetailsDialogOpen, setIsPgDetailsDialogOpen] = useState(false);
   const [isRoomMatrixDialogOpen, setIsRoomMatrixDialogOpen] = useState(false);
+  const [guestStatuses, setGuestStatuses] = useState({});
 
   const location = useLocation();
   const history = useHistory();
@@ -58,6 +60,16 @@ const Dashboard = () => {
           paymentDetails: docData.paymentDetails,
         });
       });
+      // Update the guestStatuses state with the initial status of all guests
+      setGuestStatuses((prevStatuses) => {
+        return {
+          ...prevStatuses,
+          ...data.reduce(
+            (acc, guest) => ({ ...acc, [guest.guestID]: guest.currentStatus }),
+            {}
+          ),
+        };
+      });
       setPayingGuests(data);
       console.log("Paying guests fetched successfully:");
     } catch (error) {
@@ -79,6 +91,47 @@ const Dashboard = () => {
       }
     }
   }, [pgId, fetchPayingGuests]);
+
+  const handleToggleStatus = (guestID, newStatus) => {
+    setGuestStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [guestID]: newStatus,
+    }));
+    const guestIndex = payingGuests.findIndex(
+      (guest) => guest.guestID === guestID
+    );
+    if (guestIndex !== -1) {
+      db.collection(`users/${auth.currentUser.uid}/PGs/${pgId}/PayingGuestData`)
+        .doc(payingGuests[guestIndex].id)
+        .update({
+          "payingGuestMap.currentStatus": newStatus,
+        })
+        .then(() => {
+          console.log("Status updated successfully");
+          setPayingGuests((prevGuests) => {
+            return prevGuests.map((guest, index) => {
+              if (index === guestIndex) {
+                return {
+                  ...guest,
+                  payingGuestMap: {
+                    ...guest.payingGuestMap,
+                    currentStatus: newStatus,
+                  },
+                };
+              }
+              return guest;
+            });
+          });
+        })
+        .catch((error) => {
+          console.error("Error updating status:", error);
+        });
+    } else {
+      console.error(
+        `Guest with ID ${guestID} not found in payingGuests array.`
+      );
+    }
+  };
 
   const openAddPayingGuestModal = () => {
     setPayingGuestModalIsOpen(true);
@@ -111,6 +164,11 @@ const Dashboard = () => {
     setSelectedGuest(null);
   };
 
+  const handleCloseDialog = () => {
+    // Define the function
+    setSelectedGuest(null); // Clear selectedGuest
+  };
+
   const handleLogout = async () => {
     setLoading(true);
     try {
@@ -137,6 +195,10 @@ const Dashboard = () => {
   const handleDataUpdate = (newGuest) => {
     setPayingGuests((prevGuests) => [newGuest, ...prevGuests]);
     setDataSaved(true);
+    setGuestStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [newGuest.guestID]: "Active",
+    }));
   };
 
   const handlePaymentUpdate = (updatedGuest) => {
@@ -229,7 +291,20 @@ const Dashboard = () => {
         payingGuests={payingGuests}
         onAddPayment={openAddPaymentDialog}
         onPaymentUpdate={handlePaymentUpdate}
+        guestStatuses={guestStatuses} 
+        onToggleStatus={handleToggleStatus} 
       />
+
+      {selectedGuest && (
+        <PaymentStatusDialog
+          guest={selectedGuest}
+          onClose={handleCloseDialog}
+          onToggleStatus={handleToggleStatus}
+          guestStatuses={guestStatuses}
+          setGuestData={setPayingGuests} 
+          selectedPGId={pgId}
+        />
+      )}
 
       <div className="add-paying-guest-container">
         <button
