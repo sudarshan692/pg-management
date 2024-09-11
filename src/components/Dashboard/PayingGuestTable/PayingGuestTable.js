@@ -227,24 +227,18 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
   const columns = [
     { 
       name: 'Guest ID', 
-      selector: (row) => row.guestID, 
-      sortable: true,
-      cell: (row) => {
-        const previousMonthStatus = getPreviousMonthPaymentStatus(row.paymentDetails);
-        const showAlert = previousMonthStatus === 'Partial' || previousMonthStatus === 'Not Paid';
-  
-        return (
-          <div className="guest-id-container">
-            <span>{row.guestID}</span>
-            {showAlert && (
-              <FaExclamationTriangle
-                className="alert-icon"
-                title="Previous month payment status is Partial or Not Paid"
-              />
-            )}
-          </div>
-        );
-      }
+      selector: (row) => (
+        <div className="guest-id-container">
+          <span>{row.guestID}</span>
+          {row.paymentDetails && Object.keys(row.paymentDetails).length > 1 && 
+            (getPreviousMonthPaymentStatus(row.paymentDetails) === 'Partial' || 
+             getPreviousMonthPaymentStatus(row.paymentDetails) === 'Not Paid') && (
+              <FaExclamationTriangle className="alert-icon" title="Previous month payment status is Partial or Not Paid" />
+            )
+          }
+        </div>
+      ), 
+      sortable: true 
     },
     { 
       name: 'Guest Name', 
@@ -327,28 +321,31 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
     },
     {
       name: 'Actions',
-      cell: (row) => (
-        <div className="actions-container">
-          <button onClick={() => onAddPayment(row)} className="add-payment-button">
-            <FaPlus className="add-icon" />
-          </button>
-        </div>
-      ),
+      cell: (row) => {
+        return (
+          <div className="actions-container">
+            <button onClick={() => onAddPayment(row)} className="add-payment-button">
+              <FaPlus className="add-icon" />
+            </button>
+          </div>
+        );
+      },
     },
     {
       name: 'Current Status', 
       cell: (row) => {
         // Access the currentStatus from the guestStatuses state
         const isActive = guestStatuses[row.guestID] === 'Active';
-  
         return (
           <div className="status-container">
-            <span>{isActive ? 'Active' : 'Inactive'}</span>
-            <label className="toggle-switch">
+            <span className={isActive ? 'active-status' : 'inactive-status'}>
+              {isActive ? 'Active' : 'InActive'}
+            </span>
+            <label className={`toggle-switch ${isActive ? '' : 'inactive-toggle'}`}>
               <input 
                 type="checkbox" 
                 checked={isActive} 
-                onChange={() => onToggleStatus(row.guestID, isActive ? 'Inactive' : 'Active')} 
+                onChange={() => onToggleStatus(row.guestID, isActive ? 'InActive' : 'Active')} 
               />
               <span className="slider"></span>
             </label>
@@ -358,7 +355,7 @@ const PayingGuestTable = ({ payingGuests, onAddPayment, guestStatuses, onToggleS
       sortable: true
     },
   ];
-  
+
   
 
   const customStyles = {

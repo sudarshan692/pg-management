@@ -157,7 +157,7 @@
 }
 
 .status-box.red {
-  background-color: #E72929;;
+  background-color: #E72929;
 }
 
 
@@ -177,7 +177,7 @@
 }
 
 .alert-icon {
-  margin-left: 8px;
+  margin-left: 0.5vw;
   color: #f39c12;
   font-size: 1.2rem; /* Adjust size as needed */
 }
@@ -208,7 +208,7 @@
 }
 
 .guest-id-circle.active {
-  background-color: #059212;;
+  background-color: #059212;
 }
 
 .guest-id-circle.inactive {
@@ -219,4 +219,15 @@
   align-items: center;
   justify-content: space-between;
 }
+.status-container .active-status {
+  font-weight: bold;
+  color: #059212; /* Green color for Active status */
+}
 
+.status-container .inactive-status {
+  font-weight: bold;
+  color: #E72929; /* Red color for InActive status */
+}
+.slider {
+  background-color: #E72929;  /* Red background for inactive toggle */
+}
