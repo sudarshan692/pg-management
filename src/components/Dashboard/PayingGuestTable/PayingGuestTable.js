@@ -322,9 +322,17 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
     {
       name: "Notice Period",
       cell: (row) => {
-        const hasNoticePeriod = row.servingNoticePeriod;
+        const currentDate = new Date().toISOString().split("T")[0];
         const noticeDate = row.noticePeriodDate ? formatDate(row.noticePeriodDate) : "-";
-        return hasNoticePeriod ? `Yes (${noticeDate})` : "No";
+        const hasNoticePeriod = row.servingNoticePeriod; // Boolean value indicating if the guest is serving notice
+        const hasGuestLeft = hasNoticePeriod && currentDate > row.noticePeriodDate; // Show Guest Left only if notice period is true
+    
+        // Show "Guest Left" only if the guest was serving notice period and the date is past
+        return hasGuestLeft ? (
+          <div style={{ border: "1px solid white", padding: "5px", borderRadius: "8px", textAlign: "center", color:"orange"}}>
+            Guest Left
+          </div>
+        ) : hasNoticePeriod ? `Yes (${noticeDate})` : "No";
       },
       sortable: true,
     },
@@ -352,23 +360,31 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
         const currentDate = new Date().toISOString().split("T")[0];
         const noticePeriodDate = row.noticePeriodDate;
         const isNoticePeriodDate = currentDate === noticePeriodDate;
+        const hasNoticePeriod = row.servingNoticePeriod; // Boolean indicating if guest is serving notice
+        const hasGuestLeft = hasNoticePeriod && currentDate > noticePeriodDate; // Guest Left if serving notice and date passed
+    
         return (
           <div className="actions-container">
             <button
               onClick={() => onAddPayment(row)}
               className="add-payment-button"
+              disabled={hasGuestLeft} // Disable the button if guest has left and was serving notice
             >
               <AddCircleOutlineIcon style={addCircleOutlineIcon} />
             </button>
-            <label className={`toggle-switch ${isNoticePeriodDate ? "inactive-toggle" : ""}`}>
+            <label
+              className={`toggle-switch ${isNoticePeriodDate || hasGuestLeft ? "inactive-toggle" : ""}`}
+            >
               <input
                 type="checkbox"
-                checked={isActive && !isNoticePeriodDate}
+                // Toggle should be ON if guest is active AND either not serving notice OR notice date is not current
+                checked={isActive && (!hasNoticePeriod || (!isNoticePeriodDate && !hasGuestLeft))}
                 onChange={() => {
-                  if (!isNoticePeriodDate) {
+                  if (!isNoticePeriodDate && !hasGuestLeft) {
                     onToggleStatus(row.guestID, isActive ? "InActive" : "Active");
                   }
                 }}
+                disabled={hasGuestLeft} // Disable the toggle if the guest has left
               />
               <span className="slider"></span>
             </label>
@@ -386,7 +402,9 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
           </div>
         );
       },
-    },
+    }
+    
+    
   ];
 
   const customStyles = {
