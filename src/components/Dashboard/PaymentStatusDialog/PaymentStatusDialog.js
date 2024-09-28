@@ -41,7 +41,12 @@ const PaymentStatusDialog = ({
 
   useEffect(() => {
     if (isOpen) {
-      const guestData = { ...guest, roomType: roomTypeMapReverse[guest.roomType] || '' };
+      const guestData = { 
+        ...guest, 
+        roomType: roomTypeMapReverse[guest.roomType] || '', 
+        servingNoticePeriod: guest.servingNoticePeriod || false, 
+        noticePeriodDate: guest.noticePeriodDate || ''
+      };
       setInitialGuest(guestData);
       setEditedGuest(guestData);
     }
@@ -62,7 +67,7 @@ const PaymentStatusDialog = ({
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
+    return `${day}-${month}-${year}`;
   };
 
   const renderStatusColor = (status) => {
@@ -132,6 +137,7 @@ const PaymentStatusDialog = ({
     setEditedGuest((prevState) => ({
       ...prevState,
       [name]: checked,
+      ...(name === "servingNoticePeriod" && !checked ? { noticePeriodDate: "" } : {}), 
     }));
   };
 
@@ -166,6 +172,8 @@ const PaymentStatusDialog = ({
         aadharNumber: Number(editedGuest.aadharNumber),
         currentStatus: guest.currentStatus,
         rentAmount: Number(editedGuest.rentAmount),
+        servingNoticePeriod: editedGuest.servingNoticePeriod,
+        noticePeriodDate: editedGuest.noticePeriodDate
       };
       await updateDoc(guestRef, {
         payingGuestMap: updatedPayingGuestMap
@@ -325,8 +333,8 @@ const PaymentStatusDialog = ({
     
     // Calculate text positions
     const textMargin = 10;
-    const acknowledgmentTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
-    const additionalTextLines = doc.splitTextToSize(acknowledgmentTextStart + acknowledgmentTextBold + acknowledgmentTextEnd, acknowledgmentTextWidth);
+    // const acknowledgmentTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
+    // const additionalTextLines = doc.splitTextToSize(acknowledgmentTextStart + acknowledgmentTextBold + acknowledgmentTextEnd, acknowledgmentTextWidth);
     
     // Position the acknowledgment text below the table with a margin
     let additionalTextY = tableStartY + textMargin;
@@ -415,17 +423,6 @@ const PaymentStatusDialog = ({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
       <div className="dialog-card">
@@ -453,56 +450,90 @@ const PaymentStatusDialog = ({
               { label: "Rent Amount", value: editedGuest.rentAmount, editable: true, key: "rentAmount" },
               { label: "Deposit Amount", value: editedGuest.depositAmount, editable: true, key: "depositAmount" },
               { label: "Maintenance Charges", value: editedGuest.maintenanceCharges, editable: true, key: "maintenanceCharges" },
-              { label: "Present Status(Employee/Student)", value: editedGuest.presentStatus, editable: true, key: "presentStatus" },
-              { label: "Full Deposit", value: editedGuest.fullDeposit, editable: true, key: "fullDeposit" },
+               { label: "Present Status(Employee/Student)", value: editedGuest.presentStatus, editable: true, key: "presentStatus" },
             ].map(({ label, value, editable, key }) => (
               <div key={key} className="detail-item">
                 <strong>{label}:</strong>
                 {editable && isEditing ? (
-                  key === "fullDeposit" ? (
-                    <div>
-                      <label>
-                        <input
-                          type="checkbox"
-                          name={key}
-                          checked={value}
-                          onChange={handleCheckboxChange}
-                          className={isEditing ? 'input-half-width' : ''}
-                        />
-                        {value ? "Yes" : "No"}
-                      </label>
-                    </div>
-                  ) : key === "roomType" ? (
-                    <select
-                      name={key}
-                      value={value}
-                      onChange={handleSelectChange}
-                    >
+                  key === "roomType" ? (
+                    <select name={key} value={value} onChange={handleSelectChange}>
                       <option value="">Select Room Type</option>
                       <option value="Single">Single</option>
                       <option value="Double">Double</option>
                       <option value="Triple">Triple</option>
                     </select>
                   ) : key === "dateOfAdmission" ? (
-                    <input
-                      type="date"
-                      name={key}
-                      value={formatDate(value)}
-                      onChange={handleInputChange}
-                    />
+                    <input type="date" name={key} value={value} onChange={handleInputChange} />
                   ) : (
                     <input
-                      type={key === "depositAmount" || key === "guestMobileNo" || key === "fatherMobileNo" || key === "aadharNumber" || key === "floorNo" || key === "roomNo" || key === "maintenanceCharges" || key === "rentAmount" ? "number" : "text"}
+                      type={
+                        ["depositAmount", "guestMobileNo", "fatherMobileNo", "aadharNumber", "floorNo", "roomNo", "maintenanceCharges", "rentAmount"].includes(key)
+                          ? "number"
+                          : "text"
+                      }
                       name={key}
                       value={value}
                       onChange={handleInputChange}
                     />
                   )
                 ) : (
-                  <span>{key === "depositAmount" || key === "maintenanceCharges" || key === "rentAmount" ? `₹${value}` : key === "fullDeposit" ? (value ? "Yes" : "No") : value}</span>
+                  <span>
+                    {key === "dateOfAdmission" ? formatDate(value) : ["depositAmount", "maintenanceCharges", "rentAmount"].includes(key) ? `₹${value}` : value}
+                  </span>
                 )}
               </div>
             ))}
+
+            {/* Notice Period Date below Present Status */}
+            <div className="detail-item">
+              <strong>Notice Period Date:</strong>
+              {isEditing ? (
+                <input
+                  type="date"
+                  name="noticePeriodDate"
+                  value={editedGuest.noticePeriodDate}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                <span>{editedGuest.servingNoticePeriod ? formatDate(editedGuest.noticePeriodDate) : "-"}</span>
+              )}
+            </div>
+
+            {/* Full Deposit and Serving Notice Period */}
+            <div className="detail-item">
+              <strong>Full Deposit:</strong>
+              {isEditing ? (
+                <label>
+                  <input
+                    type="checkbox"
+                    name="fullDeposit"
+                    checked={editedGuest.fullDeposit}
+                    onChange={handleCheckboxChange}
+                  />
+                  {editedGuest.fullDeposit ? "Yes" : "No"}
+                </label>
+              ) : (
+                <span>{editedGuest.fullDeposit ? "Yes" : "No"}</span>
+              )}
+            </div>
+
+            <div className="detail-item">
+              <strong>Serving Notice Period:</strong>
+              {isEditing ? (
+                <label>
+                  <input
+                    type="checkbox"
+                    name="servingNoticePeriod"
+                    checked={editedGuest.servingNoticePeriod}
+                    onChange={handleCheckboxChange}
+                  />
+                  {editedGuest.servingNoticePeriod ? "Yes" : "No"}
+                </label>
+              ) : (
+                <span>{editedGuest.servingNoticePeriod ? "Yes" : "No"}</span>
+              )}
+            </div>
+
             {isEditing && (
               <div className="edit-buttons">
                 <button className="cancel-button1" onClick={handleEditToggle}>Cancel</button>

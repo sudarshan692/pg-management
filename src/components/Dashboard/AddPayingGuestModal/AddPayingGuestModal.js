@@ -30,6 +30,8 @@ const AddPayingGuestModal = ({
     aadharNumber: "",
     currentStatus: "Active",
     rentAmount: "",
+    noticePeriodDate:"",
+    servingNoticePeriod: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -80,6 +82,8 @@ const AddPayingGuestModal = ({
         aadharNumber: Number(guestData.aadharNumber),
         currentStatus: guestData.currentStatus,
         rentAmount: Number(guestData.rentAmount),
+        noticePeriodDate: guestData.noticePeriodDate,
+        servingNoticePeriod: guestData.servingNoticePeriod
       };
 
       // Add the new guest to Firestore

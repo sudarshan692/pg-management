@@ -283,20 +283,14 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
       sortFunction: depositAmountSort,
     },
     {
-      name: "Payment Month",
+      name: "Payment Month/Year",
       cell: (row) => {
         const highestPayment = getHighestPayment(row.paymentDetails);
         const currentMonth = getCurrentMonthYear().currentMonth;
-        return highestPayment ? highestPayment.paymentForMonth : currentMonth;
-      },
-      sortable: true,
-    },
-    {
-      name: "Payment Year",
-      cell: (row) => {
-        const highestPayment = getHighestPayment(row.paymentDetails);
         const currentYear = getCurrentMonthYear().currentYear;
-        return highestPayment ? highestPayment.paymentForYear : currentYear;
+        const paymentMonth = highestPayment ? highestPayment.paymentForMonth : currentMonth;
+        const paymentYear = highestPayment ? highestPayment.paymentForYear : currentYear;
+        return `${paymentMonth}/${paymentYear}`;
       },
       sortable: true,
     },
@@ -326,6 +320,15 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
       sortFunction: sortPaymentAmount,
     },
     {
+      name: "Notice Period",
+      cell: (row) => {
+        const hasNoticePeriod = row.servingNoticePeriod;
+        const noticeDate = row.noticePeriodDate ? formatDate(row.noticePeriodDate) : "-";
+        return hasNoticePeriod ? `Yes (${noticeDate})` : "No";
+      },
+      sortable: true,
+    },
+    {
       name: "Payment Status",
       cell: (row) => {
         const highestPayment = getHighestPayment(row.paymentDetails);
@@ -341,33 +344,34 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
       name: "Actions",
       cell: (row) => {
         const isActive = guestStatuses[row.guestID] === "Active";
+        const currentDate = new Date().toISOString().split("T")[0];
+        const noticePeriodDate = row.noticePeriodDate;
+        const isNoticePeriodDate = currentDate === noticePeriodDate;
         return (
           <div className="actions-container">
             <button
               onClick={() => onAddPayment(row)}
               className="add-payment-button"
             >
-              <AddCircleOutlineIcon style={addCircleOutlineIcon}/>
+              <AddCircleOutlineIcon style={addCircleOutlineIcon} />
             </button>
-            <label
-              className={`toggle-switch ${isActive ? "" : "inactive-toggle"}`}
-            >
+            <label className={`toggle-switch ${isNoticePeriodDate ? "inactive-toggle" : ""}`}>
               <input
                 type="checkbox"
-                checked={isActive}
-                onChange={() =>
-                  onToggleStatus(row.guestID, isActive ? "InActive" : "Active")
-                }
+                checked={isActive && !isNoticePeriodDate}
+                onChange={() => {
+                  if (!isNoticePeriodDate) {
+                    onToggleStatus(row.guestID, isActive ? "InActive" : "Active");
+                  }
+                }}
               />
               <span className="slider"></span>
             </label>
             <div className="alert">
               {row.paymentDetails &&
                 Object.keys(row.paymentDetails).length > 1 &&
-                (getPreviousMonthPaymentStatus(row.paymentDetails) ===
-                  "Partial" ||
-                  getPreviousMonthPaymentStatus(row.paymentDetails) ===
-                    "Not Paid") && (
+                (getPreviousMonthPaymentStatus(row.paymentDetails) === "Partial" ||
+                  getPreviousMonthPaymentStatus(row.paymentDetails) === "Not Paid") && (
                   <FaExclamationTriangle
                     className="alert-icon"
                     title="Previous month payment status is Partial or Not Paid"
