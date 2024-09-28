@@ -264,11 +264,11 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
       ),
       sortable: true,
     },
-    {
-      name: "Date Of Admission",
-      selector: (row) => formatDate(row.dateOfAdmission),
-      sortable: true,
-    },
+    // {
+    //   name: "Date Of Admission",
+    //   selector: (row) => formatDate(row.dateOfAdmission),
+    //   sortable: true,
+    // },
     {
       name: "Deposit Amount",
       cell: (row) => (

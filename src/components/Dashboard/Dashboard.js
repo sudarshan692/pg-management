@@ -263,6 +263,8 @@ const Dashboard = () => {
       'Room_Type',
       'Deposit_Amount',
       'Full_Deposit',
+      'Notice_Period_Date',
+      'Serving_Notice_Period',
       'Maintenance_Charges',
       'Rent_Amount',
       'Current_Status'
@@ -300,6 +302,8 @@ const Dashboard = () => {
         guest.roomType,
         guest.depositAmount,
         guest.fullDeposit ? 'Yes' : 'No', // Convert TRUE/FALSE to Yes/No
+        guest.noticePeriodDate || '-',
+        guest.servingNoticePeriod ? 'Yes' : 'No',
         guest.maintenanceCharges,
         guest.rentAmount,
         guest.currentStatus
