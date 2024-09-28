@@ -2,10 +2,10 @@ import React, { useState, useEffect, useMemo } from "react";
 import { db, auth } from "../../shared/firebase";
 import "./paymentStatusDialog.css";
 import ConfirmDeleteDialog from "../../Dashboard/ConfirmDeleteDialog/ConfirmDeleteDialog";
-import { FaTrashAlt} from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import jsPDF from "jspdf";
-import DownloadIcon from '@mui/icons-material/Download';
+import DownloadIcon from "@mui/icons-material/Download";
 import LoadingSpinner from "../../shared/LoadingSpinner";
 
 const PaymentStatusDialog = ({
@@ -17,17 +17,29 @@ const PaymentStatusDialog = ({
   selectedPGId,
   pgDetails,
 }) => {
-  const roomTypeMap = useMemo(() => ({
-    Single: 'S',
-    Double: 'D',
-    Triple: 'T'
-  }), []);
+  const roomTypeMap = useMemo(
+    () => ({
+      Single: "S",
+      Double: "D",
+      Triple: "T",
+    }),
+    []
+  );
 
-  const roomTypeMapReverse = useMemo(() => ({
-    S: 'Single',
-    D: 'Double',
-    T: 'Triple'
-  }), []);
+  const roomTypeMapReverse = useMemo(
+    () => ({
+      S: "Single",
+      D: "Double",
+      T: "Triple",
+    }),
+    []
+  );
+
+  const mealOptions = [
+    { label: "Breakfast", value: "B" },
+    { label: "Lunch", value: "L" },
+    { label: "Dinner", value: "D" },
+  ];
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,17 +51,20 @@ const PaymentStatusDialog = ({
   const [showDownloadLink, setShowDownloadLink] = useState(false);
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedMeals, setSelectedMeals] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
-      const guestData = { 
-        ...guest, 
-        roomType: roomTypeMapReverse[guest.roomType] || '', 
-        servingNoticePeriod: guest.servingNoticePeriod || false, 
-        noticePeriodDate: guest.noticePeriodDate || ''
+      const guestData = {
+        ...guest,
+        roomType: roomTypeMapReverse[guest.roomType] || "",
+        servingNoticePeriod: guest.servingNoticePeriod || false,
+        noticePeriodDate: guest.noticePeriodDate || "",
+        meals: guest.meals ? guest.meals.split("/") : [],
       };
       setInitialGuest(guestData);
       setEditedGuest(guestData);
+      setSelectedMeals(guestData.meals);
     }
   }, [isOpen, guest, roomTypeMapReverse]);
 
@@ -85,7 +100,18 @@ const PaymentStatusDialog = ({
   };
 
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   const years = [
@@ -99,9 +125,13 @@ const PaymentStatusDialog = ({
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const guestRef = doc(db, `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`, guest.id);
+      const guestRef = doc(
+        db,
+        `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`,
+        guest.id
+      );
       await updateDoc(guestRef, {
-        paymentDetails: deleteField()
+        paymentDetails: deleteField(),
       });
       onPaymentUpdate({
         ...guest,
@@ -110,7 +140,10 @@ const PaymentStatusDialog = ({
       onSnackbarOpen("Payment details deleted successfully!", "success");
     } catch (error) {
       console.error("Error deleting payment details: ", error);
-      onSnackbarOpen("Error deleting payment details. Please try again.", "error");
+      onSnackbarOpen(
+        "Error deleting payment details. Please try again.",
+        "error"
+      );
     } finally {
       setShowConfirmDelete(false);
       onClose();
@@ -129,7 +162,13 @@ const PaymentStatusDialog = ({
     const { name, value } = e.target;
     setEditedGuest((prevState) => ({
       ...prevState,
-      [name]: name === "floorNo" || name === "roomNo" || name === "depositAmount" || name === "maintenanceCharges" ? Number(value) : value,
+      [name]:
+        name === "floorNo" ||
+        name === "roomNo" ||
+        name === "depositAmount" ||
+        name === "maintenanceCharges"
+          ? Number(value)
+          : value,
     }));
   };
 
@@ -138,7 +177,9 @@ const PaymentStatusDialog = ({
     setEditedGuest((prevState) => ({
       ...prevState,
       [name]: checked,
-      ...(name === "servingNoticePeriod" && !checked ? { noticePeriodDate: "" } : {}), 
+      ...(name === "servingNoticePeriod" && !checked
+        ? { noticePeriodDate: "" }
+        : {}),
     }));
   };
 
@@ -154,7 +195,11 @@ const PaymentStatusDialog = ({
     setLoading(true);
     setIsSaving(true);
     try {
-      const guestRef = doc(db, `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`, guest.id);
+      const guestRef = doc(
+        db,
+        `users/${auth.currentUser.uid}/PGs/${selectedPGId}/PayingGuestData`,
+        guest.id
+      );
       const updatedPayingGuestMap = {
         guestID: guest.guestID,
         guestName: editedGuest.guestName,
@@ -174,10 +219,11 @@ const PaymentStatusDialog = ({
         currentStatus: guest.currentStatus,
         rentAmount: Number(editedGuest.rentAmount),
         servingNoticePeriod: editedGuest.servingNoticePeriod,
-        noticePeriodDate: editedGuest.noticePeriodDate
+        noticePeriodDate: editedGuest.noticePeriodDate,
+        meals: selectedMeals.join("/"),
       };
       await updateDoc(guestRef, {
-        payingGuestMap: updatedPayingGuestMap
+        payingGuestMap: updatedPayingGuestMap,
       });
       setInitialGuest(updatedPayingGuestMap);
       onPaymentUpdate({ ...guest, ...updatedPayingGuestMap });
@@ -186,11 +232,13 @@ const PaymentStatusDialog = ({
       onClose();
     } catch (error) {
       console.error("Error updating guest details: ", error);
-      onSnackbarOpen("Error updating guest details. Please try again.", "error");
+      onSnackbarOpen(
+        "Error updating guest details. Please try again.",
+        "error"
+      );
     } finally {
       setIsSaving(false);
       setLoading(false);
-    
     }
   };
 
@@ -232,17 +280,19 @@ const PaymentStatusDialog = ({
     setSelectedPaymentType(e.target.value);
   };
 
-
   const handleDownloadReceipt = () => {
     const paymentDetails = guest.paymentDetails || [];
     const paymentDetail = paymentDetails.find(
-        (payment) =>
-            payment.paymentForMonth === selectedMonth &&
-            payment.paymentForYear === parseInt(selectedYear, 10)
+      (payment) =>
+        payment.paymentForMonth === selectedMonth &&
+        payment.paymentForYear === parseInt(selectedYear, 10)
     );
     if (!paymentDetail || paymentDetail.paymentStatus === "Not Paid") {
-        onSnackbarOpen("No payment details available for the selected month and year.", "error");
-        return;
+      onSnackbarOpen(
+        "No payment details available for the selected month and year.",
+        "error"
+      );
+      return;
     }
     const doc = new jsPDF({});
     // Set page dimensions
@@ -250,12 +300,17 @@ const PaymentStatusDialog = ({
     const pageHeight = doc.internal.pageSize.getHeight();
     // Set the background color
     doc.setFillColor(225, 225, 225); // #DDDDDD
-    doc.rect(0, 0, pageWidth, pageHeight, 'F'); // Fill entire page with color
+    doc.rect(0, 0, pageWidth, pageHeight, "F"); // Fill entire page with color
     // Draw a border around the page
     const borderMargin = 5;
     doc.setDrawColor(0, 0, 0); // Black border color
     doc.setLineWidth(1); // Border thickness
-    doc.rect(borderMargin, borderMargin, pageWidth - 2 * borderMargin, pageHeight - 2 * borderMargin); // Draw border inside the page edges
+    doc.rect(
+      borderMargin,
+      borderMargin,
+      pageWidth - 2 * borderMargin,
+      pageHeight - 2 * borderMargin
+    ); // Draw border inside the page edges
     // Centered "RENT RECEIPT" heading
     const headingText = "RENT RECEIPT";
     const textWidth = doc.getTextWidth(headingText);
@@ -264,8 +319,8 @@ const PaymentStatusDialog = ({
     const boxWidth = textWidth + headingPadding * 2;
     const boxHeight = 10;
     doc.setFillColor(0, 0, 0);
-    doc.rect(xPosition - headingPadding, 15, boxWidth, boxHeight, 'F'); // Adjusted Y position to 15
-    doc.setTextColor(255, 255, 255); 
+    doc.rect(xPosition - headingPadding, 15, boxWidth, boxHeight, "F"); // Adjusted Y position to 15
+    doc.setTextColor(255, 255, 255);
     doc.text(headingText, xPosition, 22); // Adjusted Y position to 22
     // Set font to size 12
     doc.setFontSize(10);
@@ -273,10 +328,10 @@ const PaymentStatusDialog = ({
     // Format the payment date as DD-MM-YYYY
     const paymentDate = new Date(paymentDetail.paymentDate);
     const formattedDate = [
-        String(paymentDate.getDate()).padStart(2, '0'),
-        String(paymentDate.getMonth() + 1).padStart(2, '0'), // Months are 0-indexed
-        paymentDate.getFullYear(),
-    ].join('-');
+      String(paymentDate.getDate()).padStart(2, "0"),
+      String(paymentDate.getMonth() + 1).padStart(2, "0"), // Months are 0-indexed
+      paymentDate.getFullYear(),
+    ].join("-");
     // Left-aligned "Receipt No:"
     doc.text(`Receipt no: ${guest.guestID}`, 10, 35);
     // Right-aligned "Payment Date:"
@@ -292,52 +347,80 @@ const PaymentStatusDialog = ({
     const rowPadding = 1; // Padding within the cells (adjusted)
     doc.setLineWidth(0.2); // Thinner line for row border
     const rows = [
-        { label: "Tenant", value: `${guest.guestName}`},
-        { label: "Address of rented property", value: `${pgDetails.address}`},
-        { label: "Rent for month - year", value: `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}` },
-        { label: "Payment received date", value: formattedDate },
-        { label: "Recipient", value: `${pgDetails.ownerName}` },
-        { label: "Payment type", value: `${selectedPaymentType}`},
-        { label: "Total rent payable", value: `Rs.${guest.rentAmount}`},
-        { label: "Total rent paid", value: `Rs.${paymentDetail.paymentAmount}`},
-        { label: "Remaining balanced owned", value: `Rs.${paymentDetail.remainingAmount != null ? paymentDetail.remainingAmount : 0}`}, // Handle null and undefined
+      { label: "Tenant", value: `${guest.guestName}` },
+      { label: "Address of rented property", value: `${pgDetails.address}` },
+      {
+        label: "Rent for month - year",
+        value: `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}`,
+      },
+      { label: "Payment received date", value: formattedDate },
+      { label: "Recipient", value: `${pgDetails.ownerName}` },
+      { label: "Payment type", value: `${selectedPaymentType}` },
+      { label: "Total rent payable", value: `Rs.${guest.rentAmount}` },
+      { label: "Total rent paid", value: `Rs.${paymentDetail.paymentAmount}` },
+      {
+        label: "Remaining balanced owned",
+        value: `Rs.${
+          paymentDetail.remainingAmount != null
+            ? paymentDetail.remainingAmount
+            : 0
+        }`,
+      }, // Handle null and undefined
     ];
     rows.forEach((row, index) => {
-        const rowY = tableStartY;
-        // Calculate the height required for the current row
-        const textLines = doc.splitTextToSize(row.value, column2Width - rowPadding * 2);
-        const lineCount = textLines.length;
-        const currentRowHeight = lineCount * 5 + rowPadding * 2; // Adjust height based on number of lines
-        // Draw row border
-        doc.rect(borderMargin + tableMargin, rowY, tableWidth, currentRowHeight);
-        doc.setFont("helvetica", "bold");
-        doc.text(row.label, borderMargin + tableMargin + rowPadding, rowY + 5); // Adjust Y to align in the middle
-        doc.setFont("helvetica", "normal");
-        textLines.forEach((line, lineIndex) => {
-            doc.text(line, borderMargin + tableMargin + column1Width + rowPadding, rowY + 5 + (lineIndex * 5)); // Adjust Y to account for multiple lines
-        });
-        doc.line(borderMargin + tableMargin + column1Width, rowY, borderMargin + tableMargin + column1Width, rowY + currentRowHeight);
-        // Update tableStartY for the next row
-        tableStartY += currentRowHeight;
+      const rowY = tableStartY;
+      // Calculate the height required for the current row
+      const textLines = doc.splitTextToSize(
+        row.value,
+        column2Width - rowPadding * 2
+      );
+      const lineCount = textLines.length;
+      const currentRowHeight = lineCount * 5 + rowPadding * 2; // Adjust height based on number of lines
+      // Draw row border
+      doc.rect(borderMargin + tableMargin, rowY, tableWidth, currentRowHeight);
+      doc.setFont("helvetica", "bold");
+      doc.text(row.label, borderMargin + tableMargin + rowPadding, rowY + 5); // Adjust Y to align in the middle
+      doc.setFont("helvetica", "normal");
+      textLines.forEach((line, lineIndex) => {
+        doc.text(
+          line,
+          borderMargin + tableMargin + column1Width + rowPadding,
+          rowY + 5 + lineIndex * 5
+        ); // Adjust Y to account for multiple lines
+      });
+      doc.line(
+        borderMargin + tableMargin + column1Width,
+        rowY,
+        borderMargin + tableMargin + column1Width,
+        rowY + currentRowHeight
+      );
+      // Update tableStartY for the next row
+      tableStartY += currentRowHeight;
     });
     // Draw vertical line separating the two columns
     doc.setDrawColor(0, 0, 0); // Ensure line is black
-    doc.line(borderMargin + tableMargin + column1Width, 50, borderMargin + tableMargin + column1Width, tableStartY);
-    
+    doc.line(
+      borderMargin + tableMargin + column1Width,
+      50,
+      borderMargin + tableMargin + column1Width,
+      tableStartY
+    );
+
     doc.setFontSize(10);
     // Add text below the table
     const acknowledgmentTextStart = `This rent receipt acknowledges that, the rent for Month `;
     const acknowledgmentTextBold = `${paymentDetail.paymentForMonth} - ${paymentDetail.paymentForYear}, ${guest.guestName}`;
     const acknowledgmentTextEnd = ` has paid the rent in full.`;
-    const privacyNotice = "Privacy Notice: We respect your privacy and ensure that your data is securely handled.";
+    const privacyNotice =
+      "Privacy Notice: We respect your privacy and ensure that your data is securely handled.";
     const helpInfoStart = "Need Help?:";
     const helpInfoBold = `  Call us at ${pgDetails.mobile} or email ${pgDetails.ownerEmail}`;
-    
+
     // Calculate text positions
     const textMargin = 10;
     // const acknowledgmentTextWidth = pageWidth - 2 * textMargin; // Width for the additional text
     // const additionalTextLines = doc.splitTextToSize(acknowledgmentTextStart + acknowledgmentTextBold + acknowledgmentTextEnd, acknowledgmentTextWidth);
-    
+
     // Position the acknowledgment text below the table with a margin
     let additionalTextY = tableStartY + textMargin;
 
@@ -345,19 +428,27 @@ const PaymentStatusDialog = ({
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text(acknowledgmentTextStart, textMargin, additionalTextY);
-    
+
     // Get the width of the starting part to position the bold text correctly
     const startTextWidth = doc.getTextWidth(acknowledgmentTextStart);
 
     // Add the bold part of the text
     doc.setFont("helvetica", "bold");
-    doc.text(acknowledgmentTextBold, textMargin + startTextWidth, additionalTextY);
+    doc.text(
+      acknowledgmentTextBold,
+      textMargin + startTextWidth,
+      additionalTextY
+    );
 
     // Calculate the total width for positioning the ending text
     const boldTextWidth = doc.getTextWidth(acknowledgmentTextBold);
     doc.setFont("helvetica", "normal");
-    doc.text(acknowledgmentTextEnd, textMargin + startTextWidth + boldTextWidth, additionalTextY);
-    
+    doc.text(
+      acknowledgmentTextEnd,
+      textMargin + startTextWidth + boldTextWidth,
+      additionalTextY
+    );
+
     additionalTextY += 10; // Adjust spacing
 
     // Add Privacy Notice
@@ -365,9 +456,13 @@ const PaymentStatusDialog = ({
     doc.text("Privacy Notice:", textMargin, additionalTextY); // Print "Privacy Notice:" in bold
     doc.setFont("helvetica", "normal");
     const privacyNoticeText = privacyNotice.replace("Privacy Notice:", ""); // Remove "Privacy Notice:" from the original text
-    doc.text(privacyNoticeText, textMargin + doc.getTextWidth("Privacy Notice: "), additionalTextY); // Print the rest of the privacy notice
+    doc.text(
+      privacyNoticeText,
+      textMargin + doc.getTextWidth("Privacy Notice: "),
+      additionalTextY
+    ); // Print the rest of the privacy notice
     additionalTextY += 10; // Adjust spacing between texts
-    
+
     // Add Help Information
     doc.setFont("helvetica", "bold");
     doc.text(helpInfoStart, textMargin, additionalTextY); // Print "Need Help?:" in bold
@@ -393,46 +488,85 @@ const PaymentStatusDialog = ({
     const thankYouTextStart = `Thank you,`;
     const thankYouTextBold = `${guest.guestName} `;
     const thankYouTextEnd = `  for your prompt payment! We appreciate your continued stay with us.`;
-    const savePaperMessage = "Save Paper: Opt for digital receipts and help save the environment!";
+    const savePaperMessage =
+      "Save Paper: Opt for digital receipts and help save the environment!";
     const footerMargin = 10; // Margin from the bottom of the page
-    
+
     doc.setFontSize(10); // Set smaller font size for footer
     doc.setTextColor(0, 0, 0); // Set text color to black
 
     // Position footer text at the bottom of the page
-    const thankYouTextWidth = doc.getTextWidth(thankYouTextStart + thankYouTextBold + thankYouTextEnd);
+    const thankYouTextWidth = doc.getTextWidth(
+      thankYouTextStart + thankYouTextBold + thankYouTextEnd
+    );
     doc.setTextColor(0, 0, 0); // Set text color to black
     doc.setFont("helvetica", "normal");
-    doc.text(thankYouTextStart, (pageWidth - thankYouTextWidth) / 2, pageHeight - footerMargin - 18);
-    
+    doc.text(
+      thankYouTextStart,
+      (pageWidth - thankYouTextWidth) / 2,
+      pageHeight - footerMargin - 18
+    );
+
     doc.setFont("helvetica", "bold");
-    doc.text(thankYouTextBold, (pageWidth - thankYouTextWidth) / 2 + doc.getTextWidth(thankYouTextStart), pageHeight - footerMargin - 18);
+    doc.text(
+      thankYouTextBold,
+      (pageWidth - thankYouTextWidth) / 2 + doc.getTextWidth(thankYouTextStart),
+      pageHeight - footerMargin - 18
+    );
 
     doc.setFont("helvetica", "normal");
-    doc.text(thankYouTextEnd, (pageWidth - thankYouTextWidth) / 2 + doc.getTextWidth(thankYouTextStart + thankYouTextBold), pageHeight - footerMargin - 18);
+    doc.text(
+      thankYouTextEnd,
+      (pageWidth - thankYouTextWidth) / 2 +
+        doc.getTextWidth(thankYouTextStart + thankYouTextBold),
+      pageHeight - footerMargin - 18
+    );
 
     // Separate bold and normal text in the footer
     const boldText = "Save Paper:";
     const normalText = savePaperMessage.replace(boldText, "");
     doc.setFont("helvetica", "bold");
-    doc.text(boldText, (pageWidth - doc.getTextWidth(savePaperMessage)) / 2, pageHeight - footerMargin - 10);
+    doc.text(
+      boldText,
+      (pageWidth - doc.getTextWidth(savePaperMessage)) / 2,
+      pageHeight - footerMargin - 10
+    );
     doc.setFont("helvetica", "normal");
-    doc.text(normalText, (pageWidth - doc.getTextWidth(savePaperMessage)) / 2 + doc.getTextWidth(boldText), pageHeight - footerMargin - 10);
-    
+    doc.text(
+      normalText,
+      (pageWidth - doc.getTextWidth(savePaperMessage)) / 2 +
+        doc.getTextWidth(boldText),
+      pageHeight - footerMargin - 10
+    );
+
     // Save the PDF
     doc.save(`Receipt_${selectedMonth}_${selectedYear}.pdf`);
-};
-
-
+  };
 
   return (
-    <div className="dialog-overlay" style={{ display: isOpen ? "flex" : "none" }}>
-    {loading && (<div className="overlay"> <LoadingSpinner /> </div>)}
+    <div
+      className="dialog-overlay"
+      style={{ display: isOpen ? "flex" : "none" }}
+    >
+      {loading && (
+        <div className="overlay">
+          {" "}
+          <LoadingSpinner />{" "}
+        </div>
+      )}
       <div className="dialog-card">
         <div className="card-header">
-          <h3>Guest Details: <span className="guest-id1">{guest.guestID}</span> </h3>
-          <button className="close-button" onClick={onClose}>x</button>
-          {isEditing && (<button className="clear-button" onClick={handleClear}>Clear</button>)}
+          <h3>
+            Guest Details: <span className="guest-id1">{guest.guestID}</span>{" "}
+          </h3>
+          <button className="close-button" onClick={onClose}>
+            x
+          </button>
+          {isEditing && (
+            <button className="clear-button" onClick={handleClear}>
+              Clear
+            </button>
+          )}
           <button className="edit-button1" onClick={handleEditToggle}>
             Edit
           </button>
@@ -440,37 +574,125 @@ const PaymentStatusDialog = ({
         <div className="card-content">
           <div className="guest-details">
             {[
-              { label: "Name", value: editedGuest.guestName, editable: true, key: "guestName" },
-              { label: "Mobile Number", value: editedGuest.guestMobileNo, editable: true, key: "guestMobileNo" },
-              { label: "Father's Name", value: editedGuest.fatherName, editable: true, key: "fatherName" },
-              { label: "Father's Mobile Number", value: editedGuest.fatherMobileNo, editable: true, key: "fatherMobileNo" },
-              { label: "Aadhar Number", value: editedGuest.aadharNumber, editable: true, key: "aadharNumber" },
-              { label: "Date of Admission", value: editedGuest.dateOfAdmission, editable: true, key: "dateOfAdmission" },
-              { label: "Permanent Address", value: editedGuest.permanentAddress, editable: true, key: "permanentAddress" },
-              { label: "Floor No", value: editedGuest.floorNo, editable: true, key: "floorNo" },
-              { label: "Room No", value: editedGuest.roomNo, editable: true, key: "roomNo" },
-              { label: "Room Type", value: editedGuest.roomType, editable: true, key: "roomType" },
-              { label: "Rent Amount", value: editedGuest.rentAmount, editable: true, key: "rentAmount" },
-              { label: "Deposit Amount", value: editedGuest.depositAmount, editable: true, key: "depositAmount" },
-              { label: "Maintenance Charges", value: editedGuest.maintenanceCharges, editable: true, key: "maintenanceCharges" },
-               { label: "Present Status(Employee/Student)", value: editedGuest.presentStatus, editable: true, key: "presentStatus" },
+              {
+                label: "Name",
+                value: editedGuest.guestName,
+                editable: true,
+                key: "guestName",
+              },
+              {
+                label: "Mobile Number",
+                value: editedGuest.guestMobileNo,
+                editable: true,
+                key: "guestMobileNo",
+              },
+              {
+                label: "Father's Name",
+                value: editedGuest.fatherName,
+                editable: true,
+                key: "fatherName",
+              },
+              {
+                label: "Father's Mobile Number",
+                value: editedGuest.fatherMobileNo,
+                editable: true,
+                key: "fatherMobileNo",
+              },
+              {
+                label: "Aadhar Number",
+                value: editedGuest.aadharNumber,
+                editable: true,
+                key: "aadharNumber",
+              },
+              {
+                label: "Date of Admission",
+                value: editedGuest.dateOfAdmission,
+                editable: true,
+                key: "dateOfAdmission",
+              },
+              {
+                label: "Permanent Address",
+                value: editedGuest.permanentAddress,
+                editable: true,
+                key: "permanentAddress",
+              },
+              {
+                label: "Floor No",
+                value: editedGuest.floorNo,
+                editable: true,
+                key: "floorNo",
+              },
+              {
+                label: "Room No",
+                value: editedGuest.roomNo,
+                editable: true,
+                key: "roomNo",
+              },
+              {
+                label: "Room Type",
+                value: editedGuest.roomType,
+                editable: true,
+                key: "roomType",
+              },
+              {
+                label: "Rent Amount",
+                value: editedGuest.rentAmount,
+                editable: true,
+                key: "rentAmount",
+              },
+              {
+                label: "Deposit Amount",
+                value: editedGuest.depositAmount,
+                editable: true,
+                key: "depositAmount",
+              },
+              {
+                label: "Maintenance Charges",
+                value: editedGuest.maintenanceCharges,
+                editable: true,
+                key: "maintenanceCharges",
+              },
+              {
+                label: "Present Status(Employee/Student)",
+                value: editedGuest.presentStatus,
+                editable: true,
+                key: "presentStatus",
+              },
             ].map(({ label, value, editable, key }) => (
               <div key={key} className="detail-item">
                 <strong>{label}:</strong>
                 {editable && isEditing ? (
                   key === "roomType" ? (
-                    <select name={key} value={value} onChange={handleSelectChange}>
+                    <select
+                      name={key}
+                      value={value}
+                      onChange={handleSelectChange}
+                    >
                       <option value="">Select Room Type</option>
                       <option value="Single">Single</option>
                       <option value="Double">Double</option>
                       <option value="Triple">Triple</option>
                     </select>
                   ) : key === "dateOfAdmission" ? (
-                    <input type="date" name={key} value={value} onChange={handleInputChange} />
+                    <input
+                      type="date"
+                      name={key}
+                      value={value}
+                      onChange={handleInputChange}
+                    />
                   ) : (
                     <input
                       type={
-                        ["depositAmount", "guestMobileNo", "fatherMobileNo", "aadharNumber", "floorNo", "roomNo", "maintenanceCharges", "rentAmount"].includes(key)
+                        [
+                          "depositAmount",
+                          "guestMobileNo",
+                          "fatherMobileNo",
+                          "aadharNumber",
+                          "floorNo",
+                          "roomNo",
+                          "maintenanceCharges",
+                          "rentAmount",
+                        ].includes(key)
                           ? "number"
                           : "text"
                       }
@@ -481,7 +703,15 @@ const PaymentStatusDialog = ({
                   )
                 ) : (
                   <span>
-                    {key === "dateOfAdmission" ? formatDate(value) : ["depositAmount", "maintenanceCharges", "rentAmount"].includes(key) ? `₹${value}` : value}
+                    {key === "dateOfAdmission"
+                      ? formatDate(value)
+                      : [
+                          "depositAmount",
+                          "maintenanceCharges",
+                          "rentAmount",
+                        ].includes(key)
+                      ? `₹${value}`
+                      : value}
                   </span>
                 )}
               </div>
@@ -498,7 +728,50 @@ const PaymentStatusDialog = ({
                   onChange={handleInputChange}
                 />
               ) : (
-                <span>{editedGuest.servingNoticePeriod ? formatDate(editedGuest.noticePeriodDate) : "-"}</span>
+                <span>
+                  {editedGuest.servingNoticePeriod
+                    ? formatDate(editedGuest.noticePeriodDate)
+                    : "-"}
+                </span>
+              )}
+            </div>
+            {/* Meal Selection Checkboxes */}
+            <div className="detail-item">
+              <strong>Meals:</strong>
+              {isEditing ? (
+                <div className="checkbox-group">
+                  {mealOptions.map(({ label, value }) => (
+                    <label key={value}>
+                      <input
+                        type="checkbox"
+                        value={value}
+                        checked={selectedMeals.includes(value)}
+                        onChange={() => {
+                          if (selectedMeals.includes(value)) {
+                            setSelectedMeals(
+                              selectedMeals.filter((meal) => meal !== value)
+                            );
+                          } else {
+                            setSelectedMeals([...selectedMeals, value]);
+                          }
+                        }}
+                      />
+                      {label} {/* Display full name */}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <span>
+                  {selectedMeals.length > 0
+                    ? selectedMeals
+                        .map(
+                          (meal) =>
+                            mealOptions.find((option) => option.value === meal)
+                              ?.label
+                        )
+                        .join(", ")
+                    : "No meal selected"}
+                </span>
               )}
             </div>
 
@@ -539,53 +812,78 @@ const PaymentStatusDialog = ({
 
             {isEditing && (
               <div className="edit-buttons">
-                <button className="cancel-button1" onClick={handleEditToggle}>Cancel</button>
-                <button className="save-button1" onClick={handleSave}>{isSaving ? 'Saving...' : 'Save'}</button>
+                <button className="cancel-button1" onClick={handleEditToggle}>
+                  Cancel
+                </button>
+                <button className="save-button1" onClick={handleSave}>
+                  {isSaving ? "Saving..." : "Save"}
+                </button>
               </div>
             )}
           </div>
 
           <div className="receipt-download-section">
             <select
-            className="payment-type"
-                name="paymentType"
-                value={selectedPaymentType}
-                onChange={handlePaymentTypeChange}
-              >
-                <option value="">Select Payment Type</option>
-                <option value="Cash">Cash</option>
-                <option value="Card">Card</option>
-                <option value="UPI Scan">UPI Scan</option>
-                <option value="Check">Check</option>
-              </select>
+              className="payment-type"
+              name="paymentType"
+              value={selectedPaymentType}
+              onChange={handlePaymentTypeChange}
+            >
+              <option value="">Select Payment Type</option>
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="UPI Scan">UPI Scan</option>
+              <option value="Check">Check</option>
+            </select>
 
-              <select className="select-year" onChange={handleYearChange} value={selectedYear}>
-                <option value="">Select Year</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              <select className="select-month" onChange={handleMonthChange} value={selectedMonth}>
-                <option value="">Select Month</option>
-                {months.map((month) => (
-                  <option key={month} value={month}>
-                    {month}
-                  </option>
-                ))}
-              </select>
-              {showDownloadLink && (
-                <button onClick={handleDownloadReceipt} className="download-receipt-button">
-                  <DownloadIcon style={{ marginTop: '0.4vw', height: '1.2vw', width: '1.2vw' }} />
-                </button>
-               )}
-            </div>
+            <select
+              className="select-year"
+              onChange={handleYearChange}
+              value={selectedYear}
+            >
+              <option value="">Select Year</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+            <select
+              className="select-month"
+              onChange={handleMonthChange}
+              value={selectedMonth}
+            >
+              <option value="">Select Month</option>
+              {months.map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+            {showDownloadLink && (
+              <button
+                onClick={handleDownloadReceipt}
+                className="download-receipt-button"
+              >
+                <DownloadIcon
+                  style={{
+                    marginTop: "0.4vw",
+                    height: "1.2vw",
+                    width: "1.2vw",
+                  }}
+                />
+              </button>
+            )}
+          </div>
 
           {/* Display Payment Status Table */}
           <div className="table-container">
             <h3 className="payment-details">Payment Status</h3>
-            <button onClick={() => setShowConfirmDelete(true)} className="delete-button" disabled={loading}>
+            <button
+              onClick={() => setShowConfirmDelete(true)}
+              className="delete-button"
+              disabled={loading}
+            >
               <FaTrashAlt />
             </button>
             <table className="payment-table">
@@ -602,7 +900,8 @@ const PaymentStatusDialog = ({
                   <tr key={year}>
                     <td>{year}</td>
                     {months.map((month) => {
-                      const { paymentStatus, paymentAmount } = getPaymentDetails(month, year);
+                      const { paymentStatus, paymentAmount } =
+                        getPaymentDetails(month, year);
                       return (
                         <td
                           key={month}
@@ -611,7 +910,9 @@ const PaymentStatusDialog = ({
                             color: paymentAmount > 0 ? "#fff" : "#f0f0f0",
                           }}
                         >
-                          {paymentAmount > 0 ? `${paymentAmount.toFixed(2)}` : ""}
+                          {paymentAmount > 0
+                            ? `${paymentAmount.toFixed(2)}`
+                            : ""}
                         </td>
                       );
                     })}
@@ -619,9 +920,6 @@ const PaymentStatusDialog = ({
                 ))}
               </tbody>
             </table>
-
-
-            
           </div>
         </div>
       </div>

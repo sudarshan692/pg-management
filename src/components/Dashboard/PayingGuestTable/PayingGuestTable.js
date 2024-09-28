@@ -329,6 +329,11 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
       sortable: true,
     },
     {
+      name: "Meals",
+      selector: (row) => row.meals || "-",
+      sortable: true,
+    },
+    {
       name: "Payment Status",
       cell: (row) => {
         const highestPayment = getHighestPayment(row.paymentDetails);
