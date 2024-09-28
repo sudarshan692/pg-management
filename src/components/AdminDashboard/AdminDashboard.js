@@ -108,13 +108,13 @@ const AdminDashboard = () => {
       setLoading(true);
       const pgRef = await db.collection(`users/${userId}/PGs`).add({
         PGDetails: {
-          number: Number(pgNumber),
+          number: pgNumber,
           maxCustomers: Number(pgMaxCustomers),
           ownerName: pgOwnerName,
           ownerEmail: pgOwnerEmail,
           name: pgName,
           address: pgAddress,
-          mobile: pgMobile,
+          mobile: Number(pgMobile),
           totalFloors: Number(pgTotalFloors),
           totalRoomsPerFloor: Number(pgTotalRoomsPerFloor),
           singleBedsPerRoom: Number(pgSingleBedsPerRoom),
@@ -128,13 +128,13 @@ const AdminDashboard = () => {
         action: 'add',
         newData: {
           userId,
-          number: Number(pgNumber),
+          number: pgNumber,
           maxCustomers: Number(pgMaxCustomers),
           ownerName: pgOwnerName,
           ownerEmail: pgOwnerEmail,
           name: pgName,
           address: pgAddress,
-          mobile: pgMobile,
+          mobile: Number(pgMobile),
           totalFloors: Number(pgTotalFloors),
           totalRoomsPerFloor: Number(pgTotalRoomsPerFloor),
           singleBedsPerRoom: Number(pgSingleBedsPerRoom),
