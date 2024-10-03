@@ -329,7 +329,7 @@ const PayingGuestTable = ({payingGuests, onAddPayment, guestStatuses, onToggleSt
     
         // Show "Guest Left" only if the guest was serving notice period and the date is past
         return hasGuestLeft ? (
-          <div style={{ border: "1px solid white", padding: "5px", borderRadius: "8px", textAlign: "center", color:"orange"}}>
+          <div style={{ border: "1px solid white", padding: "0.25vw", borderRadius: "0.4vw", textAlign: "center", color:"orange"}}>
             Guest Left
           </div>
         ) : hasNoticePeriod ? `Yes (${noticeDate})` : "No";
